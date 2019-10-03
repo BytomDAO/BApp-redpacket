@@ -1,0 +1,55 @@
+.amount__container{
+  background-image: url('../../../static/img/amount-background.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0px 2px 32px rgba(0, 0, 0, 0.08);
+  max-width: 335px;
+  color: #CF3B3B;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  min-height: 168px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.amount__container h4{
+  font-size: 28px;
+}
+
+.details__container{
+  min-height: 307px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 32px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  max-width: 335px;
+  padding: 20px;
+}
+
+.tb{
+  display: table;
+  width: 100%;
+}
+
+.tb-row{
+  display: table-row;
+}
+
+.tb-cell{
+  display: table-cell;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.detail__header{
+  font-size: 14px;
+}
+
+.detail__content{
+  font-size: 12px;
+}
+
+.noRecord{
+  margin-top: 100px;
+}

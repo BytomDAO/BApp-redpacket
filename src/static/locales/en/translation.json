@@ -1,0 +1,104 @@
+{
+  "main":{
+    "bytomPacket":"Bytom Red Packet",
+    "sendPacket":"Send Red Packet",
+    "mySent":"Sent",
+    "myReceived":"Received",
+    "service":"Service Agreement",
+    "home":"Homepage"
+  },
+  "time":{
+    "day":"{{day}} days ",
+    "hour":"{{hour}} hours ",
+    "minute":"{{minute}} minutes ",
+    "second":"{{second}} seconds "
+  },
+  "common":{
+    "address":"Address",
+    "balances":"Balance",
+    "notFound":"The Red Packet is Not Found",
+    "require":"Required",
+    "passwordHint":"Please Enter the password within length 20",
+    "passwordTypeHint":"Please Enter the password within correct format",
+    "noRecord":"no red packet transactions record found.",
+    "yes":"Yes",
+    "no":"No"
+  },
+  "wrap":{
+    "downloadHint":"Download Bycoin App \n to use Bytom Red Packet",
+    "download":"Download Now",
+    "upgradeHint":"Please upgrade to the latest version of Bycoin (v1.2.3)",
+    "vaporOnlyHint":"Please switch to Vapor Chain Net",
+    "auth":"Please upgrade to the latest version of Bycoin (v1.2.3) \n Authenticate Bycoin. \nPlease Authenticate the connection request."
+  },
+  "send":{
+    "random":"Random",
+    "switchToNormal":"Change to Identical Amount",
+    "normal":"Identical",
+    "switchToRandom":"Change to Random Amount",
+    "total":"Total",
+    "single":"Single",
+    "quantity":"Quantity",
+    "enterNo":"Enter number",
+    "code":"Code",
+    "enterCode":"Enter code",
+    "codeHint":"Packet code is encrypted. Supports Chinese, English and number. Maximum 20 characters or 6 Chinese.",
+    "message":"Message",
+    "messagePlaceHolder":"Best Wishes",
+    "messageHint":"Packet message will be displayed as plaintext",
+    "fee":"Network fee",
+    "send":"Send Red Packet",
+    "amountHint":"Invalid BTM amount format",
+    "amountMinHint":"The min value is 0.01",
+    "numberHint":"Please use the correct redpacket number",
+    "gasHint":"The minimum fee is 0.002",
+    "passwordEnHint":"Please Enter the Chinese Characters and English Characters password within length 20",
+    "passwordZhHint":"Please Enter the Chinese Characters password within length 6."
+  },
+  "share":{
+    "hint":"Your Red Packet is prepared!",
+    "qrCode":"Save QR Code",
+    "copy":"Copy Packet link",
+    "viewCode":"View Code",
+    "copied":"Copied",
+    "code":"Red Packet Code"
+  },
+  "qrCode":{
+    "spacket":"'s red packet",
+    "downloadHint":"Download Bycoin App, and scan QR code",
+    "passwordHint":"Enter code, then open the red packet",
+    "backTitle":"Back to share page",
+    "backMsg":"The screenshot is saved, would you like to back to the share page?"
+  },
+  "open":{
+    "enterCode":"Enter Code",
+    "codeError":"The code entered is wrong",
+    "viewDetails":"View Receive Details",
+    "empty":"Red packet is empty",
+    "open":"開",
+    "require":"Password required",
+    "back":"Back to home page"
+  },
+  "detail":{
+    "saved":"Transferred to your BTM Account",
+    "shared":"Share Red Packet Link",
+    "opened":"Opened {{number}} with {{total}}",
+    "finished":"{{total}} red packet(s), with {{amount}} BTM, opened in {{time}}",
+    "confirming":"Network confirmation...",
+    "luckiest":"👑Luckiest Draw",
+    "notTaken":"Haven't received yet"
+  },
+  "mySent":{
+    "total":"Sent BTM",
+    "sentAmount":"Total Number Sent {{amount}}",
+    "random":"Random Amount",
+    "normal":"Identical Amount",
+    "noneAvailable":"None available",
+    "loadMore":"Load More",
+    "loading":"Loading"
+  },
+  "myReceived":{
+    "total":"Received BTM",
+    "receivedAmount":"Total Number Received {{amount}}"
+  }
+}

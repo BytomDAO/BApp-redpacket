@@ -1,0 +1,8 @@
+# Node Modules
+/node_modules
+
+# Distribution
+/dist
+
+.idea/*
+.DS_Store

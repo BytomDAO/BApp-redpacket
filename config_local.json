@@ -1,0 +1,43 @@
+{
+  "gin-gonic": {
+    "listening_port": 3100,
+    "is_release_mode": false
+  },
+  "mysql": {
+    "master": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "username": "root",
+      "password": "123456",
+      "database": "redpacket"
+    },
+    "log_mode": true
+  },
+  "redis": {
+    "endpoint": "127.0.0.1:6379",
+    "pool_size": 10,
+    "database": 6,
+    "password": "123456",
+    "cache_seconds": 600,
+    "long_cache_hours": 24
+  },
+  "api": {
+    "mysql_conns": {
+      "max_open_conns": 20,
+      "max_idle_conns": 10
+    }
+  },
+  "updater": {
+    "block_center": {
+      "net_type": "btm",
+      "network": "solonet",
+      "common_guid": "db6970e5-eb42-47ba-8c26-f64b3d8bad8f",
+      "sync_seconds": 60,
+      "url": "http://127.0.0.1:3000",
+      "mysql_conns": {
+        "max_open_conns": 5,
+        "max_idle_conns": 5
+      }
+    }
+  }
+}

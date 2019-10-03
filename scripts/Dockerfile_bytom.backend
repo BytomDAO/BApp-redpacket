@@ -1,0 +1,16 @@
+FROM centos:centos7
+
+MAINTAINER dkaiju longjinglv@gmail.com
+
+RUN rpm --rebuilddb && yum install -y epel-release && yum -y update && yum install -y supervisor && yum clean all && mkdir -p /root/logs && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+COPY target/api /root/api
+COPY target/updater /root/updater
+
+COPY config_bytom_pro.json /root/config.json
+
+COPY scripts/supervisord.conf /root/supervisord.conf
+
+EXPOSE 3100
+
+CMD ["/usr/bin/supervisord","-c","/root/supervisord.conf"]

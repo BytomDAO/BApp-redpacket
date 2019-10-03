@@ -1,0 +1,44 @@
+.qrCode{
+  width: 117px;
+  height: 117px;
+
+  background: linear-gradient(180deg, #FFEFC4 0%, #F3D279 100%);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 5px;
+  margin: 0 auto;
+}
+
+.qrCode img{
+  width: 105px;
+  height: 105px;
+}
+
+.qrCode__container{
+  padding-top: 141px;
+}
+
+.code_box{
+  width: 200px;
+  height: 48px;
+  background: #C7442F;
+  border: 1px solid #FFF4DD;
+  border-radius: 4px;
+  line-height: 48px;
+}
+
+.hint-item:before{
+  content: "\22C4";
+  color: #F2CB7E;
+  width: 1em;
+  display: inline-block
+}
+
+.bycoin_img{
+  width: 45px;
+  height: 45px;
+}
+
+.hint-item{
+  font-size: 14px;
+}

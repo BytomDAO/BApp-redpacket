@@ -1,0 +1,20 @@
+.footer{
+  margin: 20px auto;
+}
+
+.footer__content{
+  padding: 35px;
+}
+
+.footer__content_item{
+  display: flex;
+  word-break: break-word;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.footer__content_item div:first-child{
+  flex-basis: 70px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
