@@ -4,8 +4,8 @@ PACKAGES := $(shell go list ./... | grep -v '/vendor/')
 
 all:
 	@mkdir -p target
-	go build -o target/updater redpacket-backend/cmd/updater/main.go
-	go build -o target/api redpacket-backend/cmd/api/main.go
+	go build -o target/updater cmd/updater/main.go
+	go build -o target/api cmd/api/main.go
 
 test:
 	@echo "Running go test"
