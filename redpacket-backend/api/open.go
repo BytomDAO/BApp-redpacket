@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"github.com/redpacket/server/database/orm"
-	"github.com/redpacket/server/service"
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/service"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 // status of opening red packet

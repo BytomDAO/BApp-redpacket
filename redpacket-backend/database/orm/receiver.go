@@ -1,6 +1,6 @@
 package orm
 
-import "github.com/redpacket/server/util/types"
+import "github.com/redpacket/redpacket-backend/util/types"
 
 type Receiver struct {
 	ID          uint64 `json:"-" gorm:"primary_key"`

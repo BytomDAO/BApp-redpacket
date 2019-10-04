@@ -8,7 +8,7 @@ import (
 	"github.com/go-redis/redis"
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/redpacket/server/config"
+	"github.com/redpacket/redpacket-backend/config"
 )
 
 // NewMySQLDB create the mysql master/slaves cluster

@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"github.com/redpacket/server/database/orm"
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 type CreateRedPacketReq struct {

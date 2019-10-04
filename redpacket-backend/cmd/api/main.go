@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/redpacket/server/api"
-	"github.com/redpacket/server/config"
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/api"
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 func main() {

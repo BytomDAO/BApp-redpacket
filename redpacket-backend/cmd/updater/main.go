@@ -5,10 +5,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/redpacket/server/config"
-	"github.com/redpacket/server/database"
-	"github.com/redpacket/server/synchron"
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/database"
+	"github.com/redpacket/redpacket-backend/synchron"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 func main() {

@@ -1,6 +1,6 @@
 package orm
 
-import "github.com/redpacket/server/util/types"
+import "github.com/redpacket/redpacket-backend/util/types"
 
 // Sender is the table of sender information
 // ***  RedPacketType  ***

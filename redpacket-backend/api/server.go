@@ -7,10 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/redpacket/server/api/common"
-	"github.com/redpacket/server/config"
-	"github.com/redpacket/server/database"
-	"github.com/redpacket/server/service"
+	"github.com/redpacket/redpacket-backend/api/common"
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/database"
+	"github.com/redpacket/redpacket-backend/service"
 )
 
 type Server struct {

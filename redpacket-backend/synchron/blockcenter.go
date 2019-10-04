@@ -5,14 +5,14 @@ import (
 
 	"github.com/bytom/errors"
 	"github.com/jinzhu/gorm"
-	"github.com/redpacket/server/util/types"
+	"github.com/redpacket/redpacket-backend/util/types"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/redpacket/server/config"
-	"github.com/redpacket/server/database"
-	"github.com/redpacket/server/database/orm"
-	"github.com/redpacket/server/service"
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/database"
+	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/service"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 type blockCenterKeeper struct {

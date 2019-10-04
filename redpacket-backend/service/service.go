@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/bytom/errors"
 
-	"github.com/redpacket/server/util"
+	"github.com/redpacket/redpacket-backend/util"
 )
 
 // Service can invoke the api which provide by the server

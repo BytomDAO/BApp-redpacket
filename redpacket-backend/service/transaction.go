@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/bytom/errors"
-	"github.com/redpacket/server/util/types"
+	"github.com/redpacket/redpacket-backend/util/types"
 )
 
 type BuildTransactionReq struct {

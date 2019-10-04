@@ -4,8 +4,8 @@ import (
 	"github.com/bytom/errors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/redpacket/server/database/orm"
-	"github.com/redpacket/server/util/types"
+	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/util/types"
 )
 
 type winner struct {
