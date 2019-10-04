@@ -27,9 +27,9 @@
   "wrap":{
     "downloadHint":"Download Bycoin App \n to use Bytom Red Packet",
     "download":"Download Now",
-    "upgradeHint":"Please upgrade to the latest version of Bycoin (v1.2.3)",
+    "upgradeHint":"Please upgrade to the latest version of Bycoin",
     "vaporOnlyHint":"Please switch to Vapor Chain Net",
-    "auth":"Please upgrade to the latest version of Bycoin (v1.2.3) \n Authenticate Bycoin. \nPlease Authenticate the connection request."
+    "auth":"Please upgrade to the latest version of Bycoin \n Authenticate Bycoin. \nPlease Authenticate the connection request."
   },
   "send":{
     "random":"Random",
