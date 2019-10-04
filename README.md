@@ -63,6 +63,7 @@ Build the project include two parts:
   The target of building backend source code are the `api` and `updater` binaries. The `api` provide the RPC request and response service for users, and the `updater` provide the synchronization services for `blockcenter`(blockcenter is the decentralized wallet server for `bytom`).
 
   ```bash
+  $ cd redpacket-backend
   $ make all
   ```
 
@@ -156,9 +157,9 @@ The backend service must be started before the frontend service is started, beca
   To start Red Packet Bapp Backend manually, just run:
 
   ```bash
-  $ ./target/api ./scripts/config_local.json
+  $ ./target/api ../scripts/config_local.json
 
-  $ ./target/updater ./scripts/config_local.json
+  $ ./target/updater ../scripts/config_local.json
   ```
 
 ## Specification <a id="chapter-004"></a>
