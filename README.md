@@ -88,7 +88,7 @@ The backend service must be started before the frontend service is started, beca
   Please make sure the mysql service is enabled before create database.
 
   ```bash
-  $ mysql -u root -p < server/database/dump.sql
+  $ mysql -u root -p < redpacket-backend/database/dump.sql
   ```
 
   Finally, enter the correct of `root` password that will create database and tables successfully.
@@ -104,7 +104,7 @@ The backend service must be started before the frontend service is started, beca
 
   3）Modify config
 
-  the default config file is `config_local.json`, the configuration instructions are as follows:
+  the default config file is `scripts/config_local.json`, the configuration instructions are as follows:
   ```js
   {
     "gin-gonic": {
@@ -156,14 +156,14 @@ The backend service must be started before the frontend service is started, beca
   To start Red Packet Bapp Backend manually, just run:
 
   ```bash
-  $ ./target/api config_local.json
+  $ ./target/api ./scripts/config_local.json
 
-  $ ./target/updater config_local.json
+  $ ./target/updater ./scripts/config_local.json
   ```
 
 ## Specification <a id="chapter-004"></a>
 
-In terms of use and build the Red Packet project,  please read the related [RPC documents](server/docs/rpc.md).
+In terms of use and build the Red Packet project,  please read the related [RPC documents](redpacket-backend/docs/rpc.md).
 
 ## Contributing <a id="chapter-005"></a>
 
