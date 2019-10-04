@@ -41,37 +41,38 @@ class QrCode extends React.Component {
 
     QRCode.toDataURL(`${window.location.origin}${basename}/open/${this.props.match.params.id}`, opts)
       .then(url => {
-        return setStateAsync({url:url}).then(()=>{
-          return this.props.getDetails(this.props.match.params.id).then(
-            ()=>{
-              return getPassword(this.props.match.params.id).then((resp)=> {
-                return setStateAsync({ password: resp.data.password}).then(
-                  ()=>{
-                    if(window.bycoin){
-                      window.bycoin.callAPI('native.saveScreenshot', function (err, ret) {
-                        if(ret){
-                          window.bycoin.callAPI('native.confirm', {
-                            title: t('qrCode.backTitle'),
-                            message: t('qrCode.backMsg'),
-                            cancelText: t('common.no'),
-                            confirmText: t('common.yes'),
-                          }, function(err, result) {
-                            if(err) {
-                              console.log('no')
-                            } else {
-                              that.props.history.goBack();
-                            }
-                          })
-                        }
-                      })
-                    }
-                  }
-                )
-              })
-            }
-          )
-        })
+        return setStateAsync({url:url})
       })
+      .then(()=>{
+        return this.props.getDetails(this.props.match.params.id)
+      })
+      .then(()=>{
+        return getPassword(this.props.match.params.id)
+      })
+      .then((resp)=> {
+        return setStateAsync({ password: resp.data.password})
+      })
+      .then(()=>{
+          if(window.bycoin){
+            window.bycoin.callAPI('native.saveScreenshot', function (err, ret) {
+              if(ret){
+                window.bycoin.callAPI('native.confirm', {
+                  title: t('qrCode.backTitle'),
+                  message: t('qrCode.backMsg'),
+                  cancelText: t('common.no'),
+                  confirmText: t('common.yes'),
+                }, function(err, result) {
+                  if(err) {
+                    console.log('no')
+                  } else {
+                    that.props.history.goBack();
+                  }
+                })
+              }
+            })
+          }
+        }
+      )
       .catch(err => {
         throw err
       })
@@ -110,7 +111,7 @@ class QrCode extends React.Component {
             </div>
             <div>
               <div className="hint-item text-white">
-               {t('qrCode.downloadHint')}
+                {t('qrCode.downloadHint')}
               </div>
               <div className="hint-item text-white">
                 {t('qrCode.passwordHint')}
