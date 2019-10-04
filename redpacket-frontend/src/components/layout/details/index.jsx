@@ -80,7 +80,7 @@ class RedPackDetails extends Component {
             <h4 className="details__header text-secondary">{packetDetails.note} {!isNormalType && <img className="icon" src={require('../../../static/img/icon/ping.png')} alt=""/>}</h4>
 
             <div>{address.short(packetDetails.sender_address)}{t('qrCode.spacket')}</div>
-            {myRedPack?<div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>:<div className="text-secondary red_amount">{t('detail.notTaken')}</div>}
+            {myRedPack && <div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>}
 
             {myRedPack && <div>{myRedPack.is_confirmed?t('detail.saved'):t('detail.confirming')}</div>}
             {packetDetails.sender_address === window.bytom.default_account.address && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}

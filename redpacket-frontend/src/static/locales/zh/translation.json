@@ -9,7 +9,7 @@
   },
   "time":{
     "day":"{{day}} 天 ",
-    "hour":"{{hour}} 时 ",
+    "hour":"{{hour}} 小时 ",
     "minute":"{{minute}} 分 ",
     "second":"{{second}} 秒 "
   },
@@ -27,9 +27,9 @@
   "wrap":{
     "downloadHint":"下载Bycoin App\n使用比原红包",
     "download":"立即下载",
-    "upgradeHint":"请升级至最新版Bycoin（v1.2.3）",
+    "upgradeHint":"请升级至最新版Bycoin",
     "vaporOnlyHint":"请切换至Vapor使用比原红包",
-    "auth":"请升级至最新版Bycoin（v1.2.3）并请授权红包。"
+    "auth":"请升级至最新版Bycoin \n 并请授权红包。"
   },
   "send":{
     "random":"拼手气红包",
