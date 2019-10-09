@@ -41,7 +41,7 @@ class MyRecieved extends Component {
           list.push( <div className="tb-row" key={'myReceived'+i}>
             <div className="tb-cell">
               <div className="detail__header text-secondary">{address.short(winner.sender_address)} {winner.red_packet_type === 1 && <img className="icon" src={require('../../../static/img/icon/ping.png')} alt=""/>}</div>
-              <div className="detail__content text-grey">{winner.is_confirmed?moment(winner.confirmed_time*1000).format('LLL'):t('detail.confirming')}</div>
+              <div className="detail__content text-grey">{moment(winner.confirmed_time*1000).format('LLL')}</div>
             </div>
             <div className="tb-cell text-right">
               <div className="detail__header text-secondary">{winner.amount/100000000} BTM</div>

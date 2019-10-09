@@ -9,6 +9,7 @@ import { timeDifference } from "../../util/time";
 import {Link } from 'react-router-dom'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
+import moment from "moment/moment";
 
 require('./style.scss')
 
@@ -35,6 +36,7 @@ class RedPackDetails extends Component {
     }
 
     const packetDetails = this.props.packetDetails
+
     const winners = packetDetails.winners
 
     const isNormalType = packetDetails.red_packet_type===0
@@ -62,7 +64,7 @@ class RedPackDetails extends Component {
           list.push( <div className="tb-row" key={'winner'+i}>
             <div className="tb-cell">
               <div className="detail__header text-secondary">{address.short(winner.address)}</div>
-              <div className="detail__content text-grey">{winner.is_confirmed?new Date(winner.confirmed_time * 1000).toLocaleString():t('detail.confirming')}</div>
+              <div className="detail__content text-grey">{moment(winner.confirmed_time*1000).format('LLL')}</div>
             </div>
             <div className="tb-cell  text-right">
               <div className="detail__header text-secondary">{winner.amount/100000000} BTM</div>
@@ -82,7 +84,7 @@ class RedPackDetails extends Component {
             <div>{address.short(packetDetails.sender_address)}{t('qrCode.spacket')}</div>
             {myRedPack && <div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>}
 
-            {myRedPack && <div>{myRedPack.is_confirmed?t('detail.saved'):t('detail.confirming')}</div>}
+            {myRedPack && <div>{ t('detail.saved')}</div>}
             {packetDetails.sender_address === window.bytom.default_account.address && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}
           </div>
 
