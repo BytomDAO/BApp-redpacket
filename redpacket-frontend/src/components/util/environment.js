@@ -13,7 +13,7 @@ function url(){
         return "https://bapp.bystack.com/dapp"
     }
   }
-  return ''
+  return 'https://bapp.bystack.com/dapp'
 }
 
 let  basename
