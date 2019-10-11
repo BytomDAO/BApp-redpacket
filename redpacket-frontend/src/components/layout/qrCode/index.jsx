@@ -52,6 +52,9 @@ class QrCode extends React.Component {
       .then((resp)=> {
         return setStateAsync({ password: resp.data.password})
       })
+      .then(()=> {
+        return sleep(300)
+      })
       .then(()=>{
           if(window.bycoin){
             window.bycoin.callAPI('native.saveScreenshot', function (err, ret) {
