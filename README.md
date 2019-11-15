@@ -168,7 +168,7 @@ In terms of use and build the Red Packet project,  please read the related [RPC 
 
 ## Contributing <a id="chapter-005"></a>
 
-Feel free to dive in! [Open an issue](https://github.com/Bytom/redpacket/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/Bytom/BApp-redpacket/issues/new) or submit PRs.
 
 ### Contributors <a id="chapter-006"></a>
 
