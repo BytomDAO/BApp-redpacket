@@ -28,8 +28,8 @@
     "downloadHint":"Download Bycoin App \n to use Bytom Red Packet",
     "download":"Download Now",
     "upgradeHint":"Please upgrade to the latest version of Bycoin",
-    "vaporOnlyHint":"Please switch to Vapor Chain Net",
-    "auth":"Please upgrade to the latest version of Bycoin, \n switch to Vapor Chain Net and Authenticate Bycoin."
+    "vaporOnlyHint":"Please switch to Side Chain Net",
+    "auth":"Please upgrade to the latest version of Bycoin, \n switch to Side Chain Net and Authenticate Bycoin."
   },
   "send":{
     "random":"Random",
@@ -65,7 +65,7 @@
   },
   "qrCode":{
     "spacket":"'s red packet",
-    "downloadHint":"Download Bycoin App, switch to Vapor Chain and scan QR code",
+    "downloadHint":"Download Bycoin App, switch to Side Chain and scan QR code",
     "passwordHint":"Enter code, then open the red packet",
     "backTitle":"Back to share page",
     "backMsg":"The screenshot is saved, would you like to back to the share page?"

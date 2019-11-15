@@ -28,8 +28,8 @@
     "downloadHint":"下载Bycoin App\n使用比原红包",
     "download":"立即下载",
     "upgradeHint":"请升级至最新版Bycoin",
-    "vaporOnlyHint":"请切换至Vapor使用比原红包",
-    "auth":"请升级至最新版，\n切换至Vapor使用并授权"
+    "vaporOnlyHint":"请切换至侧链使用比原红包",
+    "auth":"请升级至最新版，\n切换至侧链使用并授权"
   },
   "send":{
     "random":"拼手气红包",
@@ -65,7 +65,7 @@
   },
   "qrCode":{
     "spacket":"的红包",
-    "downloadHint":"下载Bycoin App，切换Vapor，扫一扫",
+    "downloadHint":"下载Bycoin App，切换侧链，扫一扫",
     "passwordHint":"输入口令，领红包",
     "backTitle":"返回分享页面",
     "backMsg":"截屏已保存，是否返回分享页？"
