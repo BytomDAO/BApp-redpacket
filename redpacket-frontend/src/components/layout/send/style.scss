@@ -1,10 +1,12 @@
 .inactive{
-  opacity: 0.6;
+  opacity: 0.4;
 }
 
 .send__background{
   padding: 20px;
-  background: linear-gradient(173.72deg, #E26043 9.21%, #C4412C 98.5%);
+  background: linear-gradient(172.11deg, #C4382C 9.21%, #931213 98.5%);
+  border: 2px solid #EFA17B;
+  box-sizing: border-box;
 
   box-shadow: 0px 4px 32px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
@@ -22,7 +24,7 @@
 }
 
 .form__error_hint span{
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.1);
   padding: 2px 16px;
   border-radius: 16px;
 }

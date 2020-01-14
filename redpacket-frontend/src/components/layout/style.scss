@@ -1,9 +1,9 @@
 .container__wrapper{
   height: 100%;
   min-height: 100vh;
-  background: url('../../static/img/background-texture.png'), linear-gradient(180deg, #C34330 0%, #B83420 100%);
-  background-repeat: no-repeat;
-  background-size: 100%;
+  background: url('../../static/img/background.png');
+  background-size: 45px;
+  background-repeat: repeat;
   padding-bottom: 20px;
 }
 
@@ -32,4 +32,8 @@
   max-width: 255px;
   margin-top: 35px;
   margin-bottom: 10px;
+}
+
+.download_hint{
+  font-size: 14pt;
 }

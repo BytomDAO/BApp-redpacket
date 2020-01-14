@@ -171,8 +171,11 @@ class Send extends React.Component {
             )}
           </Formik>
 
-          {this.state.error && <div className="alert alert-danger mt-4" role="alert">
+          {this.state.error && <div className="alert alert-danger alert-dismissible fade show mt-4" role="alert">
             {this.state.error}
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>}
         </div>
 

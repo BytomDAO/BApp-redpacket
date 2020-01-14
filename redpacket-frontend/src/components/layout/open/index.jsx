@@ -137,12 +137,15 @@ class Open extends React.Component {
             <div className="empty__box">{t('open.empty')}</div>
             <Link className="btn-primary back__home_btn" to={"/"}>{t('open.back')}</Link>
             </div>}
-
-          {this.state.error && <div className="alert alert-danger mt-4" role="alert">
-            {this.state.error}
-          </div>}
-
         </div>
+
+        {this.state.error && <div className="alert alert-danger  alert-dismissible fade show mt-4" role="alert">
+          {this.state.error}
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>}
+
         <Link className="hr__hint" to={`/details/${redPackId}`}>{t('open.viewDetails')}</Link>
       </LogoContainer>
     )

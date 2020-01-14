@@ -167,6 +167,10 @@ a:focus, a:hover, a:active {
     color: white;
 }
 
+.btn:focus, .btn:hover, .btn:active  {
+    color: rgba(255, 255, 255, 0.60);
+}
+
 .btn-link:focus, .btn-link:hover, .btn-link:active {
     color: #e4e4e4;
 }
@@ -192,8 +196,8 @@ a:focus, a:hover, a:active {
 }
 
 .btn-primary {
-    background: linear-gradient(180deg, #FFEFC4 0%, #F3D279 100%);
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+    background: linear-gradient(179.4deg, #FFE4CA 3.02%, #F49B66 84.02%);
+    box-shadow: 0px 2px 8px rgba(46, 3, 3, 0.04);
     border-radius: 24px;
     display: flex;
     justify-content: center;
@@ -203,12 +207,12 @@ a:focus, a:hover, a:active {
 
     border: none;
 
-    color: #C50F0F !important;
+    color: #981210 !important;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
-    background: linear-gradient(0deg, #FFEFC4 0%, #F3D279 100%);
-    color: #C50F0F !important;
+    background: linear-gradient(0deg, #FFE4CA 0%, #F49B66 100%);
+    color:  #981210 !important;
 }
 
 .btn-secondary {
@@ -264,6 +268,9 @@ a:focus, a:hover, a:active {
     background: none;
 }
 
+.fixed-top{
+    left:auto;
+}
 
 .unit{
     padding-left: 10px;

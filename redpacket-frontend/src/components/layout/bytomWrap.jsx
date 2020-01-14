@@ -71,7 +71,7 @@ export default function(WrappedComponent) {
       } else if (( bytom && ! bytom.chain)) {
         return WrapWithBycoin(
           <div className="columns">
-            <p className="text-white">
+            <p className="text-white download_hint">
               {t('wrap.upgradeHint')}
             </p>
             <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>
@@ -80,7 +80,7 @@ export default function(WrappedComponent) {
       } else if (( bytom && bytom.chain == 'bytom' )) {
         return WrapWithBycoin(
           <div className="columns">
-              <p className="text-white">
+              <p className="text-white download_hint">
                 {t('wrap.vaporOnlyHint')}
               </p>
           </div>
@@ -88,7 +88,7 @@ export default function(WrappedComponent) {
       } else {
         return WrapWithBycoin(
           <div className="columns">
-              <p className="text-white">
+              <p className="text-white download_hint">
                 {t('wrap.downloadHint')}
               </p>
               <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>
