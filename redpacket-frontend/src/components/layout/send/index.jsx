@@ -1,10 +1,11 @@
 import React from 'react'
 import { sendRedPack } from './action'
 import { Formik, Form, Field } from 'formik';
-import BigNumber from 'bignumber.js'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import Footer from '../addressFooter'
+
+import { Alert } from 'react-bootstrap';
 
 
 require('./style.scss')
@@ -47,7 +48,7 @@ class Send extends React.Component {
 
     return (
       <LogoContainer>
-        <div className="send__background">
+        <div key="sendBlock" className="send__background">
           <Formik
             initialValues={{amount: '', number: '', password: '', word: ''}}
             validate={values => {
@@ -171,12 +172,9 @@ class Send extends React.Component {
             )}
           </Formik>
 
-          {this.state.error && <div className="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+          {this.state.error && <Alert className='mt-4' variant="danger" onClose={() => this.setState({ error: '' })} dismissible>
             {this.state.error}
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>}
+          </Alert>}
         </div>
 
         <Footer/>

@@ -98,7 +98,7 @@ class QrCode extends React.Component {
             <Logo/>
           </div>
           <div className="redPacket__container qrCode__container">
-            <div className="mb-2">{packetDetails.note}</div>
+            <div className="mb-2 ml-4 mr-4">{packetDetails.note}</div>
             <div className="qrCode mb-4">
               {
                 this.state.url &&
@@ -106,7 +106,7 @@ class QrCode extends React.Component {
               }
             </div>
             {senderAddress && <p>{senderAddress}{t('qrCode.spacket')}</p>}
-            <div className="mt-4 code_box ml-auto mr-auto">{this.state.password}</div>
+            <div className="mt-2 code_box ml-auto mr-auto">{this.state.password}</div>
           </div>
           <div className="d-flex">
             <div className="mr-3">

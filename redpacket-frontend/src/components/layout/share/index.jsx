@@ -47,16 +47,19 @@ class Share extends React.Component {
         <div className="shared__container redPacket__container">
           <div className="open__header">{title}</div>
           <div className="open__hint">{t('share.hint')}</div>
-          <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}`}>{t('share.qrCode')}</Link>
 
-          <div>
-              <button className="btn btn-link link__btn" onClick={this.copyClick.bind(this)}>
-                <img className="icon" src={require('../../../static/img/icon/qrCode.png')} alt=""/> {t('share.copy')}
-              </button>
-              <div className="vertical_separator"></div>
-              <button className="btn btn-link link__btn" onClick={(e)=>this.showPassword(e)}>
-                <img className="icon" src={require('../../../static/img/icon/codeShare.png')} alt=""/> {t('share.viewCode')}
-              </button>
+          <div className="shared__component">
+            <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}`}>{t('share.qrCode')}</Link>
+
+            <div>
+                <button className="btn btn-link link__btn" onClick={this.copyClick.bind(this)}>
+                  <img className="icon" src={require('../../../static/img/icon/qrCode.png')} alt=""/> {t('share.copy')}
+                </button>
+                <div className="vertical_separator"></div>
+                <button className="btn btn-link link__btn" onClick={(e)=>this.showPassword(e)}>
+                  <img className="icon" src={require('../../../static/img/icon/codeShare.png')} alt=""/> {t('share.viewCode')}
+                </button>
+            </div>
           </div>
         </div>
       </LogoContainer>

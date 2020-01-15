@@ -1,10 +1,16 @@
 .share__copy_button{
-  width: 255px;
+  max-width: 255px;
   margin: 86px auto 10px;
 }
 
 .shared__container{
   padding-top: 195px;
+}
+
+.shared__component{
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
 }
 
 .link__btn{
