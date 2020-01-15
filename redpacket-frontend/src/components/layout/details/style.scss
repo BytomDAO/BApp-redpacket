@@ -29,10 +29,11 @@
 
 .shared_button{
   position: absolute;
-  width: 255px;
+  max-width: 255px;
   height: 48px;
   left: 38px;
   bottom: 40px;
+  right: 38px;
 }
 
 .amount_number{
