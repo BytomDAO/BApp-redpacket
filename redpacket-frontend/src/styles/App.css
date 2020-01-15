@@ -291,3 +291,10 @@ a:focus, a:hover, a:active {
 #mainNav .navbar-nav li.nav-item a.nav-link{
     color: rgba(0, 0, 0, 0.88);
 }
+
+.navbar[aria-expanded="true"]{
+    width: 100%;
+    height: 100%;
+    align-items: baseline;
+    background: #00000045;
+}
