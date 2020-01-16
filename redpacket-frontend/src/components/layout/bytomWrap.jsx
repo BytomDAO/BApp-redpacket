@@ -31,6 +31,15 @@ export default function(WrappedComponent) {
         />
       </div>
 
+      const isVapor = (address) => {
+        const ab = address.substring(0,2)
+        if(ab ==='vp' ||ab ==='tp' || ab ==='sp'){
+          return true
+        }else{
+          return false
+        }
+      }
+
       const WrapWithBycoin = (content) => <div className="container__wrapper">
         <Header />
         <section className="portfolio" id="portfolio">
@@ -68,16 +77,7 @@ export default function(WrappedComponent) {
             </p>
           </div>
         )
-      } else if (( bytom && ! bytom.chain)) {
-        return WrapWithBycoin(
-          <div className="columns">
-            <p className="text-white download_hint">
-              {t('wrap.upgradeHint')}
-            </p>
-            <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>
-          </div>
-        )
-      } else if (( bytom && bytom.chain == 'bytom' )) {
+      } else if (( bytom && !isVapor(bytom.default_account.address) )) {
         return WrapWithBycoin(
           <div className="columns">
               <p className="text-white download_hint">

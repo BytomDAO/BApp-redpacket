@@ -77,7 +77,7 @@ class Send extends React.Component {
                 const hanArray = (values.password.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
                 if(hanArray.length> 6){
                   errors.password = t('send.passwordZhHint')
-                }else if((values.password.length) > 20 ){
+                }else if((hanArray.length*3 + (values.password.length-hanArray.length)) > 20 ){
                   errors.password = t('send.passwordEnHint')
                 }
               }
