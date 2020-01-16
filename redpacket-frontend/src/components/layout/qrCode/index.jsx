@@ -18,9 +18,10 @@ class QrCode extends React.Component {
       url: '',
       password:''
     }
+    this.fetchData = this.fetchData.bind(this)
   }
 
-  componentDidMount(){
+  fetchData(){
     let opts = {
       errorCorrectionLevel: 'H',
       type: 'image/jpeg',
@@ -81,6 +82,18 @@ class QrCode extends React.Component {
       })
   }
 
+  componentDidMount(){
+    if(this.props.bytom){
+      this.fetchData()
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.bytom && this.props.bytom !== prevProps.bytom ) {
+      this.fetchData();
+    }
+  }
+
   render() {
     const { t } = this.props;
 
@@ -129,6 +142,7 @@ class QrCode extends React.Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
+  bytom: state.bytom
 })
 
 const mapDispatchToProps = dispatch => ({
