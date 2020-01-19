@@ -48,7 +48,7 @@ class QrCode extends React.Component {
         return this.props.getDetails(this.props.match.params.id)
       })
       .then(()=>{
-        return getPassword(this.props.match.params.id)
+        return getPassword(this.props.match.params.id, this.props.bytom.default_account.address)
       })
       .then((resp)=> {
         return setStateAsync({ password: resp.data.password})

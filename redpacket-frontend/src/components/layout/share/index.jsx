@@ -29,7 +29,7 @@ class Share extends React.Component {
 
   showPassword(e){
     e.preventDefault()
-    getPassword(this.props.match.params.id).then((resp)=> {
+    getPassword(this.props.match.params.id, window.bytom.default_account.address).then((resp)=> {
       const password = resp.data.password
       toastMsg(`${this.props.t('share.code')}:${password}`)
     })

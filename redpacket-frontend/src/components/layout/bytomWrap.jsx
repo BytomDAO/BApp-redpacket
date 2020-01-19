@@ -65,6 +65,7 @@ export default function(WrappedComponent) {
       if (
         bytom
         && bytom.default_account
+        && isVapor(bytom.default_account.address)
       ) {
         return Wrap(<WrappedComponent {...this.props} />)
       }

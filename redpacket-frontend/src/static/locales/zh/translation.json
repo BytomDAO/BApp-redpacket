@@ -29,7 +29,7 @@
     "download":"立即下载",
     "upgradeHint":"请升级至最新版Bycoin",
     "vaporOnlyHint":"请切换至侧链使用比原红包",
-    "auth":"请授权钱包地址"
+    "auth":"请授权侧链钱包地址"
   },
   "send":{
     "random":"拼手气红包",
