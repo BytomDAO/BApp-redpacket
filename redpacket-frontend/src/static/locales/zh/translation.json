@@ -29,7 +29,7 @@
     "download":"立即下载",
     "upgradeHint":"请升级至最新版Bycoin",
     "vaporOnlyHint":"请切换至侧链使用比原红包",
-    "auth":"请升级至最新版，\n切换至侧链使用并授权"
+    "auth":"请授权侧链钱包地址"
   },
   "send":{
     "random":"拼手气红包",
@@ -50,6 +50,7 @@
     "send":"发红包",
     "amountHint":"请填写正确的红包金额",
     "amountMinHint":"红包金额最低0.01BTM",
+    "amountMultipleMinHint":"每个红包金额最低0.01BTM",
     "numberHint":"请填写正确的红包个数",
     "gasHint":"手续费最小值为0.002",
     "passwordEnHint":"请输入英文和中文长度为20以内的口令。",

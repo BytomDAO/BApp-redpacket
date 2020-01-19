@@ -50,6 +50,7 @@
     "send":"Send Red Packet",
     "amountHint":"Invalid BTM amount format",
     "amountMinHint":"The min value is 0.01",
+    "amountMultipleMinHint":"The min value of each redpacket is 0.01",
     "numberHint":"Please use the correct redpacket number",
     "gasHint":"The minimum fee is 0.002",
     "passwordEnHint":"Please Enter the Chinese Characters and English Characters password within length 20",

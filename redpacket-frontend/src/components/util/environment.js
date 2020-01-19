@@ -1,13 +1,12 @@
 function url(){
   const bytom = window.bytom
   if(bytom){
-    const isVapor = bytom.chain === 'vapor'
     switch (bytom.net) {
       case "testnet":
-        return "http://app.bycoin.io:3120/dapp"
+        return "http://52.82.55.89:3100/dapp"
         break
       case "solonet":
-        return isVapor? "http://app.bycoin.io:3130/dapp":""
+        return "http://52.82.55.89:3100/dapp"
         break
       default:
         return "https://bapp.bystack.com/dapp"

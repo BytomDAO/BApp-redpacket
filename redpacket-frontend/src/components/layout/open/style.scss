@@ -20,7 +20,7 @@
 
 .open__header{
   font-size: 16px;
-  margin-bottom: 20px;
+  margin: 0 30px 20px;
 }
 
 .open_hint{
@@ -61,10 +61,18 @@
   width: 68px;
   height: 68px;
 
-  background: linear-gradient(180deg, #FEF7E9 0%, #FFE8B9 100%);
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(179.4deg, #FFE4CA 3.02%, #F49B66 84.02%);
+  box-shadow: 0px 2px 8px rgba(46, 3, 3, 0.04);
   border-radius: 34px;
+  border: none;
   padding: 0;
+
+  color:  #981210 !important;
+}
+
+.open__button:hover, .btn-primary:focus, .btn-primary:active {
+  background: linear-gradient(0deg, #FFE4CA 0%, #F49B66 100%);
+  color:  #981210 !important;
 }
 
 .hr__hint {

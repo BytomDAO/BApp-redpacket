@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import address from '../../util/address'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
+import { Alert } from 'react-bootstrap';
 
 require('./style.scss')
 
@@ -137,12 +138,14 @@ class Open extends React.Component {
             <div className="empty__box">{t('open.empty')}</div>
             <Link className="btn-primary back__home_btn" to={"/"}>{t('open.back')}</Link>
             </div>}
-
-          {this.state.error && <div className="alert alert-danger mt-4" role="alert">
-            {this.state.error}
-          </div>}
-
         </div>
+
+        {this.state.error && <Alert className='mt-4' variant="danger" onClose={() => this.setState({ error: '' })} dismissible>
+          {this.state.error}
+        </Alert>}
+
+
+
         <Link className="hr__hint" to={`/details/${redPackId}`}>{t('open.viewDetails')}</Link>
       </LogoContainer>
     )

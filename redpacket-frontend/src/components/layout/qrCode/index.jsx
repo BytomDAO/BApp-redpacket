@@ -18,9 +18,10 @@ class QrCode extends React.Component {
       url: '',
       password:''
     }
+    this.fetchData = this.fetchData.bind(this)
   }
 
-  componentDidMount(){
+  fetchData(){
     let opts = {
       errorCorrectionLevel: 'H',
       type: 'image/jpeg',
@@ -47,7 +48,7 @@ class QrCode extends React.Component {
         return this.props.getDetails(this.props.match.params.id)
       })
       .then(()=>{
-        return getPassword(this.props.match.params.id)
+        return getPassword(this.props.match.params.id, this.props.bytom.default_account.address)
       })
       .then((resp)=> {
         return setStateAsync({ password: resp.data.password})
@@ -81,6 +82,18 @@ class QrCode extends React.Component {
       })
   }
 
+  componentDidMount(){
+    if(this.props.bytom){
+      this.fetchData()
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.bytom && this.props.bytom !== prevProps.bytom ) {
+      this.fetchData();
+    }
+  }
+
   render() {
     const { t } = this.props;
 
@@ -98,7 +111,7 @@ class QrCode extends React.Component {
             <Logo/>
           </div>
           <div className="redPacket__container qrCode__container">
-            <div className="mb-2">{packetDetails.note}</div>
+            <div className="mb-2 ml-4 mr-4">{packetDetails.note}</div>
             <div className="qrCode mb-4">
               {
                 this.state.url &&
@@ -106,7 +119,7 @@ class QrCode extends React.Component {
               }
             </div>
             {senderAddress && <p>{senderAddress}{t('qrCode.spacket')}</p>}
-            <div className="mt-4 code_box ml-auto mr-auto">{this.state.password}</div>
+            <div className="mt-2 code_box ml-auto mr-auto">{this.state.password}</div>
           </div>
           <div className="d-flex">
             <div className="mr-3">
@@ -129,6 +142,7 @@ class QrCode extends React.Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
+  bytom: state.bytom
 })
 
 const mapDispatchToProps = dispatch => ({

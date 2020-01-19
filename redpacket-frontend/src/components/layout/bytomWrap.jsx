@@ -31,6 +31,15 @@ export default function(WrappedComponent) {
         />
       </div>
 
+      const isVapor = (address) => {
+        const ab = address.substring(0,2)
+        if(ab ==='vp' ||ab ==='tp' || ab ==='sp'){
+          return true
+        }else{
+          return false
+        }
+      }
+
       const WrapWithBycoin = (content) => <div className="container__wrapper">
         <Header />
         <section className="portfolio" id="portfolio">
@@ -56,7 +65,7 @@ export default function(WrappedComponent) {
       if (
         bytom
         && bytom.default_account
-        && bytom.chain === 'vapor'
+        && isVapor(bytom.default_account.address)
       ) {
         return Wrap(<WrappedComponent {...this.props} />)
       }
@@ -68,19 +77,10 @@ export default function(WrappedComponent) {
             </p>
           </div>
         )
-      } else if (( bytom && ! bytom.chain)) {
+      } else if (( bytom && !isVapor(bytom.default_account.address) )) {
         return WrapWithBycoin(
           <div className="columns">
-            <p className="text-white">
-              {t('wrap.upgradeHint')}
-            </p>
-            <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>
-          </div>
-        )
-      } else if (( bytom && bytom.chain == 'bytom' )) {
-        return WrapWithBycoin(
-          <div className="columns">
-              <p className="text-white">
+              <p className="text-white download_hint">
                 {t('wrap.vaporOnlyHint')}
               </p>
           </div>
@@ -88,7 +88,7 @@ export default function(WrappedComponent) {
       } else {
         return WrapWithBycoin(
           <div className="columns">
-              <p className="text-white">
+              <p className="text-white download_hint">
                 {t('wrap.downloadHint')}
               </p>
               <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>

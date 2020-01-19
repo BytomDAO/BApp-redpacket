@@ -40,7 +40,7 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    port: 8000,
+    port: 8888,
     // Send API requests on localhost to API server get around CORS.
   },
   resolve: {

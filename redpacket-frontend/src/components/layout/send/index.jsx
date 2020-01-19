@@ -1,10 +1,11 @@
 import React from 'react'
 import { sendRedPack } from './action'
 import { Formik, Form, Field } from 'formik';
-import BigNumber from 'bignumber.js'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import Footer from '../addressFooter'
+
+import { Alert } from 'react-bootstrap';
 
 
 require('./style.scss')
@@ -47,7 +48,7 @@ class Send extends React.Component {
 
     return (
       <LogoContainer>
-        <div className="send__background">
+        <div key="sendBlock" className="send__background">
           <Formik
             initialValues={{amount: '', number: '', password: '', word: ''}}
             validate={values => {
@@ -56,6 +57,8 @@ class Send extends React.Component {
                 errors.amount = t('common.require');
               } else if (values.amount < 0.01) {
                 errors.amount = t('send.amountMinHint');
+              } else if (values.amount < 0.01 * values.number) {
+                errors.amount = t('send.amountMultipleMinHint');
               } else if (
                 !/^(\d*\.)?\d+$/i.test(values.amount)
               ) {
@@ -76,7 +79,7 @@ class Send extends React.Component {
                 const hanArray = (values.password.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
                 if(hanArray.length> 6){
                   errors.password = t('send.passwordZhHint')
-                }else if((values.password.length) > 20 ){
+                }else if((hanArray.length*3 + (values.password.length-hanArray.length)) > 20 ){
                   errors.password = t('send.passwordEnHint')
                 }
               }
@@ -171,9 +174,9 @@ class Send extends React.Component {
             )}
           </Formik>
 
-          {this.state.error && <div className="alert alert-danger mt-4" role="alert">
+          {this.state.error && <Alert className='mt-4' variant="danger" onClose={() => this.setState({ error: '' })} dismissible>
             {this.state.error}
-          </div>}
+          </Alert>}
         </div>
 
         <Footer/>

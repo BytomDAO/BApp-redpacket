@@ -79,7 +79,7 @@ class RedPackDetails extends Component {
       <LogoContainer>
         <div className="shadow__mask">
           <div className="details__summary">
-            <h4 className="details__header text-secondary">{packetDetails.note} {!isNormalType && <img className="icon" src={require('../../../static/img/icon/ping.png')} alt=""/>}</h4>
+            <h4 className="details__header text-secondary redPack_detail__header">{packetDetails.note} {!isNormalType && <img className="icon" src={require('../../../static/img/icon/ping.png')} alt=""/>}</h4>
 
             <div>{address.short(packetDetails.sender_address)}{t('qrCode.spacket')}</div>
             {myRedPack && <div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>}
