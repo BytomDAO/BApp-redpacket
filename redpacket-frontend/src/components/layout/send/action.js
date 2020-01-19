@@ -76,14 +76,13 @@ export function sendRedPack(value,isNormalType) {
 
 function generateRandom(count, sum){
   let result = []
-  let money = sum
-
+  let remainTotal = sum - count*0.01
   for (let i=0;i<count - 1;i++) {
-    const value = parseFloat((Math.random() * (money/(count-result.length)*2 - 0.01) + 0.01).toFixed(2) )
-    result.push(value)
-    money = money - value
+    const value = parseFloat((Math.random() * (remainTotal/(count-result.length)*2)).toFixed(2) )
+    result.push(parseFloat((value+0.01).toFixed(2)))
+    remainTotal = remainTotal - value
   }
-  result.push(parseFloat(money.toFixed(2)))
+  result.push(parseFloat((remainTotal+0.01).toFixed(2)))
 
   return result
 }
