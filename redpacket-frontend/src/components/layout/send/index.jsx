@@ -57,7 +57,7 @@ class Send extends React.Component {
                 errors.amount = t('common.require');
               } else if (values.amount < 0.01) {
                 errors.amount = t('send.amountMinHint');
-              } else if (values.amount < 0.01 * values.number) {
+              } else if (this.state.type ==='advanced' && values.amount < 0.01 * values.number) {
                 errors.amount = t('send.amountMultipleMinHint');
               } else if (
                 !/^(\d*\.)?\d+$/i.test(values.amount)
