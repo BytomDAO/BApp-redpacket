@@ -17,7 +17,7 @@ function url(){
 
 let  basename
 if (process.env.NODE_ENV === 'production') {
-  basename = '/bapp/redpacket'
+  basename = '/redpacket'
 } else {
   basename = ''
 }

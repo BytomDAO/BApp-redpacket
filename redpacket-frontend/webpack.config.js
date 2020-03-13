@@ -5,7 +5,7 @@ const webpack = require("webpack");
 
 let publicPath = '/'
 if (process.env.NODE_ENV === 'production') {
-  publicPath = '/bapp/redpacket/'
+  publicPath = '/redpacket/'
 }
 
 module.exports = {
