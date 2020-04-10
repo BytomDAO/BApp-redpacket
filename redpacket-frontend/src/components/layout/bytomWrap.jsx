@@ -31,7 +31,7 @@ export default function(WrappedComponent) {
         />
       </div>
 
-      const isVapor = (address) => {
+      const isVapor = (address='') => {
         const ab = address.substring(0,2)
         if(ab ==='vp' ||ab ==='tp' || ab ==='sp'){
           return true

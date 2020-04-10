@@ -54,7 +54,7 @@ export function sendRedPack(value,isNormalType) {
       }).then((res)=>{
         return submitRedPacket({
           "red_packet_id": redPackId,
-          "tx_id": res.transaction_hash,
+          "tx_id": res.transaction_hash || res.transactionHash,
           "address": window.bytom.default_account.address,
           "amount": unitAmount.times(totalAmount).toNumber(),
           "password": password,
