@@ -17,17 +17,18 @@ import bytomWrap from './layout/bytomWrap'
 import Bytom from "bytom-js-sdk";
 import action from './action'
 import {connect} from "react-redux";
+import bytomJs from 'bytom.js'
 import {BTM} from './util/constants'
 
+const networks = {
+  solonet: 'http://app.bycoin.io:3000/',
+  testnet: 'http://app.bycoin.io:3020/',
+  mainnet: 'https://api.bycoin.im:8000/'
+};
 
 class App extends Component {
   constructor(props){
     super(props)
-    let networks = {
-      solonet: 'http://app.bycoin.io:3000/',
-      testnet: 'http://app.bycoin.io:3020/',
-      mainnet: 'https://api.bycoin.im:8000/'
-    };
     global.bytomAPI = new Bytom(networks, '')
   }
 
@@ -36,6 +37,7 @@ class App extends Component {
     if(!bytom){
       document.addEventListener('chromeBytomLoaded', bytomExtension => {
         const bytom = window.bytom;
+        window.bytomJs = new bytomJs()
         this.bytomLoaded(bytom);
         setBytom(bytom);
       });
@@ -53,22 +55,12 @@ class App extends Component {
       this.props.updateConnection(true)
 
       global.bytomAPI.setNetType(bytom.net)
-      const that = this
 
       // Check to see if the user has signed in/out of their
       // bytom wallet or switched accounts
       let accountInterval = setInterval(function () {
         if (BYTOM_ACCOUNT.address !== bytom.default_account.address) {
           location.reload(true);
-        } else{
-          const oldBalanceAccount = BYTOM_ACCOUNT.balances.filter(b => b.asset === BTM)[0]
-          const oldBalance = oldBalanceAccount? oldBalanceAccount.balance:0
-          const newBalanceAccount = bytom.default_account.balances.filter(b => b.asset === BTM)[0]
-          const newBalance = newBalanceAccount? newBalanceAccount.balance:0
-          if(oldBalance !== newBalance){
-            BYTOM_ACCOUNT = bytom.default_account
-            that.props.setBytom(bytom)
-          }
         }
 
       }, bytomPollInterval);

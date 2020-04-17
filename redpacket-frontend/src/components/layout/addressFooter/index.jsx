@@ -1,5 +1,5 @@
 import React, {
-  Component
+  Component,
 } from 'react'
 import {connect} from "react-redux";
 import {BTM} from "../../util/constants";
@@ -10,12 +10,39 @@ import { withTranslation } from 'react-i18next';
 require('./style.scss')
 
 class Footer extends Component {
-
   constructor(props) {
     super(props);
     this.copyAddress = this.copyAddress.bind(this)
+    this.state={
+      BtmBalance: 0
+    }
   }
 
+  componentDidMount(){
+    const { account } = this.props;
+    const that = this
+    function  updateBalance() {
+      bytomJs.getBalance(account.accountId).then((balances) => {
+        if (balances && balances.length > 0) {
+          const balance = balances.filter(b => b.asset === BTM)[0]
+          that.setState({
+            BtmBalance: balance
+          })
+        }
+      })
+      that.timer = setTimeout(updateBalance, 5000);
+    }
+
+    updateBalance()
+  }
+
+  componentWillUnmount() {
+    // Is our timer running?
+    if (this.timer) {
+      // Yes, clear it
+      clearTimeout(this.timer);
+    }
+  }
   copyAddress(e, account){
     e.preventDefault()
     copyToClipboard(account.address)
@@ -23,11 +50,12 @@ class Footer extends Component {
   }
 
   render () {
-    const { t , balanceObject, account } = this.props;
+    const { t , account } = this.props;
+    const { BtmBalance } = this.state
 
     let balance =  0.00
-    if(balanceObject && balanceObject.balance){
-      balance = balanceObject.balance/Math.pow(10, balanceObject.decimals)
+    if(BtmBalance){
+      balance = BtmBalance.availableBalance/Math.pow(10, BtmBalance.decimals)
     }
 
     return (
@@ -54,14 +82,8 @@ class Footer extends Component {
 const mapStateToProps = state => {
   const account = state.bytom && state.bytom.default_account
 
-  let balanceObject
-  if(account && account.balances &&account.balances.length>0) {
-    balanceObject = account.balances.filter(b => b.asset === BTM)[0]
-  }
-
   return ({
     bytom: state.bytom,
-    balanceObject,
     account
   })
 }
