@@ -33,7 +33,7 @@
     "axios": "^0.18.0",
     "bignumber.js": "^8.0.2",
     "bootstrap": "^4.2.1",
-    "bytom.js": "^1.4.0-beta3",
+    "bytom.js": "^1.4.0-beta5",
     "formik": "^1.5.4",
     "i18next": "^17.0.15",
     "i18next-browser-languagedetector": "^3.0.3",

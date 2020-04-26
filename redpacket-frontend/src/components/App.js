@@ -37,7 +37,7 @@ class App extends Component {
     if(!bytom){
       document.addEventListener('chromeBytomLoaded', bytomExtension => {
         const bytom = window.bytom;
-        window.bytomJs = new bytomJs()
+        window.bytomJs = new bytomJs(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
         this.bytomLoaded(bytom);
         setBytom(bytom);
       });
