@@ -18,8 +18,8 @@ export function getCurrentAddress(){
   const bytom = window.bytom
   if (bytom && bytom.defaultAccount){
     return bytom.defaultAccount.address
-  }else if(bytom &&  bytom.defalut_account){
-    return bytom.defalut_account.address
+  }else if(bytom &&  bytom.default_account){
+    return bytom.default_account.address
   }else{
     return ''
   }
