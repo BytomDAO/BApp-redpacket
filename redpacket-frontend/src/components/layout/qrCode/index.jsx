@@ -123,7 +123,7 @@ class QrCode extends React.Component {
           </div>
           <div className="d-flex">
             <div className="mr-3">
-              <img className="bycoin_img" src={require('../../../static/img/bycoin.png')}/>
+              <img className="bycoin_img" src={require('../../img/bycoin.png')}/>
             </div>
             <div>
               <div className="hint-item text-white">

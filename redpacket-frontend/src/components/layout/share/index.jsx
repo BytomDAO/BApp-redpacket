@@ -53,11 +53,11 @@ class Share extends React.Component {
 
             <div>
                 <button className="btn btn-link link__btn" onClick={this.copyClick.bind(this)}>
-                  <img className="icon" src={require('../../../static/img/icon/qrCode.png')} alt=""/> {t('share.copy')}
+                  <img className="icon" src={require('../../img/icon/qrCode.png')} alt=""/> {t('share.copy')}
                 </button>
                 <div className="vertical_separator"></div>
                 <button className="btn btn-link link__btn" onClick={(e)=>this.showPassword(e)}>
-                  <img className="icon" src={require('../../../static/img/icon/codeShare.png')} alt=""/> {t('share.viewCode')}
+                  <img className="icon" src={require('../../img/icon/codeShare.png')} alt=""/> {t('share.viewCode')}
                 </button>
             </div>
           </div>

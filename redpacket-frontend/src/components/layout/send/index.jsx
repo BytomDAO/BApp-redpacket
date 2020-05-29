@@ -115,11 +115,11 @@ class Send extends React.Component {
               <div>
                 <div className="text-center mb-3">
                   <button className={`btn btn-link link__btn ${this.state.type !=='advanced' && 'inactive'}`} onClick={(e)=>this.changeToNormal(e, props.handleReset,'advanced')}>
-                    <img className="icon" src={require('../../../static/img/icon/ping-outline.png')} alt=""/> {t('send.random')}
+                    <img className="icon" src={require('../../img/icon/ping-outline.png')} alt=""/> {t('send.random')}
                   </button>
                   <div className="vertical_separator"/>
                   <button className={`btn btn-link link__btn ${this.state.type ==='advanced' && 'inactive'}`} onClick={(e)=>this.changeToNormal(e, props.handleReset, 'normal')}>
-                    <img className="icon" src={require('../../../static/img/icon/packet.png')} alt=""/> {t('send.normal')}
+                    <img className="icon" src={require('../../img/icon/packet.png')} alt=""/> {t('send.normal')}
                   </button>
                 </div>
                 <Form>

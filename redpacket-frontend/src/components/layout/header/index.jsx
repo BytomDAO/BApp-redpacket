@@ -30,7 +30,7 @@ const Header = class extends Component {
       <nav className="navbar fixed-top text-uppercase" id="mainNav" data-toggle="collapse"  data-target="#navbarResponsive" >
         <div className="container" >
           <button className="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <img className="ham" src={require("../../../static/img/icon/menu.png")} />
+            <img className="ham" src={require("../../img/icon/menu.png")} />
           </button>
 
           <div className="collapse navbar-collapse" id="navbarResponsive">

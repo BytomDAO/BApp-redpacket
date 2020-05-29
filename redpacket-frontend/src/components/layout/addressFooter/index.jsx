@@ -83,7 +83,7 @@ class Footer extends Component {
             <div className="footer__content_item">
               <div>{t('common.address')}: </div>
               { account && <div className="text-secondary">{account.address} <a onClick={(e)=>this.copyAddress(e, account)}>
-                <img className="icon" src={require('../../../static/img/icon/copy.png')} alt=""/></a>
+                <img className="icon" src={require('../../img/icon/copy.png')} alt=""/></a>
               </div>}
             </div>
 

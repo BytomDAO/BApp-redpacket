@@ -8,7 +8,7 @@ const Logo = class extends Component {
 
     return (
       <NavLink className="navbar-brand js-scroll-trigger mt-3" to="/">
-        <img className="logo" src={require("../../../static/img/logo.png")} />
+        <img className="logo" src={require("../../img/logo.png")} />
       </NavLink>
     )
   }

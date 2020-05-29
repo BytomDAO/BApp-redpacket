@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require("webpack");
 
 let publicPath = '/'
@@ -53,7 +54,10 @@ module.exports = {
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: 'src/static' }
+    ])
   ],
   externals: {
     config:  "config",
