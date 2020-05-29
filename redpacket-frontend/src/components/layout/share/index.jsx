@@ -1,6 +1,6 @@
 import React from 'react'
 import { copyToClipboard } from '../../util/clipboard'
-import { toastMsg } from "../../util/utils";
+import { toastMsg, getCurrentAddress } from "../../util/utils";
 import {Link } from 'react-router-dom'
 import {getPassword} from "./action";
 import {withTranslation} from "react-i18next";
@@ -29,7 +29,7 @@ class Share extends React.Component {
 
   showPassword(e){
     e.preventDefault()
-    getPassword(this.props.match.params.id, window.bytom.default_account.address).then((resp)=> {
+    getPassword(this.props.match.params.id, getCurrentAddress()).then((resp)=> {
       const password = resp.data.password
       toastMsg(`${this.props.t('share.code')}:${password}`)
     })

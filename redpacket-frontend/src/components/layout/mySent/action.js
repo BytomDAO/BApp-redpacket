@@ -1,8 +1,9 @@
 import { listSenderRedPackets } from '../../util/api'
+import {getCurrentAddress} from "../../util/utils";
 
 const getMySent = () => {
   return (dispatch) => {
-    return listSenderRedPackets({address:window.bytom.default_account.address})
+    return listSenderRedPackets({address: getCurrentAddress()})
       .then((resp)=>{
         dispatch({
           type: "UPDATE_MY_SENT_DETAILS",

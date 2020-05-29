@@ -10,6 +10,7 @@ import {Link } from 'react-router-dom'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import moment from "moment/moment";
+import {getCurrentAddress} from "../../util/utils";
 
 require('./style.scss')
 
@@ -38,13 +39,14 @@ class RedPackDetails extends Component {
     const packetDetails = this.props.packetDetails
 
     const winners = packetDetails.winners
+    const myAddress = getCurrentAddress()
 
     const isNormalType = packetDetails.red_packet_type===0
     let myRedPack,label
     let list = []
     if(winners){
 
-      myRedPack = winners.filter(winner => winner.address === window.bytom.default_account.address)[0]
+      myRedPack = winners.filter(winner => winner.address === myAddress)[0]
 
       let maxAmount
 
@@ -85,7 +87,7 @@ class RedPackDetails extends Component {
             {myRedPack && <div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>}
 
             {myRedPack && <div>{ t('detail.saved')}</div>}
-            {packetDetails.sender_address === window.bytom.default_account.address && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}
+            {packetDetails.sender_address === myAddress && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}
           </div>
 
           <div className="details__container">

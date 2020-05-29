@@ -18,6 +18,7 @@ import Bytom from "bytom-js-sdk";
 import action from './action'
 import {connect} from "react-redux";
 import bytomJs from 'bytom.js'
+import bytomJsV1 from 'bytom.jsV1'
 import {BTM} from './util/constants'
 
 const networks = {
@@ -38,6 +39,7 @@ class App extends Component {
       document.addEventListener('chromeBytomLoaded', bytomExtension => {
         const bytom = window.bytom;
         window.bytomJs = new bytomJs(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
+        window.bytomJsV1 = new bytomJsV1(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
         this.bytomLoaded(bytom);
         setBytom(bytom);
       });

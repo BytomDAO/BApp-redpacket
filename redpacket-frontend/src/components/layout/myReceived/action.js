@@ -1,8 +1,9 @@
 import { listReceiverRedPackets } from '../../util/api'
+import {getCurrentAddress} from "../../util/utils";
 
 const getMyReceived = () => {
   return (dispatch) => {
-    return listReceiverRedPackets({address:window.bytom.default_account.address})
+    return listReceiverRedPackets({address:getCurrentAddress()})
       .then((resp)=>{
         dispatch({
           type: "UPDATE_MY_RECEIVED_DETAILS",

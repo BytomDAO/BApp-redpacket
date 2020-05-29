@@ -19,18 +19,29 @@ class Footer extends Component {
   }
 
   componentDidMount(){
-    const { account } = this.props;
+    const { account, bytom } = this.props;
     const that = this
     function  updateBalance() {
-      bytomJs.getBalance(account.accountId).then((balances) => {
-        if (balances && balances.length > 0) {
-          const balance = balances.filter(b => b.asset === BTM)[0]
-          that.setState({
-            BtmBalance: balance
-          })
-        }
-      })
-      that.timer = setTimeout(updateBalance, 5000);
+      if(bytom && bytom.version){
+        bytomJs.getBalance(account.address).then((balances) => {
+          if (balances && balances.length > 0) {
+            const balance = balances.filter(b => b.asset === BTM)[0]
+            that.setState({
+              BtmBalance: balance
+            })
+          }
+        })
+      }else{
+        bytomJsV1.getBalance(account.accountId).then((balances) => {
+          if (balances && balances.length > 0) {
+            const balance = balances.filter(b => b.asset === BTM)[0]
+            that.setState({
+              BtmBalance: balance
+            })
+          }
+        })
+      }
+      that.timer = setTimeout(updateBalance, 50000);
     }
 
     updateBalance()
@@ -50,12 +61,16 @@ class Footer extends Component {
   }
 
   render () {
-    const { t , account } = this.props;
+    const { t , account, bytom } = this.props;
     const { BtmBalance } = this.state
 
     let balance =  0.00
     if(BtmBalance){
-      balance = BtmBalance.availableBalance/Math.pow(10, BtmBalance.decimals)
+      if(bytom && bytom.version){
+        balance = BtmBalance.availableBalance
+      }else{
+        balance = BtmBalance.availableBalance/Math.pow(10, BtmBalance.decimals)
+      }
     }
 
     return (

@@ -11,6 +11,7 @@ export function sendRedPack(value,isNormalType) {
   const amount = Number(value.amount)
   const number = Number(value.number)
   const note = value.word
+  const bytom = window.bytom
 
   const unitAmount = new BigNumber(100000000)
 
@@ -23,51 +24,100 @@ export function sendRedPack(value,isNormalType) {
 
       const input = []
       const output = []
-
       let totalAmount
 
-      if(isNormalType){
-        totalAmount = BigNumber(amount).times(number)
+      if(bytom && bytom.version ){
 
-        for(let i = 0; i <number; i++){
-          output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), BTM, contractAddress))
+        if(isNormalType){
+          totalAmount = BigNumber(amount).times(number)
+
+          for(let i = 0; i <number; i++){
+            output.push(controlAddressAction((BigNumber(amount)).toString(), BTM, contractAddress))
+          }
+        }else{
+          totalAmount = amount
+
+          const numberArray = generateRandom(number, totalAmount)
+
+          numberArray.forEach((randomAmount)=>{
+            output.push(controlAddressAction(BigNumber(randomAmount).toString(), BTM, contractAddress))
+          })
+
         }
-      }else{
-        totalAmount = amount
 
-        const numberArray = generateRandom(number, totalAmount)
+        const inputAmount = BigNumber(totalAmount)
 
-        numberArray.forEach((randomAmount)=>{
-          output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), BTM, contractAddress))
+        input.push(spendWalletAction(inputAmount.toString() ,BTM))
+
+        return window.bytom.sendAdvancedTransaction({
+          input,
+          output,
+          gas:0
+        }).then((res)=>{
+          return submitRedPacket({
+            "red_packet_id": redPackId,
+            "tx_id":  res.transactionHash,
+            "address": window.bytom.defaultAccount.address,
+            "amount": unitAmount.times(totalAmount).toNumber(),
+            "password": password,
+            "red_packet_type":isNormalType? 0:1,
+            "note": note
+          }).then(() =>{
+            resolve(redPackId)
+          }).catch(err => {
+            throw err
+          })
+        }).catch(err => {
+          throw err.message
+        })
+
+      }
+      else{
+        if(isNormalType){
+          totalAmount = BigNumber(amount).times(number)
+
+          for(let i = 0; i <number; i++){
+            output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), BTM, contractAddress))
+          }
+        }else{
+          totalAmount = amount
+
+          const numberArray = generateRandom(number, totalAmount)
+
+          numberArray.forEach((randomAmount)=>{
+            output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), BTM, contractAddress))
+          })
+
+        }
+
+        const inputAmount = BigNumber(totalAmount)
+
+        input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,BTM))
+
+        return window.bytom.send_advanced_transaction({
+          input,
+          output,
+          gas:0
+        }).then((res)=>{
+          return submitRedPacket({
+            "red_packet_id": redPackId,
+            "tx_id": res.transaction_hash || res.transactionHash,
+            "address": window.bytom.default_account.address,
+            "amount": unitAmount.times(totalAmount).toNumber(),
+            "password": password,
+            "red_packet_type":isNormalType? 0:1,
+            "note": note
+          }).then(() =>{
+            resolve(redPackId)
+          }).catch(err => {
+            throw err
+          })
+        }).catch(err => {
+          throw err.message
         })
 
       }
 
-      const inputAmount = BigNumber(totalAmount)
-
-      input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,BTM))
-
-      return window.bytom.send_advanced_transaction({
-        input,
-        output,
-        gas:0
-      }).then((res)=>{
-        return submitRedPacket({
-          "red_packet_id": redPackId,
-          "tx_id": res.transaction_hash || res.transactionHash,
-          "address": window.bytom.default_account.address,
-          "amount": unitAmount.times(totalAmount).toNumber(),
-          "password": password,
-          "red_packet_type":isNormalType? 0:1,
-          "note": note
-        }).then(() =>{
-          resolve(redPackId)
-        }).catch(err => {
-          throw err
-        })
-      }).catch(err => {
-        throw err.message
-      })
     }).catch(err => {
       reject(err)
     })

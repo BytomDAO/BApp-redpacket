@@ -1,9 +1,10 @@
 import {
   openRedPacket
 } from '../../util/api'
+import {getCurrentAddress} from "../../util/utils";
 
 export function open(value,redPackId) {
-  const address = window.bytom.default_account.address
+  const address = getCurrentAddress()
   const password = value.password
 
   return openRedPacket({
