@@ -14,7 +14,7 @@ type Sender struct {
 	WitnessProgram  string
 	Address         string
 	Amount          uint64
-	TxID            *string
+	TxID            *string // todo: *string -> string?
 	IsConfirmed     bool
 	IsHandled       bool
 	RedPacketType   int
