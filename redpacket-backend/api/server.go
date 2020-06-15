@@ -125,6 +125,6 @@ func (s *Server) GetNetWorkPrefix() (prefix string, err error) {
 	return
 }
 
-func (s *Server) GetCommonGuid() string {
-	return s.cfg.Updater.BlockCenter.CommonGuid
+func (s *Server) GetCommonAddress() string {
+	return s.cfg.Updater.BlockCenter.CommonAddress
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/hex"
 	"encoding/json"
+	"strconv"
 
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 	"github.com/redpacket/redpacket-backend/database/orm"
 	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
+	"github.com/redpacket/redpacket-backend/util/types"
 )
 
 // status of opening red packet
@@ -142,15 +144,17 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 
 func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) ([]byte, error) {
 	buildReq := &service.BuildTransactionReq{
-		Guid:          s.GetCommonGuid(),
-		Fee:           util.TransactionFee,
-		Confirmations: uint64(1),
-		Inputs: []map[string]interface{}{
-			map[string]interface{}{"type": "spend_utxo", "output_id": utxoID},
+		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
+			Fee:           strconv.FormatUint(util.TransactionFee, 10),
+			Confirmations: uint64(1),
+			Inputs: []map[string]interface{}{
+				{"type": "spend_utxo", "output_id": utxoID},
+			},
+			Outputs: []map[string]interface{}{
+				{"type": "control_address", "asset": util.BTMAssetID, "address": address, "amount": amount},
+			},
 		},
-		Outputs: []map[string]interface{}{
-			map[string]interface{}{"type": "control_address", "asset": util.BTMAssetID, "address": address, "amount": amount},
-		},
+		Address: s.GetCommonAddress(),
 	}
 	buildResp, err := s.service.BuildTransaction(buildReq)
 	if err != nil {
