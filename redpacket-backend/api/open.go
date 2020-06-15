@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"strconv"
 
 	"github.com/bytom/bytom/errors"
@@ -142,7 +141,7 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 	return *txID, nil
 }
 
-func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) ([]byte, error) {
+func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) (string, error) {
 	buildReq := &service.BuildTransactionReq{
 		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
 			Fee:           strconv.FormatUint(util.TransactionFee, 10),
@@ -158,14 +157,10 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 	}
 	buildResp, err := s.service.BuildTransaction(buildReq)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	rawTx, err := json.Marshal(buildResp.RawTransaction)
-	if err != nil {
-		return nil, err
-	}
-	return rawTx[1 : len(rawTx)-1], nil
+	return buildResp.RawTransaction.(string), nil
 }
 
 func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*string, error) {
@@ -176,11 +171,13 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 
 	assemblePassword := util.AssemblePassword(sender.Password, redPacketID)
 	submitReq := &service.SubmitTransactionReq{
-		Guid:  s.GetCommonGuid(),
-		RawTx: rawTx,
-		Sigs: [][]string{
-			[]string{hex.EncodeToString(assemblePassword), sender.WitnessProgram},
+		SubmitPaymentReqV3: &types.SubmitPaymentReqV3{
+			RawTx: rawTx,
+			Sigs: [][]string{
+				{hex.EncodeToString(assemblePassword), sender.WitnessProgram},
+			},
 		},
+		Address: s.GetCommonAddress(),
 	}
 	submitResp, err := s.service.SubmitTransaction(submitReq)
 	if err != nil {
