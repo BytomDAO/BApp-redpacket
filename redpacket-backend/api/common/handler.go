@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 )
 

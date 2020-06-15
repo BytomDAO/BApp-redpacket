@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/errors"
+
 	"github.com/redpacket/redpacket-backend/util/types"
 )
 

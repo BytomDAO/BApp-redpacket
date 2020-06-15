@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/redpacket/redpacket-backend/database/orm"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/errors"
 	"github.com/go-redis/redis"
 	"gopkg.in/mgo.v2/bson"
 
