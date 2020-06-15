@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 

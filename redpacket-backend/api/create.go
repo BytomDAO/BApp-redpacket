@@ -4,8 +4,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/bytom/crypto"
-	"github.com/bytom/errors"
+	"github.com/bytom/bytom/crypto"
+	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 

@@ -1,9 +1,9 @@
 package util
 
 import (
-	"github.com/bytom/crypto"
-	"github.com/bytom/protocol/vm"
-	"github.com/bytom/protocol/vm/vmutil"
+	"github.com/bytom/bytom/crypto"
+	"github.com/bytom/bytom/protocol/vm"
+	"github.com/bytom/bytom/protocol/vm/vmutil"
 	"github.com/google/uuid"
 )
 
