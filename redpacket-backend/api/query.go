@@ -114,7 +114,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	totalAmount := uint64(0)
 	senderDetails := []*senderDetail{}
 	for _, sender := range senders {
-		var openedReceivers []*orm.Receiver
+		openedReceivers := []*orm.Receiver{}
 		for _, receiver := range sender.Receivers {
 			if receiver.IsSpend {
 				openedReceivers = append(openedReceivers, receiver)
