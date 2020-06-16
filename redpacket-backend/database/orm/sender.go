@@ -13,6 +13,7 @@ type Sender struct {
 	ContractProgram string
 	WitnessProgram  string
 	Address         string
+	AddressName     string
 	Amount          uint64
 	TxID            *string // todo: *string -> string?
 	IsConfirmed     bool
