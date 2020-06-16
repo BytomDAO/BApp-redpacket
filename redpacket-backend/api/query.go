@@ -66,7 +66,7 @@ func (s *Server) GetRedPacketDetails(c *gin.Context, req *GetRedPacketReq) (*Red
 		return nil, errors.Wrap(err, "query sender")
 	}
 
-	var openedReceivers []*orm.Receiver
+	openedReceivers := []*orm.Receiver{}
 	for _, receiver := range sender.Receivers {
 		if receiver.IsSpend {
 			openedReceivers = append(openedReceivers, receiver)
@@ -105,14 +105,14 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 		return nil, errors.New("the address is empty")
 	}
 
-	var senders []*orm.Sender
+	senders := []*orm.Sender{}
 	query := s.db.Master().Preload("Receivers").Where(&orm.Sender{Address: req.Address})
 	if err := query.Find(&senders).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
 	}
 
 	totalAmount := uint64(0)
-	var senderDetails []*senderDetail
+	senderDetails := []*senderDetail{}
 	for _, sender := range senders {
 		var openedReceivers []*orm.Receiver
 		for _, receiver := range sender.Receivers {
@@ -161,8 +161,8 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 	winners := convertToWinner(receivers)
 
-	var totalAmount uint64
-	var receiverDetails []*receiverDetail
+	totalAmount := uint64(0)
+	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
 		totalAmount += receiver.Amount
 		receiverDetails = append(receiverDetails, &receiverDetail{
