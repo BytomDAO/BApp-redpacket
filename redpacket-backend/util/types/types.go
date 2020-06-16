@@ -6,6 +6,32 @@ import (
 	"time"
 )
 
+// BuildTxRequestGeneralV3 is the general struct request to build tx v3
+type BuildTxRequestGeneralV3 struct {
+	Confirmations uint64                   `json:"confirmations"`
+	Fee           string                   `json:"fee"`
+	Inputs        []map[string]interface{} `json:"inputs"`
+	Outputs       []map[string]interface{} `json:"outputs"`
+	ForbidChainTx bool                     `json:"forbid_chain_tx"`
+}
+
+// SigningInstruction represent the signing instruction
+type SigningInstruction struct {
+	DerivationPath []string `json:"derivation_path"`
+	SignData       []string `json:"sign_data"`
+	DataWitness    []byte   `json:"-"`
+
+	// only shown for a single-signature tx
+	Pubkey string `json:"pubkey,omitempty"`
+}
+
+// SubmitPaymentReqV3 the struct request to submit payment
+type SubmitPaymentReqV3 struct {
+	RawTx string     `json:"raw_transaction"`
+	Sigs  [][]string `json:"signatures"`
+	Memo  string     `json:"memo"`
+}
+
 type Input struct {
 	Script  string `json:"script"`
 	Address string `json:"address"`
@@ -21,9 +47,10 @@ type Output struct {
 	Amount  uint64 `json:"amount"`
 }
 
+// Tx the transcation in txpool
 type Tx struct {
 	Hash                string     `json:"hash"`
-	StatusFail          bool       `json:"status_fail"`
+	Status              bool       `json:"status"`
 	Size                uint64     `json:"size"`
 	SubmissionTimestamp uint64     `json:"submission_timestamp"`
 	BlockHeight         uint64     `json:"block_height,omitempty"`
@@ -31,8 +58,10 @@ type Tx struct {
 	Memo                string     `json:"memo"`
 	Inputs              []*Input   `json:"inputs"`
 	Outputs             []*Output  `json:"outputs"`
-	Fee                 uint64     `json:"fee"`
+	Fee                 string     `json:"fee"`
+	CrossChainFee       string     `json:"cross_chain_fee,omitempty"`
 	Balances            []*Balance `json:"balances"`
+	Types               []string   `json:"types"`
 }
 
 type Balance struct {

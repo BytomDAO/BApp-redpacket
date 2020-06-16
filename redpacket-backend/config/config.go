@@ -75,12 +75,12 @@ type API struct {
 }
 
 type BlockCenter struct {
-	NetType      string       `json:"net_type"`
-	NetWork      string       `json:"network"`
-	CommonGuid   string       `json:"common_guid"`
-	SyncSeconds  int          `json:"sync_seconds"`
-	URL          string       `json:"url"`
-	MySQLConnCfg MySQLConnCfg `json:"mysql_conns"`
+	NetType       string       `json:"net_type"`
+	NetWork       string       `json:"network"`
+	CommonAddress string       `json:"common_address"`
+	SyncSeconds   int          `json:"sync_seconds"`
+	URL           string       `json:"url"`
+	MySQLConnCfg  MySQLConnCfg `json:"mysql_conns"`
 }
 
 type Updater struct {

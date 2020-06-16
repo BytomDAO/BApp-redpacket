@@ -11,7 +11,11 @@ test:
 	@echo "Running go test"
 	@go test $(PACKAGES)
 
-ci: test
+golint:
+	@echo "======> Running golint"
+	@golint --set_exit_status $(PACKAGES)
+
+ci: test golint
 
 clean:
 	rm -f target/updater

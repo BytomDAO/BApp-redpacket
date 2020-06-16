@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/hex"
-	"encoding/json"
+	"strconv"
 
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +11,7 @@ import (
 	"github.com/redpacket/redpacket-backend/database/orm"
 	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
+	"github.com/redpacket/redpacket-backend/util/types"
 )
 
 // status of opening red packet
@@ -140,28 +141,26 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 	return *txID, nil
 }
 
-func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) ([]byte, error) {
+func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) (string, error) {
 	buildReq := &service.BuildTransactionReq{
-		Guid:          s.GetCommonGuid(),
-		Fee:           util.TransactionFee,
-		Confirmations: uint64(1),
-		Inputs: []map[string]interface{}{
-			map[string]interface{}{"type": "spend_utxo", "output_id": utxoID},
+		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
+			Fee:           strconv.FormatUint(util.TransactionFee, 10),
+			Confirmations: uint64(1),
+			Inputs: []map[string]interface{}{
+				{"type": "spend_utxo", "output_id": utxoID},
+			},
+			Outputs: []map[string]interface{}{
+				{"type": "control_address", "asset": util.BTMAssetID, "address": address, "amount": amount},
+			},
 		},
-		Outputs: []map[string]interface{}{
-			map[string]interface{}{"type": "control_address", "asset": util.BTMAssetID, "address": address, "amount": amount},
-		},
+		Address: s.GetCommonAddress(),
 	}
 	buildResp, err := s.service.BuildTransaction(buildReq)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	rawTx, err := json.Marshal(buildResp.RawTransaction)
-	if err != nil {
-		return nil, err
-	}
-	return rawTx[1 : len(rawTx)-1], nil
+	return buildResp.RawTransaction.(string), nil
 }
 
 func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*string, error) {
@@ -172,11 +171,13 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 
 	assemblePassword := util.AssemblePassword(sender.Password, redPacketID)
 	submitReq := &service.SubmitTransactionReq{
-		Guid:  s.GetCommonGuid(),
-		RawTx: rawTx,
-		Sigs: [][]string{
-			[]string{hex.EncodeToString(assemblePassword), sender.WitnessProgram},
+		SubmitPaymentReqV3: &types.SubmitPaymentReqV3{
+			RawTx: rawTx,
+			Sigs: [][]string{
+				{hex.EncodeToString(assemblePassword), sender.WitnessProgram},
+			},
 		},
+		Address: s.GetCommonAddress(),
 	}
 	submitResp, err := s.service.SubmitTransaction(submitReq)
 	if err != nil {
