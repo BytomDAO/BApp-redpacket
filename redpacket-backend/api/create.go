@@ -43,7 +43,11 @@ func (s *Server) CreateRedPacket(c *gin.Context, req *CreateRedPacketReq) (*Crea
 	if err != nil {
 		return nil, err
 	}
+
 	addressProgram, err := util.NewP2SHAddressProgram(witnessProgram, hrp)
+	if err != nil {
+		return nil, errors.Wrap(err, "new P2SH address program")
+	}
 
 	// save contract information into db
 	sender := &orm.Sender{
