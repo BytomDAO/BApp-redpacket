@@ -13,8 +13,9 @@ type Sender struct {
 	ContractProgram string
 	WitnessProgram  string
 	Address         string
+	AddressName     string
 	Amount          uint64
-	TxID            *string // todo: *string -> string?
+	TxID            *string
 	IsConfirmed     bool
 	IsHandled       bool
 	RedPacketType   int

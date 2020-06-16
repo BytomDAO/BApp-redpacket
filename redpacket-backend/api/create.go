@@ -67,6 +67,7 @@ type SubmitRedPacketReq struct {
 	RedPacketID   string `json:"red_packet_id"`
 	TxID          string `json:"tx_id"`
 	Address       string `json:"address"`
+	AddressName   string `json:"address_name,omitempty"`
 	Amount        uint64 `json:"amount"`
 	RedPacketType int    `json:"red_packet_type"`
 	Note          string `json:"note"`
@@ -96,6 +97,7 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 
 	// update sender information
 	sender.Address = req.Address
+	sender.AddressName = req.AddressName
 	sender.Amount = req.Amount
 	sender.TxID = &req.TxID
 	sender.RedPacketType = req.RedPacketType
