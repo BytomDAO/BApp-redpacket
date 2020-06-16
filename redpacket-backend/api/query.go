@@ -105,7 +105,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 		return nil, errors.New("the address is empty")
 	}
 
-	senders := []*orm.Sender{}
+	var senders []*orm.Sender
 	query := s.db.Master().Preload("Receivers").Where(&orm.Sender{Address: req.Address})
 	if err := query.Find(&senders).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
