@@ -1,6 +1,8 @@
 package synchron
 
 import (
+	"math"
+	"strconv"
 	"time"
 
 	"github.com/bytom/bytom/errors"
@@ -103,15 +105,20 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	// batch insert utxo into db
 	batchDB := b.db.Begin()
 	for _, output := range tx.Outputs {
+		amount, err := b.parseAmount(output.Amount)
+		if err != nil {
+			return errors.Wrap(err, "parse output amount")
+		}
+
 		// match program and asset, filter out the amount less than transaction fee
-		if output.Script != sender.ContractProgram || output.Asset != util.BTMAssetID || output.Amount <= util.TransactionFee {
+		if output.Script != sender.ContractProgram || output.Asset.AssetID != b.cfg.Updater.BlockCenter.AssetID || amount <= util.TransactionFee {
 			continue
 		}
 
 		// save utxo into receiver
 		receiver := &orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   uint64(output.Amount - util.TransactionFee),
+			Amount:   amount - util.TransactionFee,
 			SenderID: sender.ID,
 		}
 		if err := batchDB.Create(receiver).Error; err != nil {
@@ -126,6 +133,15 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		return err
 	}
 	return batchDB.Commit().Error
+}
+
+func (b *blockCenterKeeper) parseAmount(srcAmount string) (uint64, error) {
+	amountFloat, err := strconv.ParseFloat(srcAmount, 64)
+	if err != nil {
+		return 0, errors.Wrapf(err, "parse output float of amount, amount: %s", srcAmount)
+	}
+
+	return uint64(amountFloat * math.Pow10(b.cfg.Updater.BlockCenter.AssetDecimal)), nil
 }
 
 func (b *blockCenterKeeper) updateReceiverRedPacketStatus() error {

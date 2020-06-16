@@ -32,19 +32,38 @@ type SubmitPaymentReqV3 struct {
 	Memo  string     `json:"memo"`
 }
 
-type Input struct {
-	Script  string `json:"script"`
-	Address string `json:"address"`
-	Asset   string `json:"asset"`
-	Amount  uint64 `json:"amount"`
+// SymbolAsset the real symbol asset struct
+type SymbolAsset struct {
+	AssetID string `json:"asset_id"`
+	Symbol  string `json:"symbol"`
+	Name    string `json:"name,omitempty"`
 }
 
+// Input the struct of the input of uxto
+type Input struct {
+	Script  string       `json:"script"`
+	Address string       `json:"address"`
+	Asset   *SymbolAsset `json:"asset"`
+	Amount  string       `json:"amount"`
+	Type    string       `json:"type"`
+	Vote    string       `json:"vote,omitempty"`
+}
+
+// Output the struct of the output of utxo
 type Output struct {
-	UtxoID  string `json:"utxo_id"`
-	Script  string `json:"script"`
-	Address string `json:"address"`
-	Asset   string `json:"asset"`
-	Amount  uint64 `json:"amount"`
+	UtxoID  string       `json:"utxo_id"`
+	Script  string       `json:"script"`
+	Address string       `json:"address"`
+	Asset   *SymbolAsset `json:"asset"`
+	Amount  string       `json:"amount"`
+	Type    string       `json:"type"`
+	Vote    string       `json:"vote,omitempty"`
+}
+
+// Balance the struct of the balance , {asset: amount}
+type Balance struct {
+	Asset  *SymbolAsset `json:"asset"`
+	Amount string       `json:"amount"`
 }
 
 // Tx the transcation in txpool
@@ -62,11 +81,6 @@ type Tx struct {
 	CrossChainFee       string     `json:"cross_chain_fee,omitempty"`
 	Balances            []*Balance `json:"balances"`
 	Types               []string   `json:"types"`
-}
-
-type Balance struct {
-	Asset  string `json:"asset"`
-	Amount string `json:"amount"`
 }
 
 type Timestamp time.Time

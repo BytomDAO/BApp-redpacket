@@ -78,6 +78,7 @@ type BlockCenter struct {
 	NetType       string       `json:"net_type"`
 	NetWork       string       `json:"network"`
 	AssetID       string       `json:"asset_id"`
+	AssetDecimal  int          `json:"asset_decimal"`
 	CommonAddress string       `json:"common_address"`
 	SyncSeconds   int          `json:"sync_seconds"`
 	URL           string       `json:"url"`
