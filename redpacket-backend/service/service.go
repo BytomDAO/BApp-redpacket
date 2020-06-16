@@ -22,12 +22,12 @@ func NewService(netType string, url string) *Service {
 	}
 }
 
-// Response is the response result of request service, blockcenter v3 api response
-type Response struct {
-	Code   int                        `json:"code"`
-	Msg    string                     `json:"msg"`
-	Data   json.RawMessage            `json:"data,omitempty"`
-	Result map[string]json.RawMessage `json:"result"`
+// ResponseV3 describes the response standard. Code & Msg are always present.
+// Data is present for a success response only.
+type ResponseV3 struct {
+	Code int             `json:"code"`
+	Msg  string          `json:"msg"`
+	Data json.RawMessage `json:"data,omitempty"`
 }
 
 func (s *Service) request(path string, reqData, respData interface{}) error {
@@ -36,7 +36,7 @@ func (s *Service) request(path string, reqData, respData interface{}) error {
 		return err
 	}
 
-	resp := &Response{}
+	resp := &ResponseV3{}
 	if reqData == nil {
 		err = util.Get(s.url+path, resp)
 	} else {
@@ -51,15 +51,5 @@ func (s *Service) request(path string, reqData, respData interface{}) error {
 		return errors.New(resp.Msg)
 	}
 
-	// v3 response format
-	if len(resp.Data) != 0 {
-		return json.Unmarshal(resp.Data, respData)
-	}
-
-	data, ok := resp.Result["data"]
-	if !ok {
-		return errors.New("fail on find resp data")
-	}
-
-	return json.Unmarshal(data, respData)
+	return json.Unmarshal(resp.Data, respData)
 }
