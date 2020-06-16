@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/hex"
+	"math"
 	"strconv"
 
 	"github.com/bytom/bytom/errors"
@@ -150,7 +151,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 				{"type": "spend_utxo", "output_id": utxoID},
 			},
 			Outputs: []map[string]interface{}{
-				{"type": "control_address", "asset": util.BTMAssetID, "address": address, "amount": amount},
+				{"type": "control_address", "asset": s.cfg.Updater.BlockCenter.AssetID, "address": address, "amount": float64(amount) / math.Pow10(s.cfg.Updater.BlockCenter.AssetDecimal)},
 			},
 		},
 		Address: s.GetCommonAddress(),
