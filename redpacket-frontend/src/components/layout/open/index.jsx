@@ -51,7 +51,7 @@ class Open extends React.Component {
     }
     const packetDetails = this.props.packetDetails
 
-    const senderAddress = address.short(packetDetails.sender_address)
+    const senderAddress = packetDetails.sender_address_name ? `${t('open.nickNameHint')} ${packetDetails.sender_address_name} `: address.short(packetDetails.sender_address)
     const redPackId = this.props.match.params.id
 
     let winnerAddressArray = []

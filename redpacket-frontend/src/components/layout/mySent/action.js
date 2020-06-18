@@ -1,9 +1,9 @@
 import { listSenderRedPackets } from '../../util/api'
 import {getCurrentAddress} from "../../util/utils";
 
-const getMySent = () => {
+const getMySent = (currency) => {
   return (dispatch) => {
-    return listSenderRedPackets({address: getCurrentAddress()})
+    return listSenderRedPackets({address: getCurrentAddress()}, currency)
       .then((resp)=>{
         dispatch({
           type: "UPDATE_MY_SENT_DETAILS",

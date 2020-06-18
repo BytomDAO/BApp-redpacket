@@ -45,6 +45,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.scss', '.css', '.js', '.jsx', '.json'],
+    alias: {
+      '@': path.resolve(__dirname, "./src")
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

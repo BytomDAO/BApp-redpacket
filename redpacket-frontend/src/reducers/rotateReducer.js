@@ -25,6 +25,11 @@ export default (state, action) => {
         ...state,
         bytomConnection: action.bytomConnection
       };
+    case "UPDATE_CURRENCY":
+      return {
+        ...state,
+        currency: action.currency
+      };
     default:
       return state
   }

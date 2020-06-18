@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js'
+
 export function toastMsg(msg){
   if(window.bycoin){
     window.bycoin.callAPI('native.toastInfo', msg)
@@ -25,3 +27,8 @@ export function getCurrentAddress(){
   }
 }
 
+export function formateNumber(n, decimals){
+  const x = new BigNumber(n)
+
+  return x.shiftedBy(-decimals).toString()
+}

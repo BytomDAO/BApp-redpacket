@@ -32,7 +32,7 @@ class QrCode extends React.Component {
 
     const that = this
 
-    const { t } = this.props;
+    const { t , currency } = this.props;
 
     const setStateAsync = (state) => {
       return new Promise((resolve) => {
@@ -48,7 +48,7 @@ class QrCode extends React.Component {
         return this.props.getDetails(this.props.match.params.id)
       })
       .then(()=>{
-        return getPassword(this.props.match.params.id, this.props.bytom.default_account.address)
+        return getPassword(this.props.match.params.id, this.props.bytom.default_account.address, currency)
       })
       .then((resp)=> {
         return setStateAsync({ password: resp.data.password})
@@ -103,6 +103,14 @@ class QrCode extends React.Component {
     const packetDetails = this.props.packetDetails
 
     const senderAddress = address.short(packetDetails.sender_address)
+    const alias = packetDetails.sender_address_name
+
+    let yourRedPacket =  <p>{senderAddress}{t('qrCode.spacket')}</p>
+    if(alias){
+      yourRedPacket =  <p>{t('open.nickNameHint')} {alias} {t('qrCode.spacket')}</p>
+    }
+
+
 
     return (
       <div className="container__wrapper">
@@ -112,13 +120,13 @@ class QrCode extends React.Component {
           </div>
           <div className="redPacket__container qrCode__container">
             <div className="mb-2 ml-4 mr-4">{packetDetails.note}</div>
+            {yourRedPacket}
             <div className="qrCode mb-4">
               {
                 this.state.url &&
                 <img src={this.state.url}/>
               }
             </div>
-            {senderAddress && <p>{senderAddress}{t('qrCode.spacket')}</p>}
             <div className="mt-2 code_box ml-auto mr-auto">{this.state.password}</div>
           </div>
           <div className="d-flex">
@@ -142,7 +150,8 @@ class QrCode extends React.Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
-  bytom: state.bytom
+  bytom: state.bytom,
+  currency: state.currency
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -29,7 +29,7 @@ class Share extends React.Component {
 
   showPassword(e){
     e.preventDefault()
-    getPassword(this.props.match.params.id, getCurrentAddress()).then((resp)=> {
+    getPassword(this.props.match.params.id, getCurrentAddress(), this.props.currency).then((resp)=> {
       const password = resp.data.password
       toastMsg(`${this.props.t('share.code')}:${password}`)
     })
@@ -69,6 +69,7 @@ class Share extends React.Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
+  currency: state.currency
 })
 
 const mapDispatchToProps = dispatch => ({
