@@ -132,13 +132,14 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string, sender *orm.Sender) (string, error) {
 	rawTx, err := s.BuildRedPacketTransaction(amount, utxoID, address)
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "build red packet transaction")
 	}
 
-	txID, err := s.SubmitRedPacketTransaction(string(rawTx), sender)
+	txID, err := s.SubmitRedPacketTransaction(rawTx, sender)
 	if err != nil {
-		return "", err
+		return "", errors.Wrapf(err, "submit red packet transaction, raw tx: %s, sender: %s", rawTx, sender.Address)
 	}
+
 	return *txID, nil
 }
 
@@ -160,7 +161,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 	}
 	buildResp, err := s.service.BuildTransaction(buildReq)
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "build transaction")
 	}
 
 	return buildResp[0].RawTransaction.(string), nil
@@ -169,7 +170,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*string, error) {
 	redPacketID, err := uuid.Parse(sender.RedPacketID)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "parse uuid, red packet id: %s", sender.RedPacketID)
 	}
 
 	assemblePassword := util.AssemblePassword(sender.Password, redPacketID)
@@ -184,7 +185,7 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 	}
 	submitResp, err := s.service.SubmitTransaction(submitReq)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "submit transaction")
 	}
 	return &submitResp.TxHash, nil
 }
