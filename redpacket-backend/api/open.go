@@ -163,7 +163,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 		return "", err
 	}
 
-	return buildResp.RawTransaction.(string), nil
+	return buildResp[0].RawTransaction.(string), nil
 }
 
 func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*string, error) {
