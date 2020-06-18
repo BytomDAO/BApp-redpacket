@@ -143,6 +143,8 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 }
 
 func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) (string, error) {
+	amountFloat := float64(amount) / math.Pow10(s.cfg.Updater.BlockCenter.AssetDecimal)
+	amountStr := strconv.FormatFloat(amountFloat, 'f', s.cfg.Updater.BlockCenter.AssetDecimal, 64)
 	buildReq := &service.BuildTransactionReq{
 		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
 			Fee:           strconv.FormatUint(util.TransactionFee, 10),
@@ -151,7 +153,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 				{"type": "spend_utxo", "output_id": utxoID},
 			},
 			Outputs: []map[string]interface{}{
-				{"type": "control_address", "asset": s.cfg.Updater.BlockCenter.AssetID, "address": address, "amount": float64(amount) / math.Pow10(s.cfg.Updater.BlockCenter.AssetDecimal)},
+				{"type": "control_address", "asset": s.cfg.Updater.BlockCenter.AssetID, "address": address, "amount": amountStr},
 			},
 		},
 		Address: s.GetCommonAddress(),
