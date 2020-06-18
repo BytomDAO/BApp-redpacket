@@ -159,8 +159,8 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	if err := query.Find(&receivers).Error; err != nil {
 		return nil, errors.Wrap(err, "query receiver")
 	}
-	winners := convertToWinner(receivers)
 
+	winners := convertToWinner(receivers)
 	totalAmount := uint64(0)
 	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
