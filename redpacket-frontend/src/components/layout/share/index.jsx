@@ -36,7 +36,7 @@ class Share extends React.Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { t , currency } = this.props;
 
     const packetDetails = this.props.packetDetails
 
@@ -49,7 +49,7 @@ class Share extends React.Component {
           <div className="open__hint">{t('share.hint')}</div>
 
           <div className="shared__component">
-            <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}`}>{t('share.qrCode')}</Link>
+            <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}#${currency}`}>{t('share.qrCode')}</Link>
 
             <div>
                 <button className="btn btn-link link__btn" onClick={this.copyClick.bind(this)}>

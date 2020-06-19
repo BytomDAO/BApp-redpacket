@@ -21,12 +21,13 @@ class RedPackDetails extends Component {
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.match.params.id)
+    let currency = this.props.currency
+    this.props.getDetails(this.props.match.params.id, currency)
   }
 
   componentWillUpdate(nextProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.props.getDetails(this.props.match.params.id)
+      this.props.getDetails(this.props.match.params.id, this.props.currency)
     }
   }
 
@@ -94,7 +95,7 @@ class RedPackDetails extends Component {
             {myRedPack && <div className="text-secondary amount_number red_amount"> { formateNumber(myRedPack.amount,currencyDecimals) }{currency}</div>}
 
             {myRedPack && <div>{ t('detail.saved', {unit:currency})}</div>}
-            {packetDetails.sender_address === myAddress && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}
+            {packetDetails.sender_address === myAddress && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}#${currency}`}>{t('detail.shared')}</Link>}
           </div>
 
           <div className="details__container">
@@ -120,6 +121,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getDetails: (redPackId) => dispatch(action.getRedpackDetails(redPackId)),
+  updateCurrency: (currency) => dispatch({
+    type: "UPDATE_CURRENCY",
+    currency: currency
+  }),
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)( withTranslation()(RedPackDetails))

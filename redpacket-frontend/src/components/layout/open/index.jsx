@@ -21,12 +21,7 @@ class Open extends React.Component {
   }
 
   componentDidMount() {
-    const hash = this.props.location.hash
-    let currency
-    if(hash){
-      currency = hash.replace('#','');
-      this.props.updateCurrency(currency)
-    }
+    let currency = this.props.currency
     this.props.getDetails(this.props.match.params.id, currency)
     const bytom = this.props.bytom
     if (
@@ -66,7 +61,7 @@ class Open extends React.Component {
     }
 
     if(this.state.account &&  winnerAddressArray.includes(this.state.account.address)){
-      this.props.history.push(`/details/${redPackId}`);
+      this.props.history.push(`/details/${redPackId}#${currency}`);
     }
 
     const finishState = packetDetails.total_number>0 && packetDetails.total_number === packetDetails.opened_number
@@ -106,7 +101,7 @@ class Open extends React.Component {
                   switch (resp.data.status){
                     case 0:
                     case 2:
-                      this.props.history.push(`/details/${redPackId}`);
+                      this.props.history.push(`/details/${redPackId}#${currency}`);
                       break;
 
                     case 3:
@@ -152,7 +147,7 @@ class Open extends React.Component {
 
 
 
-        <Link className="hr__hint" to={`/details/${redPackId}`}>{t('open.viewDetails')}</Link>
+        <Link className="hr__hint" to={`/details/${redPackId}#${currency}`}>{t('open.viewDetails')}</Link>
       </LogoContainer>
     )
   }

@@ -48,7 +48,7 @@ class MySent extends Component {
 
       mySentList.forEach(
         (winner, i) =>{
-          list.push(<Link className="tb-row" key={'mySent'+i} to={`/details/${winner.red_packet_id}`}>
+          list.push(<Link className="tb-row" key={'mySent'+i} to={`/details/${winner.red_packet_id}#${currency}`}>
             <div className="tb-cell">
               <div className="detail__header text-secondary">{winner.red_packet_type === 1 ? t('mySent.random'):t('mySent.normal')}</div>
               <div className="detail__content text-grey">{winner.is_confirmed?moment(winner.send_time*1000).format('LLL'):t('detail.confirming')}</div>
