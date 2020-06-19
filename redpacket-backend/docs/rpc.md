@@ -67,6 +67,7 @@ submit transaction for sending red packet.
 - String - `red_packet_id`, the unique ID of redpacket.
 - String - `tx_id`, the transaction ID of sending redpacket.
 - String - `address`, the address of redpacket sender.
+- String - `address_name`, the name of redpacket sender address.
 - Integer - `amount`, the amount of redpacket sender.
 - String - `password`, the password of redpacket.
 - Integer - `red_packet_type`, the red packet type.
@@ -84,6 +85,7 @@ null
   "red_packet_id": "dd73e414-2642-4872-a922-62f44caad092",
   "tx_id": "f572b640e1a33f474ab63bc7023575c4367718c27c0a9983cbf248a7e285ba65",
   "address": "sm1qykcpcn662adgkleurzs2rf6grzx2j8qsk0zdql",
+  "address_name": "my_name",
   "amount": 163010000,
   "password": "123456",
   "note": "remarks"
@@ -171,6 +173,7 @@ query the detail for specified red packet.
 ### Returns
 
 - String - `sender_address`, the sender address.
+- String - `sender_address_name`, the sender address name.
 - String - `red_packet_id`, the ID of redpacket.
 - Integer - `red_packet_type`, the type of redpacket.
 - Integer - `total_amount`, the total amount of redpacket.
@@ -197,6 +200,7 @@ query the detail for specified red packet.
 // response
 {
   "sender_address": "sm1qeujlyjj4tx7utw33t2mdkkr2x5d5d86jy8wlpf",
+  "sender_address_name": "my_name",
   "red_packet_id": "dd73e414-2642-4872-a922-62f44caad092",
   "red_packet_type": 2,
   "total_amount": 350000000,
@@ -247,6 +251,7 @@ list all red packets for specified sender.
 - Integer - `total_number`, the total number of redpacket for sender.
 - Object - `sender_details`, Array type, the list of redpackets for the specified sender.
   - String - `sender_address`, the sender address.
+  - String - `sender_address_name`, the sender address name.
   - String - `red_packet_id`, the ID of redpacket.
   - Integer - `red_packet_type`, the type of redpacket.
   - Integer - `total_amount`, the total amount of redpacket.
@@ -271,6 +276,7 @@ list all red packets for specified sender.
   "sender_details": [
     {
       "sender_address": "sm1qq494j3sv9r4qfm4v29rhl4arxpwgx7h5kpgru9",
+      "sender_address_name": "my_name",
       "red_packet_id": "424c8b55-7234-43fd-976d-e44eb459f859",
       "red_packet_type": 2,
       "total_amount": 1500000000,
@@ -282,6 +288,7 @@ list all red packets for specified sender.
     },
     {
       "sender_address": "sm1qq494j3sv9r4qfm4v29rhl4arxpwgx7h5kpgru9",
+      "sender_address_name": "my_name",
       "red_packet_id": "73051203-18ae-4593-bd5e-841a40b93311",
       "red_packet_type": 2,
       "total_amount": 1500000000,
@@ -311,6 +318,7 @@ list all red packets for specified receiver.
 - Integer - `total_number`, the total number of redpacket for receicer.
 - Object - `receiver_details`, Array type, the list of redpackets for the specified receicer.
   - String - `sender_address`, the sender address of redpacket.
+  - String - `sender_address_name`, the sender address name.
   - Integer - `red_packet_type`, the type of redpacket.
   - String - `note`, the note of redpacket.
   - String - `address`, the receiver address.
@@ -334,6 +342,7 @@ list all red packets for specified receiver.
   "receiver_details": [
     {
       "sender_address": "sm1qeujlyjj4tx7utw33t2mdkkr2x5d5d86jy8wlpf",
+      "sender_address_name": "my_name",
       "red_packet_type": 2,
       "note": "first",
       "address": "sm1q8len93mc3g6lj832fu6cmscg8x0y9r303cjl4d",
@@ -344,6 +353,7 @@ list all red packets for specified receiver.
     },
     {
       "sender_address": "sm1qeujlyjj4tx7utw33t2mdkkr2x5d5d86jy8wlpf",
+      "sender_address_name": "my_name",
       "red_packet_type": 1,
       "note": "000000",
       "address": "sm1q8len93mc3g6lj832fu6cmscg8x0y9r303cjl4d",

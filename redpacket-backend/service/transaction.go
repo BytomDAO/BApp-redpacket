@@ -21,10 +21,10 @@ type BuildTransactionResp struct {
 	SigningInstructions []*types.SigningInstruction `json:"signing_instructions"`
 }
 
-func (s *Service) BuildTransaction(req *BuildTransactionReq) (*BuildTransactionResp, error) {
+func (s *Service) BuildTransaction(req *BuildTransactionReq) ([]*BuildTransactionResp, error) {
 	urlPath := fmt.Sprintf("/%s/v3/merchant/build-advanced-tx?address=%s", s.netType, req.Address)
-	resp := new(BuildTransactionResp)
-	return resp, errors.Wrap(s.request(urlPath, req.BuildTxRequestGeneralV3, resp), "build transaction")
+	resp := []*BuildTransactionResp{}
+	return resp, errors.Wrap(s.request(urlPath, req.BuildTxRequestGeneralV3, &resp), "build transaction")
 }
 
 type SubmitTransactionReq struct {

@@ -29,9 +29,11 @@
   },
   "updater": {
     "block_center": {
-      "net_type": "btm",
-      "network": "solonet",
-      "common_guid": "db6970e5-eb42-47ba-8c26-f64b3d8bad8f",
+      "net_type": "vapor",
+      "network": "testnet",
+      "asset_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "asset_decimal": 8,
+      "common_address": "your_address",
       "sync_seconds": 60,
       "url": "http://127.0.0.1:3000",
       "mysql_conns": {

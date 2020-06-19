@@ -35,15 +35,19 @@ func (s *Server) CreateRedPacket(c *gin.Context, req *CreateRedPacketReq) (*Crea
 	hash := crypto.Sha256(assemblePassword)
 	witnessProgram, err := util.NewRevealPreimageScript(hash)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "new reveal preimage script, hash: %s", hex.EncodeToString(hash))
 	}
 
 	// create redpacket contract
 	hrp, err := s.GetNetWorkPrefix()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get net work prefix")
 	}
+
 	addressProgram, err := util.NewP2SHAddressProgram(witnessProgram, hrp)
+	if err != nil {
+		return nil, errors.Wrap(err, "new P2SH address program")
+	}
 
 	// save contract information into db
 	sender := &orm.Sender{

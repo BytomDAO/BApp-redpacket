@@ -11,8 +11,7 @@ import (
 var TransactionFee uint64
 
 const (
-	Duration   = int64(600)
-	BTMAssetID = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+	Duration = int64(600)
 )
 
 // AddressProgram contains address and program

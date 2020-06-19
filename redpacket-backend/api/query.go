@@ -17,21 +17,23 @@ type winner struct {
 }
 
 type senderDetail struct {
-	SenderAddress string          `json:"sender_address"`
-	RedPacketID   string          `json:"red_packet_id"`
-	RedPacketType int             `json:"red_packet_type"`
-	TotalAmount   uint64          `json:"total_amount"`
-	TotalNumber   int64           `json:"total_number"`
-	OpenedNumber  int64           `json:"opened_number"`
-	Note          string          `json:"note"`
-	IsConfirmed   bool            `json:"is_confirmed"`
-	SendTime      types.Timestamp `json:"send_time"`
+	SenderAddress     string          `json:"sender_address"`
+	SenderAddressName string          `json:"sender_address_name"`
+	RedPacketID       string          `json:"red_packet_id"`
+	RedPacketType     int             `json:"red_packet_type"`
+	TotalAmount       uint64          `json:"total_amount"`
+	TotalNumber       int64           `json:"total_number"`
+	OpenedNumber      int64           `json:"opened_number"`
+	Note              string          `json:"note"`
+	IsConfirmed       bool            `json:"is_confirmed"`
+	SendTime          types.Timestamp `json:"send_time"`
 }
 
 type receiverDetail struct {
-	SenderAddress string `json:"sender_address"`
-	RedPacketType int    `json:"red_packet_type"`
-	Note          string `json:"note"`
+	SenderAddress     string `json:"sender_address"`
+	SenderAddressName string `json:"sender_address_name"`
+	RedPacketType     int    `json:"red_packet_type"`
+	Note              string `json:"note"`
 	winner
 }
 
@@ -73,15 +75,16 @@ func (s *Server) GetRedPacketDetails(c *gin.Context, req *GetRedPacketReq) (*Red
 
 	return &RedPacketDetail{
 		senderDetail: senderDetail{
-			SenderAddress: sender.Address,
-			RedPacketID:   sender.RedPacketID,
-			RedPacketType: sender.RedPacketType,
-			TotalAmount:   sender.Amount,
-			TotalNumber:   int64(len(sender.Receivers)),
-			OpenedNumber:  int64(len(openedReceivers)),
-			Note:          sender.Note,
-			IsConfirmed:   sender.IsConfirmed,
-			SendTime:      sender.UpdatedAt,
+			SenderAddress:     sender.Address,
+			SenderAddressName: sender.AddressName,
+			RedPacketID:       sender.RedPacketID,
+			RedPacketType:     sender.RedPacketType,
+			TotalAmount:       sender.Amount,
+			TotalNumber:       int64(len(sender.Receivers)),
+			OpenedNumber:      int64(len(openedReceivers)),
+			Note:              sender.Note,
+			IsConfirmed:       sender.IsConfirmed,
+			SendTime:          sender.UpdatedAt,
 		},
 		Winners: convertToWinner(openedReceivers),
 	}, nil
@@ -120,15 +123,16 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 
 		totalAmount += sender.Amount
 		senderDetails = append(senderDetails, &senderDetail{
-			SenderAddress: sender.Address,
-			RedPacketID:   sender.RedPacketID,
-			RedPacketType: sender.RedPacketType,
-			Note:          sender.Note,
-			TotalAmount:   sender.Amount,
-			TotalNumber:   int64(len(sender.Receivers)),
-			OpenedNumber:  int64(len(openedReceivers)),
-			IsConfirmed:   sender.IsConfirmed,
-			SendTime:      sender.UpdatedAt,
+			SenderAddress:     sender.Address,
+			SenderAddressName: sender.AddressName,
+			RedPacketID:       sender.RedPacketID,
+			RedPacketType:     sender.RedPacketType,
+			Note:              sender.Note,
+			TotalAmount:       sender.Amount,
+			TotalNumber:       int64(len(sender.Receivers)),
+			OpenedNumber:      int64(len(openedReceivers)),
+			IsConfirmed:       sender.IsConfirmed,
+			SendTime:          sender.UpdatedAt,
 		})
 	}
 
@@ -155,20 +159,21 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	if err := query.Find(&receivers).Error; err != nil {
 		return nil, errors.Wrap(err, "query receiver")
 	}
-	winners := convertToWinner(receivers)
 
+	winners := convertToWinner(receivers)
 	totalAmount := uint64(0)
 	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
 		totalAmount += receiver.Amount
 		receiverDetails = append(receiverDetails, &receiverDetail{
-			SenderAddress: receiver.Sender.Address,
-			RedPacketType: receiver.Sender.RedPacketType,
-			Note:          receiver.Sender.Note,
-			winner:        *winners[i],
+			SenderAddress:     receiver.Sender.Address,
+			SenderAddressName: receiver.Sender.AddressName,
+			RedPacketType:     receiver.Sender.RedPacketType,
+			Note:              receiver.Sender.Note,
+			winner:            *winners[i],
 		})
-
 	}
+
 	return &ListReceiverRedPacketsResp{
 		TotalAmount:     totalAmount,
 		TotalNumber:     int64(len(receivers)),
@@ -194,5 +199,6 @@ func (s *Server) GetRedPacketPwd(c *gin.Context, req *GetRedPacketPwdReq) (*GetR
 	if err := s.db.Master().Where(sender).First(sender).Error; err != nil {
 		return nil, errors.Wrap(err, "db query sender")
 	}
+
 	return &GetRedPacketPwdResp{Password: sender.Password}, nil
 }
