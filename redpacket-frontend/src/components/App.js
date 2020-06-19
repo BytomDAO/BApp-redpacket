@@ -19,7 +19,6 @@ import action from './action'
 import {connect} from "react-redux";
 import bytomJs from 'bytom.js'
 import bytomJsV1 from 'bytom.jsV1'
-import {BTM} from './util/constants'
 
 const networks = {
   solonet: 'http://app.bycoin.io:3000/',

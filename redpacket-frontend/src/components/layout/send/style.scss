@@ -39,3 +39,26 @@
 .gas_box *{
   color: white;
 }
+
+.arrow{
+  box-sizing: border-box;
+  height: 7px;
+  width: 7px;
+  border-style: solid;
+  border-color: #1f1f1f;
+  border-width: 0px 1px 1px 0px;
+  transform: rotate(45deg);
+  display: inline-block;
+  margin-bottom: 3px;
+  margin-left: 10px;
+}
+
+.show.dropdown .arrow{
+  border-width: 1px 0px 0px 1px;
+  margin-bottom: 0;
+}
+
+.dropdown-menu.show {
+  min-width: 100px;
+  text-align: right;
+}

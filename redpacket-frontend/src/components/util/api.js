@@ -2,45 +2,45 @@ import axios from "axios/index";
 import { url} from './environment';
 
 //Api call from Buffer server
-export function createRedPacket(params)
+export function createRedPacket(params, currency)
 {
-  let link = `${url()}/create-redpacket`
+  let link = `${url(currency)}/create-redpacket`
   return post(link, params).then(resp => resp.data)
 }
 
-export function submitRedPacket(params)
+export function submitRedPacket(params, currency)
 {
-  let link = `${url()}/submit-redpacket`
+  let link = `${url(currency)}/submit-redpacket`
   return post(link, params)
 }
 
-export function getRedPacketPassword(params)
+export function getRedPacketPassword(params, currency)
 {
-  let link = `${url()}/get-redpacket-password`
+  let link = `${url(currency)}/get-redpacket-password`
   return post(link, params)
 }
 
-export function openRedPacket(params)
+export function openRedPacket(params, currency)
 {
-  let link = `${url()}/open-redpacket`
+  let link = `${url(currency)}/open-redpacket`
   return post(link, params)
 }
 
-export function getRedPacketDetials(params)
+export function getRedPacketDetials(params, currency)
 {
-  let link = `${url()}/get-redpacket-details`
+  let link = `${url(currency)}/get-redpacket-details`
   return post(link, params)
 }
 
-export function listReceiverRedPackets(params)
+export function listReceiverRedPackets(params, currency)
 {
-  let link = `${url()}/list-receiver-redpackets`
+  let link = `${url(currency)}/list-receiver-redpackets`
   return post(link, params)
 }
 
-export function listSenderRedPackets(params)
+export function listSenderRedPackets(params, currency)
 {
-  let link = `${url()}/list-sender-redpackets`
+  let link = `${url(currency)}/list-sender-redpackets`
   return post(link, params)
 }
 

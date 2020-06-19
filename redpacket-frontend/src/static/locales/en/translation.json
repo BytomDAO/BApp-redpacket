@@ -43,18 +43,24 @@
     "code":"Code",
     "enterCode":"Enter code",
     "codeHint":"Packet code is encrypted. Supports Chinese, English and number. Maximum 20 characters or 6 Chinese.",
+    "alias":"Alias",
+    "aliasPlaceHolder":"Optional",
+    "aliasHint":"Alias is encrypted. Supports Chinese, English and number. Maximum 20 characters or 6 Chinese.",
     "message":"Message",
     "messagePlaceHolder":"Best Wishes",
     "messageHint":"Packet message will be displayed as plaintext",
     "fee":"Network fee",
     "send":"Send Red Packet",
-    "amountHint":"Invalid BTM amount format",
+    "amountHint":"Invalid {{unit}} amount format",
     "amountMinHint":"The min value is 0.01",
     "amountMultipleMinHint":"The min value of each redpacket is 0.01",
     "numberHint":"Please use the correct redpacket number",
     "gasHint":"The minimum fee is 0.002",
     "passwordEnHint":"Please Enter the Chinese Characters and English Characters password within length 20",
-    "passwordZhHint":"Please Enter the Chinese Characters password within length 6."
+    "passwordZhHint":"Please Enter the Chinese Characters password within length 6.",
+    "aliasEnHint":"Please Enter the Chinese Characters and English Characters alias within length 20",
+    "aliasZhHint":"Please Enter the Chinese Characters alias within length 6.",
+    "aliasTypeHint":"Please Enter the alias within correct format"
   },
   "share":{
     "hint":"Your Red Packet is prepared!",
@@ -78,19 +84,20 @@
     "empty":"Red packet is empty",
     "open":"開",
     "require":"Password required",
-    "back":"Back to home page"
+    "back":"Back to home page",
+    "nickNameHint":"Your friends"
   },
   "detail":{
-    "saved":"Transferred to your BTM Account",
+    "saved":"Transferred to your {{unit}} Account",
     "shared":"Share Red Packet Link",
     "opened":"Opened {{number}} with {{total}}",
-    "finished":"{{total}} red packet(s), with {{amount}} BTM, opened in {{time}}",
+    "finished":"{{total}} red packet(s), with {{amount}} {{unit}}, opened in {{time}}",
     "confirming":"Network confirmation...",
     "luckiest":"👑Luckiest Draw",
     "notTaken":"Haven't received yet"
   },
   "mySent":{
-    "total":"Sent BTM",
+    "total":"Sent",
     "sentAmount":"Total Number Sent {{amount}}",
     "random":"Random Amount",
     "normal":"Identical Amount",
@@ -99,7 +106,7 @@
     "loading":"Loading"
   },
   "myReceived":{
-    "total":"Received BTM",
+    "total":"Received",
     "receivedAmount":"Total Number Received {{amount}}"
   }
 }

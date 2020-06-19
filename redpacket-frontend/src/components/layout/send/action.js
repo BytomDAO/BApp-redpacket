@@ -1,24 +1,29 @@
 import {
   spendWalletAction, controlAddressAction
 } from '../../util/bytomAction'
-import { createRedPacket, submitRedPacket
+import {
+  createRedPacket, submitRedPacket
 } from '../../util/api'
-import { BTM } from '../../util/constants'
+import { IdMapTest, IdMap } from '../../util/constants'
 import BigNumber from 'bignumber.js'
+import {decimals} from "@/components/util/constants";
 
 export function sendRedPack(value,isNormalType) {
   const password = value.password
   const amount = Number(value.amount)
   const number = Number(value.number)
-  const note = value.word
+  const alias = value.alias.trim()
   const bytom = window.bytom
 
-  const unitAmount = new BigNumber(100000000)
+  const currency = value.currency
+  const currencyDecimals = decimals[currency]
+
+  const unitAmount = new BigNumber(1).shiftedBy(currencyDecimals)
 
   return new Promise((resolve, reject) => {
     return createRedPacket({
-      "password": password
-    }).then(resp=>{
+      "password": password,
+    }, currency).then(resp=>{
       const contractAddress = resp.address
       const redPackId = resp.red_packet_id
 
@@ -26,13 +31,18 @@ export function sendRedPack(value,isNormalType) {
       const output = []
       let totalAmount
 
+      let assetId  = IdMap[currency]
+      if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
+        assetId  = IdMapTest[currency]
+      }
+
       if(bytom && bytom.version ){
 
         if(isNormalType){
           totalAmount = BigNumber(amount).times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction((BigNumber(amount)).toString(), BTM, contractAddress))
+            output.push(controlAddressAction((BigNumber(amount)).toString(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
@@ -40,29 +50,34 @@ export function sendRedPack(value,isNormalType) {
           const numberArray = generateRandom(number, totalAmount)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(BigNumber(randomAmount).toString(), BTM, contractAddress))
+            output.push(controlAddressAction(BigNumber(randomAmount).toString(), assetId, contractAddress))
           })
 
         }
 
         const inputAmount = BigNumber(totalAmount)
 
-        input.push(spendWalletAction(inputAmount.toString() ,BTM))
+        input.push(spendWalletAction(inputAmount.toString() ,assetId))
+
+        const requestObject = {
+          red_packet_id: redPackId,
+          address: window.bytom.defaultAccount.address,
+          amount: unitAmount.times(totalAmount).toNumber(),
+          password: password,
+          red_packet_type:isNormalType? 0:1,
+        }
+
+        if(alias){
+          requestObject.address_name = alias
+        }
 
         return window.bytom.sendAdvancedTransaction({
           input,
           output,
           gas:0
         }).then((res)=>{
-          return submitRedPacket({
-            "red_packet_id": redPackId,
-            "tx_id":  res.transactionHash,
-            "address": window.bytom.defaultAccount.address,
-            "amount": unitAmount.times(totalAmount).toNumber(),
-            "password": password,
-            "red_packet_type":isNormalType? 0:1,
-            "note": note
-          }).then(() =>{
+          requestObject.tx_id = res.transactionHash
+          return submitRedPacket(requestObject, currency).then(() =>{
             resolve(redPackId)
           }).catch(err => {
             throw err
@@ -77,7 +92,7 @@ export function sendRedPack(value,isNormalType) {
           totalAmount = BigNumber(amount).times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), BTM, contractAddress))
+            output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
@@ -85,29 +100,34 @@ export function sendRedPack(value,isNormalType) {
           const numberArray = generateRandom(number, totalAmount)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), BTM, contractAddress))
+            output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), assetId, contractAddress))
           })
 
         }
 
         const inputAmount = BigNumber(totalAmount)
 
-        input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,BTM))
+        input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,assetId))
+
+        const requestObject = {
+          red_packet_id: redPackId,
+          address: window.bytom.default_account.address,
+          amount: unitAmount.times(totalAmount).toNumber(),
+          password: password,
+          red_packet_type:isNormalType? 0:1,
+        }
+        if(alias){
+          requestObject.address_name = alias
+        }
 
         return window.bytom.send_advanced_transaction({
           input,
           output,
           gas:0
         }).then((res)=>{
-          return submitRedPacket({
-            "red_packet_id": redPackId,
-            "tx_id": res.transaction_hash || res.transactionHash,
-            "address": window.bytom.default_account.address,
-            "amount": unitAmount.times(totalAmount).toNumber(),
-            "password": password,
-            "red_packet_type":isNormalType? 0:1,
-            "note": note
-          }).then(() =>{
+          requestObject.tx_id = res.transaction_hash || res.transactionHash
+
+          return submitRedPacket(requestObject, currency).then(() =>{
             resolve(redPackId)
           }).catch(err => {
             throw err

@@ -21,7 +21,8 @@ class Open extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.match.params.id)
+    let currency = this.props.currency
+    this.props.getDetails(this.props.match.params.id, currency)
     const bytom = this.props.bytom
     if (
       bytom
@@ -44,14 +45,14 @@ class Open extends React.Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { t, currency } = this.props;
 
     if(!this.props.packetDetails){
       return <div>{t('common.notFound')}</div>
     }
     const packetDetails = this.props.packetDetails
 
-    const senderAddress = address.short(packetDetails.sender_address)
+    const senderAddress = packetDetails.sender_address_name ? `${t('open.nickNameHint')} ${packetDetails.sender_address_name} `: address.short(packetDetails.sender_address)
     const redPackId = this.props.match.params.id
 
     let winnerAddressArray = []
@@ -60,7 +61,7 @@ class Open extends React.Component {
     }
 
     if(this.state.account &&  winnerAddressArray.includes(this.state.account.address)){
-      this.props.history.push(`/details/${redPackId}`);
+      this.props.history.push(`/details/${redPackId}#${currency}`);
     }
 
     const finishState = packetDetails.total_number>0 && packetDetails.total_number === packetDetails.opened_number
@@ -95,12 +96,12 @@ class Open extends React.Component {
                 error:'',
               })
 
-              open(values,redPackId)
+              open(values,redPackId, currency)
                 .then((resp)=> {
                   switch (resp.data.status){
                     case 0:
                     case 2:
-                      this.props.history.push(`/details/${redPackId}`);
+                      this.props.history.push(`/details/${redPackId}#${currency}`);
                       break;
 
                     case 3:
@@ -146,18 +147,23 @@ class Open extends React.Component {
 
 
 
-        <Link className="hr__hint" to={`/details/${redPackId}`}>{t('open.viewDetails')}</Link>
+        <Link className="hr__hint" to={`/details/${redPackId}#${currency}`}>{t('open.viewDetails')}</Link>
       </LogoContainer>
     )
   }
 }
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
-  bytom: state.bytom
+  bytom: state.bytom,
+  currency: state.currency
 })
 
 const mapDispatchToProps = dispatch => ({
   getDetails: (redPackId) => dispatch(action.getRedpackDetails(redPackId)),
+  updateCurrency: (currency) => dispatch({
+    type: "UPDATE_CURRENCY",
+    currency: currency
+  }),
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(withTranslation()(Open))

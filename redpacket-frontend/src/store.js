@@ -2,7 +2,7 @@ import rotateReducer from "./reducers/rotateReducer"
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-function configureStore(state = { packetDetails: '', myReceivedDetails:'', mySentDetails:'',  bytom:'', bytomConnection:false}) {
+function configureStore(state = { packetDetails: '', myReceivedDetails:'', mySentDetails:'',  bytom:'', bytomConnection:false, currency:'BTM'}) {
   return createStore(
     rotateReducer,
     state,

@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Header from './header'
 import {withTranslation} from "react-i18next";
 import style from './style.scss'
+import action from "@/components/layout/details/action";
 
 // This is a Higher Order Component (HOC) that wraps up any components that require
 // an unlocked Bytom account instance
@@ -10,6 +11,14 @@ export default function(WrappedComponent) {
 
   // ...and returns another component...
   const BytomWrap = class extends Component {
+    componentDidMount() {
+      const hash = this.props.location.hash
+      let currency
+      if(hash){
+        currency = hash.replace('#','');
+        this.props.updateCurrency(currency)
+      }
+    }
 
     render () {
       const { t } = this.props;
@@ -104,5 +113,12 @@ export default function(WrappedComponent) {
     bytom: state.bytom,
     bytomConnection: state.bytomConnection
   })
-  return connect(mapStateToProps)(withTranslation()(BytomWrap))
+
+  const mapDispatchToProps = dispatch => ({
+    updateCurrency: (currency) => dispatch({
+      type: "UPDATE_CURRENCY",
+      currency: currency
+    }),
+  })
+  return connect(mapStateToProps, mapDispatchToProps)(withTranslation()(BytomWrap))
 }

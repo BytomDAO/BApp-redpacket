@@ -6,8 +6,9 @@ import LogoContainer from '../logoContainer'
 import Footer from '../addressFooter'
 
 import { Alert } from 'react-bootstrap';
+import {connect} from "react-redux";
 
-
+import Unit from "@/components/widget/unitDropdown";
 require('./style.scss')
 
 class Send extends React.Component {
@@ -33,7 +34,7 @@ class Send extends React.Component {
 
   render() {
 
-    const { t, i18n} = this.props;
+    const { t, i18n, currency} = this.props;
 
     const lng = i18n.language
 
@@ -50,15 +51,15 @@ class Send extends React.Component {
       <LogoContainer>
         <div key="sendBlock" className="send__background">
           <Formik
-            initialValues={{amount: '', number: '', password: '', word: ''}}
+            initialValues={{amount: '', number: '', password: '', alias: ''}}
             validate={values => {
               let errors = {};
               if (!values.amount) {
                 errors.amount = t('common.require');
               } else if (values.amount < 0.01) {
-                errors.amount = t('send.amountMinHint');
+                errors.amount = t('send.amountMinHint', {unit:currency});
               } else if (this.state.type ==='advanced' && values.amount < 0.01 * values.number) {
-                errors.amount = t('send.amountMultipleMinHint');
+                errors.amount = t('send.amountMultipleMinHint' , {unit:currency});
               } else if (
                 !/^(\d*\.)?\d+$/i.test(values.amount)
               ) {
@@ -84,14 +85,24 @@ class Send extends React.Component {
                 }
               }
 
+              if(values.alias) {
+                if (!/^[ A-Za-z0-9\u3000\u3400-\u4DBF\u4E00-\u9FFF]*$/.test(values.alias)) {
+                  errors.alias = t('send.aliasTypeHint')
+                } else {
+                  const hanArray = (values.alias.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
+                  if (hanArray.length > 6) {
+                    errors.alias = t('send.aliasZhHint')
+                  } else if ((hanArray.length * 3 + (values.alias.length - hanArray.length)) > 20) {
+                    errors.alias = t('send.aliasEnHint')
+                  }
+                }
+              }
+
               return errors;
             }}
             onSubmit={(values, {setSubmitting}) => {
 
-              if(!values.word){
-                values.word=t('send.messagePlaceHolder')
-              }
-
+              values.currency = currency
               this.setState({
                 error:'',
               })
@@ -99,7 +110,7 @@ class Send extends React.Component {
               sendRedPack(values,(this.state.type === 'normal'))
                 .then((redPackId)=> {
                   setSubmitting(false)
-                  this.props.history.push(`/share/${redPackId}`)
+                  this.props.history.push(`/share/${redPackId}#${currency}`)
                   this.setState({
                     error:'',
                   })
@@ -127,7 +138,9 @@ class Send extends React.Component {
                     <div className="input-box">
                       <label htmlFor="amount">{this.state.type ==='advanced'? t('send.total') : t('send.single')}
                       </label>
-                      <Field type="text" name="amount" placeholder='0.00'/><span className="unit">BTM</span>
+                      <Field type="text" name="amount" placeholder='0.00'/>
+                      <Unit/>
+
                     </div>
                     <Error name="amount" component="div"/>
                   </div>
@@ -158,11 +171,10 @@ class Send extends React.Component {
 
                   <div className="form-group">
                     <div className="input-box">
-                      <label htmlFor="word">{t('send.message')} </label>
-                      <Field type="text" name="word" placeholder={t('send.messagePlaceHolder')}/>
+                      <label htmlFor="word">{t('send.alias')} </label>
+                      <Field type="text" name="alias" placeholder={t('send.aliasPlaceHolder')}/>
                     </div>
-                    <div className="hint text-white">{t('send.messageHint')}</div>
-                    <Error name="word" component="div"/>
+                    <Error name="alias" component="div"/>
                   </div>
 
 
@@ -185,4 +197,9 @@ class Send extends React.Component {
   }
 }
 
-export default withTranslation()(Send);
+const mapStateToProps = state => ({
+  currency: state.currency,
+})
+
+
+export default connect(mapStateToProps)(withTranslation()(Send));

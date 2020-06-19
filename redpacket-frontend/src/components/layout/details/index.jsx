@@ -10,7 +10,8 @@ import {Link } from 'react-router-dom'
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import moment from "moment/moment";
-import {getCurrentAddress} from "../../util/utils";
+import { getCurrentAddress, formateNumber } from "../../util/utils";
+import { decimals } from '@/components/util/constants'
 
 require('./style.scss')
 
@@ -20,17 +21,19 @@ class RedPackDetails extends Component {
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.match.params.id)
+    let currency = this.props.currency
+    this.props.getDetails(this.props.match.params.id, currency)
   }
 
   componentWillUpdate(nextProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.props.getDetails(this.props.match.params.id)
+      this.props.getDetails(this.props.match.params.id, this.props.currency)
     }
   }
 
   render () {
-    const { t } = this.props;
+    const { t, currency } = this.props;
+    const currencyDecimals = decimals[currency]
 
     if(!this.props.packetDetails){
       return <div></div>
@@ -54,10 +57,10 @@ class RedPackDetails extends Component {
         const date1 = new Date(_.maxBy(winners, 'confirmed_time').confirmed_time * 1000)
         const date2 = new Date(packetDetails.send_time *1000)
         const timeDiff = timeDifference(date1, date2)
-        label = t('detail.finished', {total:packetDetails.total_number, amount:packetDetails.total_amount/100000000, time:timeDiff})
+        label = t('detail.finished', {total:packetDetails.total_number, amount:formateNumber(packetDetails.total_amount,currencyDecimals), time:timeDiff, unit:currency})
         maxAmount = (_.maxBy(winners, 'amount')).amount
       }else{
-        label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${_.sumBy(winners, 'amount') / 100000000}/ ${packetDetails.total_amount / 100000000} BTM`})
+        label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${ formateNumber(_.sumBy(winners, 'amount') ,currencyDecimals) }/ ${ formateNumber(packetDetails.total_amount ,currencyDecimals) } ${currency}`})
       }
 
 
@@ -69,7 +72,7 @@ class RedPackDetails extends Component {
               <div className="detail__content text-grey">{moment(winner.confirmed_time*1000).format('LLL')}</div>
             </div>
             <div className="tb-cell  text-right">
-              <div className="detail__header text-secondary">{winner.amount/100000000} BTM</div>
+              <div className="detail__header text-secondary">{ formateNumber( winner.amount ,currencyDecimals)} {currency}</div>
               <div className="detail__content text-grey">{!isNormalType && maxAmount && maxAmount===winner.amount && t('detail.luckiest')}</div>
             </div>
           </div>)
@@ -77,17 +80,22 @@ class RedPackDetails extends Component {
       )
     }
 
+    const senderAddress = address.short(packetDetails.sender_address)
+    const alias = packetDetails.sender_address_name
+    let yourRedPacket =  `${senderAddress}${t('qrCode.spacket')}`
+    if(alias){
+      yourRedPacket =  `${t('open.nickNameHint')} ${alias} ${t('qrCode.spacket')}`
+    }
+
     return (
       <LogoContainer>
         <div className="shadow__mask">
           <div className="details__summary">
-            <h4 className="details__header text-secondary redPack_detail__header">{packetDetails.note} {!isNormalType && <img className="icon" src={require('../../img/icon/ping.png')} alt=""/>}</h4>
+            <div>{!isNormalType && <img className="icon mr-1" src={require('../../img/icon/ping.png')} alt=""/>}{yourRedPacket}</div>
+            {myRedPack && <div className="text-secondary amount_number red_amount"> { formateNumber(myRedPack.amount,currencyDecimals) }{currency}</div>}
 
-            <div>{address.short(packetDetails.sender_address)}{t('qrCode.spacket')}</div>
-            {myRedPack && <div className="text-secondary amount_number red_amount"> {myRedPack.amount/100000000}BTM</div>}
-
-            {myRedPack && <div>{ t('detail.saved')}</div>}
-            {packetDetails.sender_address === myAddress && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}`}>{t('detail.shared')}</Link>}
+            {myRedPack && <div>{ t('detail.saved', {unit:currency})}</div>}
+            {packetDetails.sender_address === myAddress && <Link className="shared_button btn-primary" to={`/share/${this.props.match.params.id}#${currency}`}>{t('detail.shared')}</Link>}
           </div>
 
           <div className="details__container">
@@ -107,10 +115,16 @@ class RedPackDetails extends Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
+  currency: state.currency && state.currency.toUpperCase()
+
 })
 
 const mapDispatchToProps = dispatch => ({
   getDetails: (redPackId) => dispatch(action.getRedpackDetails(redPackId)),
+  updateCurrency: (currency) => dispatch({
+    type: "UPDATE_CURRENCY",
+    currency: currency
+  }),
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)( withTranslation()(RedPackDetails))
