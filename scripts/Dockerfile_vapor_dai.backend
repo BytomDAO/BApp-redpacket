@@ -7,10 +7,10 @@ RUN rpm --rebuilddb && yum install -y epel-release && yum -y update && yum insta
 COPY target/api /root/api
 COPY target/updater /root/updater
 
-COPY config_vapor_pro.json /root/config.json
+COPY config_vapor_dai_pro.json /root/config.json
 
 COPY scripts/supervisord.conf /root/supervisord.conf
 
-EXPOSE 3100
+EXPOSE 3101
 
 CMD ["/usr/bin/supervisord","-c","/root/supervisord.conf"]
