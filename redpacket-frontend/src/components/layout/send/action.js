@@ -12,7 +12,7 @@ export function sendRedPack(value,isNormalType) {
   const password = value.password
   const amount = Number(value.amount)
   const number = Number(value.number)
-  const alias = value.alias
+  const alias = value.alias.trim()
   const bytom = window.bytom
 
   const currency = value.currency
