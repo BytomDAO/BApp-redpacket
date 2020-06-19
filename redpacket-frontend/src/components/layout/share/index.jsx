@@ -23,7 +23,7 @@ class Share extends React.Component {
   }
 
   copyClick(){
-    copyToClipboard(`${window.location.origin}${basename}/open/${this.props.match.params.id}`)
+    copyToClipboard(`${window.location.origin}${basename}/open/${this.props.match.params.id}#${this.props.currency}`)
     toastMsg(this.props.t('share.copied'))
   }
 

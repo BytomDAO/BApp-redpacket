@@ -4,7 +4,7 @@ import {
 import {
   createRedPacket, submitRedPacket
 } from '../../util/api'
-import { BTM } from '../../util/constants'
+import { IdMapTest, IdMap } from '../../util/constants'
 import BigNumber from 'bignumber.js'
 import {decimals} from "@/components/util/constants";
 
@@ -31,13 +31,18 @@ export function sendRedPack(value,isNormalType) {
       const output = []
       let totalAmount
 
+      let assetId  = IdMap[currency]
+      if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
+        assetId  = IdMapTest[currency]
+      }
+
       if(bytom && bytom.version ){
 
         if(isNormalType){
           totalAmount = BigNumber(amount).times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction((BigNumber(amount)).toString(), BTM, contractAddress))
+            output.push(controlAddressAction((BigNumber(amount)).toString(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
@@ -45,14 +50,14 @@ export function sendRedPack(value,isNormalType) {
           const numberArray = generateRandom(number, totalAmount)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(BigNumber(randomAmount).toString(), BTM, contractAddress))
+            output.push(controlAddressAction(BigNumber(randomAmount).toString(), assetId, contractAddress))
           })
 
         }
 
         const inputAmount = BigNumber(totalAmount)
 
-        input.push(spendWalletAction(inputAmount.toString() ,BTM))
+        input.push(spendWalletAction(inputAmount.toString() ,assetId))
 
         const requestObject = {
           red_packet_id: redPackId,
@@ -87,7 +92,7 @@ export function sendRedPack(value,isNormalType) {
           totalAmount = BigNumber(amount).times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), BTM, contractAddress))
+            output.push(controlAddressAction(unitAmount.times(BigNumber(amount)).toNumber(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
@@ -95,14 +100,14 @@ export function sendRedPack(value,isNormalType) {
           const numberArray = generateRandom(number, totalAmount)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), BTM, contractAddress))
+            output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), assetId, contractAddress))
           })
 
         }
 
         const inputAmount = BigNumber(totalAmount)
 
-        input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,BTM))
+        input.push(spendWalletAction(unitAmount.times(inputAmount).toNumber() ,assetId))
 
         const requestObject = {
           red_packet_id: redPackId,

@@ -21,7 +21,13 @@ class Open extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.match.params.id)
+    const hash = this.props.location.hash
+    let currency
+    if(hash){
+      currency = hash.replace('#','');
+      this.props.updateCurrency(currency)
+    }
+    this.props.getDetails(this.props.match.params.id, currency)
     const bytom = this.props.bytom
     if (
       bytom
@@ -44,7 +50,7 @@ class Open extends React.Component {
   }
 
   render() {
-    const { t } = this.props;
+    const { t, currency } = this.props;
 
     if(!this.props.packetDetails){
       return <div>{t('common.notFound')}</div>
@@ -95,7 +101,7 @@ class Open extends React.Component {
                 error:'',
               })
 
-              open(values,redPackId)
+              open(values,redPackId, currency)
                 .then((resp)=> {
                   switch (resp.data.status){
                     case 0:
@@ -153,11 +159,16 @@ class Open extends React.Component {
 }
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
-  bytom: state.bytom
+  bytom: state.bytom,
+  currency: state.currency
 })
 
 const mapDispatchToProps = dispatch => ({
   getDetails: (redPackId) => dispatch(action.getRedpackDetails(redPackId)),
+  updateCurrency: (currency) => dispatch({
+    type: "UPDATE_CURRENCY",
+    currency: currency
+  }),
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(withTranslation()(Open))

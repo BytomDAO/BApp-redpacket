@@ -85,6 +85,19 @@ class Send extends React.Component {
                 }
               }
 
+              if(values.alias) {
+                if (!/^[ A-Za-z0-9\u3000\u3400-\u4DBF\u4E00-\u9FFF]*$/.test(values.alias)) {
+                  errors.alias = t('send.aliasTypeHint')
+                } else {
+                  const hanArray = (values.alias.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
+                  if (hanArray.length > 6) {
+                    errors.alias = t('send.aliasZhHint')
+                  } else if ((hanArray.length * 3 + (values.alias.length - hanArray.length)) > 20) {
+                    errors.alias = t('send.aliasEnHint')
+                  }
+                }
+              }
+
               return errors;
             }}
             onSubmit={(values, {setSubmitting}) => {
@@ -97,7 +110,7 @@ class Send extends React.Component {
               sendRedPack(values,(this.state.type === 'normal'))
                 .then((redPackId)=> {
                   setSubmitting(false)
-                  this.props.history.push(`/share/${redPackId}`)
+                  this.props.history.push(`/share/${redPackId}#${currency}`)
                   this.setState({
                     error:'',
                   })
