@@ -43,13 +43,13 @@ type RedPacketDetail struct {
 }
 
 func convertToWinner(receivers []*orm.Receiver) (winners []*winner) {
-	for _, receicer := range receivers {
+	for _, receiver := range receivers {
 		winners = append(winners, &winner{
-			Address:       receicer.Address,
-			Amount:        receicer.Amount,
-			TxID:          receicer.TxID,
-			IsConfirmed:   receicer.IsConfirmed,
-			ConfirmedTime: receicer.UpdatedAt,
+			Address:       receiver.Address,
+			Amount:        receiver.Amount,
+			TxID:          receiver.TxID,
+			IsConfirmed:   receiver.IsConfirmed,
+			ConfirmedTime: receiver.UpdatedAt,
 		})
 	}
 	return
