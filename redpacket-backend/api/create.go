@@ -14,6 +14,11 @@ import (
 	"github.com/redpacket/redpacket-backend/util"
 )
 
+var (
+	errUnsupportedAsset = errors.New("unsupported asset")
+	errFindScriptFail   = errors.New("find script fail")
+)
+
 type CreateRedPacketReq struct {
 	Password string `json:"password"`
 }
@@ -84,6 +89,10 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
 	}
 
+	if _, ok := s.cfg.AssetDecimals[assetID]; !ok {
+		return errUnsupportedAsset
+	}
+
 	if req.Address == "" {
 		return errors.New("sender address is empty, please input correct address")
 	}
@@ -144,5 +153,5 @@ func (s *Server) getAssetID(txID string) (string, error) {
 		}
 	}
 
-	return "", nil
+	return "", errFindScriptFail
 }

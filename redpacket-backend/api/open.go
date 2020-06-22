@@ -29,10 +29,6 @@ const (
 	notFound
 )
 
-var (
-	errUnsupportedAsset = errors.New("unsupported asset")
-)
-
 var statusMsg = map[int]string{
 	successOpened:    "success opened red packet",
 	allOpened:        "all redpackets has been completely opened",
