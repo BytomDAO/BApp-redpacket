@@ -131,15 +131,15 @@ func (s *Server) getAssetID(txID string) (string, error) {
 		return "", errors.Wrapf(err, "get transaction from blockcenter, tx id: %s", txID)
 	}
 
-	var inputScript string
+	var script string
 	for _, input := range tx.Inputs {
 		if len(input.Script) != 0 {
-			inputScript = input.Script
+			script = input.Script
 		}
 	}
 
 	for _, output := range tx.Outputs {
-		if output.Script != inputScript {
+		if output.Script != script {
 			return output.Script, nil
 		}
 	}
