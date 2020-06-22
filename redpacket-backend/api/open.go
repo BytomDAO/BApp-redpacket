@@ -120,7 +120,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	openReceiver.IsSpend = true
 	if err := s.db.Master().Model(&orm.Receiver{}).Where(&orm.Receiver{UtxoID: openReceiver.UtxoID}).Updates(openReceiver).Error; err != nil {
 		s.cache.Del(openReceiver.UtxoID)
-		return nil, errors.Wrap(err, "update receicer utxo to spent")
+		return nil, errors.Wrap(err, "update receiver utxo to spend")
 	}
 
 	return &RedPacketStatus{
