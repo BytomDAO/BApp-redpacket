@@ -25,13 +25,14 @@ type blockCenterKeeper struct {
 	workAsset string
 }
 
-func NewBlockCenterKeeper(cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {
+func NewBlockCenterKeeper(assetID string, cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {
 	service := service.NewService(cfg.Updater.BlockCenter.NetType, cfg.Updater.BlockCenter.URL)
 	return &blockCenterKeeper{
-		cfg:     cfg,
-		db:      db,
-		cache:   cache,
-		service: service,
+		cfg:       cfg,
+		db:        db,
+		cache:     cache,
+		service:   service,
+		workAsset: assetID,
 	}
 }
 
@@ -94,7 +95,7 @@ func (b *blockCenterKeeper) updateSenderRedPacketStatus() error {
 
 		// update tx expired status
 		if time.Now().Unix()-sender.UpdatedAt.Unix() > util.Duration {
-			if err := b.db.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID}).Update("is_expired", true).Error; err != nil {
+			if err := b.db.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID, AssetID: b.workAsset}).Update("is_expired", true).Error; err != nil {
 				return errors.Wrap(err, "update sender redpacket tx expired")
 			}
 		}
@@ -112,7 +113,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		}
 
 		// match program and asset, filter out the amount less than transaction fee
-		if output.Script != sender.ContractProgram || output.Asset.AssetID != b.cfg.Updater.BlockCenter.AssetID || amount <= util.TransactionFee {
+		if output.Script != sender.ContractProgram || output.Asset.AssetID != b.workAsset || amount <= util.TransactionFee {
 			continue
 		}
 
@@ -128,7 +129,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	}
 
 	// update tx handled status
-	if err := batchDB.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID}).Update("is_handled", true).Error; err != nil {
+	if err := batchDB.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID, AssetID: b.workAsset}).Update("is_handled", true).Error; err != nil {
 		batchDB.Rollback()
 		return err
 	}
@@ -141,7 +142,12 @@ func (b *blockCenterKeeper) parseAmount(srcAmount string) (uint64, error) {
 		return 0, errors.Wrapf(err, "parse output float of amount, amount: %s", srcAmount)
 	}
 
-	return uint64(amountFloat * math.Pow10(b.cfg.Updater.BlockCenter.AssetDecimal)), nil
+	decimals, ok := b.cfg.AssetDecimals[b.workAsset]
+	if !ok {
+		return 0, errors.New("wrong asset id")
+	}
+
+	return uint64(amountFloat * math.Pow10(decimals)), nil
 }
 
 func (b *blockCenterKeeper) updateReceiverRedPacketStatus() error {
