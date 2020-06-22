@@ -79,13 +79,9 @@ type SubmitRedPacketReq struct {
 }
 
 func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error {
-	if req.TxID == "" {
-		return errors.New("txid is empty, submit redpacket must include txid")
-	}
-
 	assetID, err := s.getAssetID(req.TxID)
 	if err != nil {
-		return errors.Wrapf(err, "get asset, tx id: %s", req.TxID)
+		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
 	}
 
 	if req.Address == "" {
@@ -126,6 +122,10 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 
 // getAsset get asset id from blockcenter
 func (s *Server) getAssetID(txID string) (string, error) {
+	if txID == "" {
+		return "", errors.New("txid is empty, submit redpacket must include txid")
+	}
+
 	tx, err := s.service.GetTransaction(&service.GetTransactionReq{TxID: txID})
 	if err != nil {
 		return "", errors.Wrapf(err, "get transaction from blockcenter, tx id: %s", txID)
