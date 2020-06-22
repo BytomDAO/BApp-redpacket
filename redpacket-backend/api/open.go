@@ -29,6 +29,10 @@ const (
 	notFound
 )
 
+var (
+	errUnsupportedAsset = errors.New("unsupported asset")
+)
+
 var statusMsg = map[int]string{
 	successOpened:    "success opened red packet",
 	allOpened:        "all redpackets has been completely opened",
@@ -75,6 +79,11 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 		}, nil
 	}
 
+	// check whether asset is valid
+	if _, ok := s.cfg.AssetDecimals[sender.AssetID]; !ok {
+		return nil, errUnsupportedAsset
+	}
+
 	// open redpacket
 	var openReceiver *orm.Receiver
 	for _, recv := range sender.Receivers {
@@ -108,7 +117,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}
 
 	// send transaction
-	txID, err := s.OpenRedPacketTransaction(openReceiver.Amount, openReceiver.UtxoID, req.Address, sender)
+	txID, err := s.OpenRedPacketTransaction(sender.AssetID, openReceiver.Amount, openReceiver.UtxoID, req.Address, sender)
 	if err != nil {
 		s.cache.Del(openReceiver.UtxoID)
 		return nil, errors.Wrap(err, "send open red packet transaction")
@@ -129,8 +138,8 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}, nil
 }
 
-func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string, sender *orm.Sender) (string, error) {
-	rawTx, err := s.BuildRedPacketTransaction(amount, utxoID, address)
+func (s *Server) OpenRedPacketTransaction(assetID string, amount uint64, utxoID, address string, sender *orm.Sender) (string, error) {
+	rawTx, err := s.BuildRedPacketTransaction(assetID, amount, utxoID, address)
 	if err != nil {
 		return "", errors.Wrap(err, "build red packet transaction")
 	}
@@ -143,9 +152,14 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 	return *txID, nil
 }
 
-func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) (string, error) {
-	amountFloat := float64(amount) / math.Pow10(s.cfg.Updater.BlockCenter.AssetDecimal)
-	amountStr := strconv.FormatFloat(amountFloat, 'f', s.cfg.Updater.BlockCenter.AssetDecimal, 64)
+func (s *Server) BuildRedPacketTransaction(assetID string, amount uint64, utxoID, address string) (string, error) {
+	decimals, ok := s.cfg.AssetDecimals[assetID]
+	if !ok {
+		return "", errUnsupportedAsset
+	}
+
+	amountFloat := float64(amount) / math.Pow10(decimals)
+	amountStr := strconv.FormatFloat(amountFloat, 'f', decimals, 64)
 	buildReq := &service.BuildTransactionReq{
 		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
 			Fee:           strconv.FormatUint(util.TransactionFee, 10),
@@ -154,7 +168,7 @@ func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string
 				{"type": "spend_utxo", "output_id": utxoID},
 			},
 			Outputs: []map[string]interface{}{
-				{"type": "control_address", "asset": s.cfg.Updater.BlockCenter.AssetID, "address": address, "amount": amountStr},
+				{"type": "control_address", "asset": assetID, "address": address, "amount": amountStr},
 			},
 		},
 		Address: s.GetCommonAddress(),

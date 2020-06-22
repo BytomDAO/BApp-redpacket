@@ -31,11 +31,12 @@ func NewConfigWithPath(path string) *Config {
 }
 
 type Config struct {
-	GinGonic GinGonic `json:"gin-gonic"`
-	MySQL    MySQL    `json:"mysql"`
-	Redis    Redis    `json:"redis"`
-	API      API      `json:"api"`
-	Updater  Updater  `json:"updater"`
+	GinGonic      GinGonic       `json:"gin-gonic"`
+	MySQL         MySQL          `json:"mysql"`
+	Redis         Redis          `json:"redis"`
+	API           API            `json:"api"`
+	Updater       Updater        `json:"updater"`
+	AssetDecimals map[string]int `json:"asset_decimals"`
 }
 
 type GinGonic struct {
@@ -74,19 +75,13 @@ type API struct {
 	MySQLConnCfg MySQLConnCfg `json:"mysql_conns"`
 }
 
-type Asset struct {
-	AssetID      string `json:"asset_id"`
-	AssetDecimal int    `json:"asset_decimal"`
-}
-
 type BlockCenter struct {
-	NetType       string            `json:"net_type"`
-	NetWork       string            `json:"network"`
-	Assets        map[string]*Asset `json:"assets"`
-	CommonAddress string            `json:"common_address"`
-	SyncSeconds   int               `json:"sync_seconds"`
-	URL           string            `json:"url"`
-	MySQLConnCfg  MySQLConnCfg      `json:"mysql_conns"`
+	NetType       string       `json:"net_type"`
+	NetWork       string       `json:"network"`
+	CommonAddress string       `json:"common_address"`
+	SyncSeconds   int          `json:"sync_seconds"`
+	URL           string       `json:"url"`
+	MySQLConnCfg  MySQLConnCfg `json:"mysql_conns"`
 }
 
 type Updater struct {
