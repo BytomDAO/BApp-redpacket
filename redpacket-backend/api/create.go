@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
 )
 
@@ -82,6 +83,11 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.New("txid is empty, submit redpacket must include txid")
 	}
 
+	assetID, err := s.getAssetID(req.TxID)
+	if err != nil {
+		return errors.Wrapf(err, "get asset, tx id: %s", req.TxID)
+	}
+
 	if req.Address == "" {
 		return errors.New("sender address is empty, please input correct address")
 	}
@@ -102,6 +108,7 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 	// update sender information
 	sender.Address = req.Address
 	sender.AddressName = req.AddressName
+	sender.AssetID = assetID
 	sender.Amount = req.Amount
 	sender.TxID = &req.TxID
 	sender.RedPacketType = req.RedPacketType
@@ -115,4 +122,27 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.New("inconsistent db status, maybe exist the same txid")
 	}
 	return nil
+}
+
+// getAsset get asset id from blockcenter
+func (s *Server) getAssetID(txID string) (string, error) {
+	tx, err := s.service.GetTransaction(&service.GetTransactionReq{TxID: txID})
+	if err != nil {
+		return "", errors.Wrapf(err, "get transaction from blockcenter, tx id: %s", txID)
+	}
+
+	var inputScript string
+	for _, input := range tx.Inputs {
+		if len(input.Script) != 0 {
+			inputScript = input.Script
+		}
+	}
+
+	for _, output := range tx.Outputs {
+		if output.Script != inputScript {
+			return output.Script, nil
+		}
+	}
+
+	return "", nil
 }
