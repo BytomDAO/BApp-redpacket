@@ -31,8 +31,16 @@
     "block_center": {
       "net_type": "vapor",
       "network": "testnet",
-      "asset_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-      "asset_decimal": 8,
+      "assets": {
+        "btm": {
+          "asset_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "asset_decimal": 8
+        },
+        "dai": {
+          "asset_id": "57e5b3a3040e1c0162f64019838fd93b5f33dcde7069fa72aee48a054143443f",
+          "asset_decimal": 6
+        }
+      },
       "common_address": "your_address",
       "sync_seconds": 60,
       "url": "http://127.0.0.1:3000",
