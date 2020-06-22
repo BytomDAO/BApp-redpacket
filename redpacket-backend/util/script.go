@@ -8,7 +8,7 @@ import (
 )
 
 // TransactionFee is global variable for transaction fee
-var TransactionFee uint64
+var TransactionFee string
 
 const (
 	Duration = int64(600)
@@ -60,8 +60,8 @@ func AssemblePassword(password string, guid uuid.UUID) []byte {
 // ChangeTransactionFee change TransactionFee by netType
 func ChangeTransactionFee(netType string) {
 	if netType == "btm" {
-		TransactionFee = uint64(200000)
+		TransactionFee = "0.002"
 	} else if netType == "vapor" {
-		TransactionFee = uint64(0)
+		TransactionFee = "0"
 	}
 }

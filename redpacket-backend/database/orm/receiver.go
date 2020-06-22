@@ -8,7 +8,7 @@ type Receiver struct {
 	UtxoID      string
 	IsSpend     bool
 	Address     string
-	Amount      uint64
+	Amount      string
 	TxID        string
 	IsConfirmed bool
 	IsExpired   bool

@@ -14,7 +14,7 @@ type Sender struct {
 	WitnessProgram  string
 	Address         string
 	AddressName     string
-	Amount          uint64
+	Amount          string
 	TxID            *string
 	IsConfirmed     bool
 	IsHandled       bool

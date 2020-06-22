@@ -105,6 +105,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	// batch insert utxo into db
 	batchDB := b.db.Begin()
 	for _, output := range tx.Outputs {
+		// todo:attention: asset id is not btm? fee?
 		amount, err := b.parseAmount(output.Amount)
 		if err != nil {
 			return errors.Wrap(err, "parse output amount")
@@ -118,7 +119,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		// save utxo into receiver
 		if err := batchDB.Create(&orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   amount - util.TransactionFee,
+			Amount:   strconv.ParseFloat(output.Amount) - strconv.ParseFloat(util.TransactionFee),
 			SenderID: sender.ID,
 		}).Error; err != nil {
 			batchDB.Rollback()
