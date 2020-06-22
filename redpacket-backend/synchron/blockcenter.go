@@ -18,10 +18,11 @@ import (
 )
 
 type blockCenterKeeper struct {
-	cfg     *config.Config
-	db      *gorm.DB
-	cache   *database.RedisDB
-	service *service.Service
+	cfg       *config.Config
+	db        *gorm.DB
+	cache     *database.RedisDB
+	service   *service.Service
+	workAsset string
 }
 
 func NewBlockCenterKeeper(cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {

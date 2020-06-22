@@ -14,11 +14,13 @@ import (
 )
 
 type Server struct {
-	db      *database.DB
-	cache   *database.RedisDB
-	cfg     *config.Config
-	engine  *gin.Engine
-	service *service.Service
+	db            *database.DB
+	cache         *database.RedisDB
+	cfg           *config.Config
+	engine        *gin.Engine
+	service       *service.Service
+	asset         string
+	assetDecimals int
 }
 
 func NewServer(cfg *config.Config) *Server {

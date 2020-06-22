@@ -120,7 +120,7 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 	return nil
 }
 
-// getAsset get asset id from blockcenter
+// getAsset get asset id by tx id from blockcenter
 func (s *Server) getAssetID(txID string) (string, error) {
 	if txID == "" {
 		return "", errors.New("txid is empty, submit redpacket must include txid")
