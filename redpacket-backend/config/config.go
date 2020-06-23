@@ -31,12 +31,11 @@ func NewConfigWithPath(path string) *Config {
 }
 
 type Config struct {
-	GinGonic      GinGonic       `json:"gin-gonic"`
-	MySQL         MySQL          `json:"mysql"`
-	Redis         Redis          `json:"redis"`
-	API           API            `json:"api"`
-	Updater       Updater        `json:"updater"`
-	AssetDecimals map[string]int `json:"asset_decimals"`
+	GinGonic GinGonic `json:"gin-gonic"`
+	MySQL    MySQL    `json:"mysql"`
+	Redis    Redis    `json:"redis"`
+	API      API      `json:"api"`
+	Updater  Updater  `json:"updater"`
 }
 
 type GinGonic struct {
