@@ -24,9 +24,7 @@ func main() {
 		log.WithField("err", err).Panic("initialize redis db error")
 	}
 
-	for assetID := range cfg.AssetDecimals {
-		go synchron.NewBlockCenterKeeper(assetID, cfg, db.Master(), cache).Run()
-	}
+	go synchron.NewBlockCenterKeeper(cfg, db.Master(), cache).Run()
 
 	// keep the main func running in case of terminating goroutines
 	var wg sync.WaitGroup

@@ -15,8 +15,7 @@ import (
 )
 
 var (
-	errUnsupportedAsset = errors.New("unsupported asset")
-	errFindScriptFail   = errors.New("find script fail")
+	errFindScriptFail = errors.New("find script fail")
 )
 
 type CreateRedPacketReq struct {
@@ -87,10 +86,6 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 	assetID, err := s.getAssetID(req.TxID)
 	if err != nil {
 		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
-	}
-
-	if _, ok := s.cfg.AssetDecimals[assetID]; !ok {
-		return errUnsupportedAsset
 	}
 
 	if req.Address == "" {

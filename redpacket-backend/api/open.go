@@ -73,11 +73,6 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 		}, nil
 	}
 
-	// check whether asset is valid
-	if _, ok := s.cfg.AssetDecimals[sender.AssetID]; !ok {
-		return nil, errUnsupportedAsset
-	}
-
 	// open redpacket
 	var openReceiver *orm.Receiver
 	for _, recv := range sender.Receivers {

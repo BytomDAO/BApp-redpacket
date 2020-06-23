@@ -1,9 +1,7 @@
 package synchron
 
 import (
-	"math"
 	"math/big"
-	"strconv"
 	"time"
 
 	"github.com/bytom/bytom/errors"
@@ -19,21 +17,18 @@ import (
 )
 
 type blockCenterKeeper struct {
-	cfg       *config.Config
-	db        *gorm.DB
-	cache     *database.RedisDB
-	service   *service.Service
-	workAsset string
+	cfg     *config.Config
+	db      *gorm.DB
+	cache   *database.RedisDB
+	service *service.Service
 }
 
-func NewBlockCenterKeeper(assetID string, cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {
-	service := service.NewService(cfg.Updater.BlockCenter.NetType, cfg.Updater.BlockCenter.URL)
+func NewBlockCenterKeeper(cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {
 	return &blockCenterKeeper{
-		cfg:       cfg,
-		db:        db,
-		cache:     cache,
-		service:   service,
-		workAsset: assetID,
+		cfg:     cfg,
+		db:      db,
+		cache:   cache,
+		service: service.NewService(cfg.Updater.BlockCenter.NetType, cfg.Updater.BlockCenter.URL),
 	}
 }
 
@@ -96,7 +91,7 @@ func (b *blockCenterKeeper) updateSenderRedPacketStatus() error {
 
 		// update tx expired status
 		if time.Now().Unix()-sender.UpdatedAt.Unix() > util.Duration {
-			if err := b.db.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID, AssetID: b.workAsset}).Update("is_expired", true).Error; err != nil {
+			if err := b.db.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID}).Update("is_expired", true).Error; err != nil {
 				return errors.Wrap(err, "update sender redpacket tx expired")
 			}
 		}
@@ -135,25 +130,11 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	}
 
 	// update tx handled status
-	if err := batchDB.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID, AssetID: b.workAsset}).Update("is_handled", true).Error; err != nil {
+	if err := batchDB.Model(&orm.Sender{}).Where(&orm.Sender{ID: sender.ID}).Update("is_handled", true).Error; err != nil {
 		batchDB.Rollback()
 		return err
 	}
 	return batchDB.Commit().Error
-}
-
-func (b *blockCenterKeeper) parseAmount(srcAmount string) (uint64, error) {
-	amountFloat, err := strconv.ParseFloat(srcAmount, 64)
-	if err != nil {
-		return 0, errors.Wrapf(err, "parse output float of amount, amount: %s", srcAmount)
-	}
-
-	decimals, ok := b.cfg.AssetDecimals[b.workAsset]
-	if !ok {
-		return 0, errors.New("wrong asset id")
-	}
-
-	return uint64(amountFloat * math.Pow10(decimals)), nil
 }
 
 func (b *blockCenterKeeper) updateReceiverRedPacketStatus() error {
