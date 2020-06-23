@@ -39,9 +39,5 @@
         "max_idle_conns": 5
       }
     }
-  },
-  "asset_decimals": {
-    "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff": 8,
-    "57e5b3a3040e1c0162f64019838fd93b5f33dcde7069fa72aee48a054143443f": 6
   }
 }
