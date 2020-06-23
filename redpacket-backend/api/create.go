@@ -78,7 +78,7 @@ type SubmitRedPacketReq struct {
 	TxID          string `json:"tx_id"`
 	Address       string `json:"address"`
 	AddressName   string `json:"address_name,omitempty"`
-	Amount        uint64 `json:"amount"`
+	Amount        string `json:"amount"`
 	RedPacketType int    `json:"red_packet_type"`
 	Note          string `json:"note"`
 }
@@ -97,8 +97,8 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.New("sender address is empty, please input correct address")
 	}
 
-	if req.Amount == uint64(0) {
-		return errors.New("sender amount is 0, please input correct amount")
+	if req.Amount == "" {
+		return errors.New("sender amount is empty, please input correct amount")
 	}
 
 	sender := &orm.Sender{RedPacketID: req.RedPacketID}

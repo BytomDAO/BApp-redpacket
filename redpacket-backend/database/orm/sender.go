@@ -15,7 +15,7 @@ type Sender struct {
 	Address         string
 	AddressName     string
 	AssetID         string
-	Amount          uint64
+	Amount          string
 	TxID            *string
 	IsConfirmed     bool
 	IsHandled       bool

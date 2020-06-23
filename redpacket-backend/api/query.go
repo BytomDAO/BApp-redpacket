@@ -1,6 +1,8 @@
 package api
 
 import (
+	"math/big"
+
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 
@@ -8,9 +10,13 @@ import (
 	"github.com/redpacket/redpacket-backend/util/types"
 )
 
+var (
+	errParseAmount = errors.New("parse sender amount to big float")
+)
+
 type winner struct {
 	Address       string          `json:"address"`
-	Amount        uint64          `json:"amount"`
+	Amount        string          `json:"amount"`
 	TxID          string          `json:"tx_id"`
 	IsConfirmed   bool            `json:"is_confirmed"`
 	ConfirmedTime types.Timestamp `json:"confirmed_time"`
@@ -21,7 +27,7 @@ type senderDetail struct {
 	SenderAddressName string          `json:"sender_address_name"`
 	RedPacketID       string          `json:"red_packet_id"`
 	RedPacketType     int             `json:"red_packet_type"`
-	TotalAmount       uint64          `json:"total_amount"`
+	TotalAmount       string          `json:"total_amount"`
 	TotalNumber       int64           `json:"total_number"`
 	OpenedNumber      int64           `json:"opened_number"`
 	Note              string          `json:"note"`
@@ -95,7 +101,7 @@ type ListRedPacketsReq struct {
 }
 
 type ListSenderRedPacketsResp struct {
-	TotalAmount   uint64          `json:"total_amount"`
+	TotalAmount   string          `json:"total_amount"`
 	TotalNumber   int64           `json:"total_number"`
 	SenderDetails []*senderDetail `json:"sender_details"`
 }
@@ -111,7 +117,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 		return nil, errors.Wrap(err, "query sender")
 	}
 
-	totalAmount := uint64(0)
+	totalAmount := new(big.Float).SetUint64(0)
 	senderDetails := []*senderDetail{}
 	for _, sender := range senders {
 		openedReceivers := []*orm.Receiver{}
@@ -121,7 +127,12 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 			}
 		}
 
-		totalAmount += sender.Amount
+		senderAmount, ok := new(big.Float).SetString(sender.Amount)
+		if !ok {
+			return nil, errors.Wrapf(errParseAmount, "sender amount: %s", sender.Amount)
+		}
+
+		totalAmount.Add(totalAmount, senderAmount)
 		senderDetails = append(senderDetails, &senderDetail{
 			SenderAddress:     sender.Address,
 			SenderAddressName: sender.AddressName,
@@ -137,14 +148,14 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	}
 
 	return &ListSenderRedPacketsResp{
-		TotalAmount:   totalAmount,
+		TotalAmount:   totalAmount.String(),
 		TotalNumber:   int64(len(senders)),
 		SenderDetails: senderDetails,
 	}, nil
 }
 
 type ListReceiverRedPacketsResp struct {
-	TotalAmount     uint64            `json:"total_amount"`
+	TotalAmount     string            `json:"total_amount"`
 	TotalNumber     int64             `json:"total_number"`
 	ReceiverDetails []*receiverDetail `json:"receiver_details"`
 }
@@ -161,10 +172,15 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	winners := convertToWinner(receivers)
-	totalAmount := uint64(0)
+	totalAmount := new(big.Float).SetUint64(0)
 	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
-		totalAmount += receiver.Amount
+		receiverAmount, ok := new(big.Float).SetString(receiver.Amount)
+		if !ok {
+			return nil, errors.Wrapf(errParseAmount, "receiver amount: %s", receiver.Amount)
+		}
+
+		totalAmount.Add(totalAmount, receiverAmount)
 		receiverDetails = append(receiverDetails, &receiverDetail{
 			SenderAddress:     receiver.Sender.Address,
 			SenderAddressName: receiver.Sender.AddressName,
@@ -175,7 +191,7 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	return &ListReceiverRedPacketsResp{
-		TotalAmount:     totalAmount,
+		TotalAmount:     totalAmount.String(),
 		TotalNumber:     int64(len(receivers)),
 		ReceiverDetails: receiverDetails,
 	}, nil

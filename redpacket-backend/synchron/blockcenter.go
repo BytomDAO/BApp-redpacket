@@ -2,6 +2,7 @@ package synchron
 
 import (
 	"math"
+	"math/big"
 	"strconv"
 	"time"
 
@@ -107,20 +108,25 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	// batch insert utxo into db
 	batchDB := b.db.Begin()
 	for _, output := range tx.Outputs {
-		amount, err := b.parseAmount(output.Amount)
-		if err != nil {
-			return errors.Wrap(err, "parse output amount")
+		amount, ok := new(big.Float).SetString(output.Amount)
+		if !ok {
+			return errors.New("set output amount string to big float")
+		}
+
+		fee, ok := new(big.Float).SetString(util.TransactionFee)
+		if !ok {
+			return errors.New("set transaction fee string to big float")
 		}
 
 		// match program and asset, filter out the amount less than transaction fee
-		if output.Script != sender.ContractProgram || output.Asset.AssetID != b.workAsset || amount <= util.TransactionFee {
+		if output.Script != sender.ContractProgram || output.Asset.AssetID != sender.AssetID || amount.Cmp(fee) <= 0 {
 			continue
 		}
 
 		// save utxo into receiver
 		if err := batchDB.Create(&orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   amount - util.TransactionFee,
+			Amount:   amount.Sub(amount, fee).String(),
 			SenderID: sender.ID,
 		}).Error; err != nil {
 			batchDB.Rollback()

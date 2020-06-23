@@ -2,8 +2,6 @@ package api
 
 import (
 	"encoding/hex"
-	"math"
-	"strconv"
 
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
@@ -134,7 +132,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}, nil
 }
 
-func (s *Server) OpenRedPacketTransaction(assetID string, amount uint64, utxoID, address string, sender *orm.Sender) (string, error) {
+func (s *Server) OpenRedPacketTransaction(assetID string, amount string, utxoID, address string, sender *orm.Sender) (string, error) {
 	rawTx, err := s.BuildRedPacketTransaction(assetID, amount, utxoID, address)
 	if err != nil {
 		return "", errors.Wrap(err, "build red packet transaction")
@@ -148,23 +146,16 @@ func (s *Server) OpenRedPacketTransaction(assetID string, amount uint64, utxoID,
 	return *txID, nil
 }
 
-func (s *Server) BuildRedPacketTransaction(assetID string, amount uint64, utxoID, address string) (string, error) {
-	decimals, ok := s.cfg.AssetDecimals[assetID]
-	if !ok {
-		return "", errUnsupportedAsset
-	}
-
-	amountFloat := float64(amount) / math.Pow10(decimals)
-	amountStr := strconv.FormatFloat(amountFloat, 'f', decimals, 64)
+func (s *Server) BuildRedPacketTransaction(assetID string, amount string, utxoID, address string) (string, error) {
 	buildReq := &service.BuildTransactionReq{
 		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
-			Fee:           strconv.FormatUint(util.TransactionFee, 10),
+			Fee:           util.TransactionFee,
 			Confirmations: uint64(1),
 			Inputs: []map[string]interface{}{
 				{"type": "spend_utxo", "output_id": utxoID},
 			},
 			Outputs: []map[string]interface{}{
-				{"type": "control_address", "asset": assetID, "address": address, "amount": amountStr},
+				{"type": "control_address", "asset": assetID, "address": address, "amount": amount},
 			},
 		},
 		Address: s.GetCommonAddress(),
