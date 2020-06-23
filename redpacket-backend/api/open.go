@@ -106,7 +106,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}
 
 	// send transaction
-	txID, err := s.OpenRedPacketTransaction(sender.AssetID, openReceiver.Amount, openReceiver.UtxoID, req.Address, sender)
+	txID, err := s.OpenRedPacketTransaction(openReceiver.Amount, openReceiver.UtxoID, req.Address, sender)
 	if err != nil {
 		s.cache.Del(openReceiver.UtxoID)
 		return nil, errors.Wrap(err, "send open red packet transaction")
@@ -127,8 +127,8 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}, nil
 }
 
-func (s *Server) OpenRedPacketTransaction(assetID string, amount string, utxoID, address string, sender *orm.Sender) (string, error) {
-	rawTx, err := s.BuildRedPacketTransaction(assetID, amount, utxoID, address)
+func (s *Server) OpenRedPacketTransaction(amount string, utxoID, address string, sender *orm.Sender) (string, error) {
+	rawTx, err := s.BuildRedPacketTransaction(sender.AssetID, amount, utxoID, address)
 	if err != nil {
 		return "", errors.Wrap(err, "build red packet transaction")
 	}
