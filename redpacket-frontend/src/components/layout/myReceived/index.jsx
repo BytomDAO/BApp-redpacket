@@ -41,7 +41,7 @@ class MyRecieved extends Component {
       const myReceivedList = myReceivedDetails.receiver_details
 
       totalNumber = myReceivedDetails.total_number
-      totalAmount = formateNumber(myReceivedDetails.total_amount, currencyDecimals)
+      totalAmount = myReceivedDetails.total_amount
 
 
       myReceivedList.forEach(
@@ -52,7 +52,7 @@ class MyRecieved extends Component {
               <div className="detail__content text-grey">{moment(winner.confirmed_time*1000).format('LLL')}</div>
             </div>
             <div className="tb-cell text-right">
-              <div className="detail__header text-secondary">{formateNumber(winner.amount, currencyDecimals)} {currency}</div>
+              <div className="detail__header text-secondary">{winner.amount} {currency}</div>
               <div className="detail__content text-grey">{winner.note}</div>
             </div>
           </div>)

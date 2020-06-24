@@ -1,9 +1,9 @@
 import { listReceiverRedPackets } from '../../util/api'
 import {getCurrentAddress} from "../../util/utils";
 
-const getMyReceived = (currency) => {
+const getMyReceived = () => {
   return (dispatch) => {
-    return listReceiverRedPackets({address:getCurrentAddress()}, currency)
+    return listReceiverRedPackets({address:getCurrentAddress()})
       .then((resp)=>{
         dispatch({
           type: "UPDATE_MY_RECEIVED_DETAILS",

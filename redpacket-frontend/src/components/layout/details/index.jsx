@@ -21,13 +21,12 @@ class RedPackDetails extends Component {
   }
 
   componentDidMount() {
-    let currency = this.props.currency
-    this.props.getDetails(this.props.match.params.id, currency)
+    this.props.getDetails(this.props.match.params.id)
   }
 
   componentWillUpdate(nextProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.props.getDetails(this.props.match.params.id, this.props.currency)
+      this.props.getDetails(this.props.match.params.id)
     }
   }
 
