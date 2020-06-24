@@ -1,8 +1,7 @@
 package synchron
 
 import (
-	"math"
-	"strconv"
+	"math/big"
 	"time"
 
 	"github.com/bytom/bytom/errors"
@@ -25,12 +24,11 @@ type blockCenterKeeper struct {
 }
 
 func NewBlockCenterKeeper(cfg *config.Config, db *gorm.DB, cache *database.RedisDB) *blockCenterKeeper {
-	service := service.NewService(cfg.Updater.BlockCenter.NetType, cfg.Updater.BlockCenter.URL)
 	return &blockCenterKeeper{
 		cfg:     cfg,
 		db:      db,
 		cache:   cache,
-		service: service,
+		service: service.NewService(cfg.Updater.BlockCenter.NetType, cfg.Updater.BlockCenter.URL),
 	}
 }
 
@@ -105,20 +103,25 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 	// batch insert utxo into db
 	batchDB := b.db.Begin()
 	for _, output := range tx.Outputs {
-		amount, err := b.parseAmount(output.Amount)
-		if err != nil {
-			return errors.Wrap(err, "parse output amount")
+		amount, ok := new(big.Float).SetString(output.Amount)
+		if !ok {
+			return errors.New("set output amount string to big float")
+		}
+
+		fee, ok := new(big.Float).SetString(util.TransactionFee)
+		if !ok {
+			return errors.New("set transaction fee string to big float")
 		}
 
 		// match program and asset, filter out the amount less than transaction fee
-		if output.Script != sender.ContractProgram || output.Asset.AssetID != b.cfg.Updater.BlockCenter.AssetID || amount <= util.TransactionFee {
+		if output.Script != sender.ContractProgram || output.Asset.AssetID != sender.AssetID || amount.Cmp(fee) <= 0 {
 			continue
 		}
 
 		// save utxo into receiver
 		if err := batchDB.Create(&orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   amount - util.TransactionFee,
+			Amount:   amount.Sub(amount, fee).String(),
 			SenderID: sender.ID,
 		}).Error; err != nil {
 			batchDB.Rollback()
@@ -132,15 +135,6 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		return err
 	}
 	return batchDB.Commit().Error
-}
-
-func (b *blockCenterKeeper) parseAmount(srcAmount string) (uint64, error) {
-	amountFloat, err := strconv.ParseFloat(srcAmount, 64)
-	if err != nil {
-		return 0, errors.Wrapf(err, "parse output float of amount, amount: %s", srcAmount)
-	}
-
-	return uint64(amountFloat * math.Pow10(b.cfg.Updater.BlockCenter.AssetDecimal)), nil
 }
 
 func (b *blockCenterKeeper) updateReceiverRedPacketStatus() error {

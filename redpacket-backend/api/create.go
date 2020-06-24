@@ -10,7 +10,12 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
+)
+
+var (
+	errFindScriptFail = errors.New("find script fail")
 )
 
 type CreateRedPacketReq struct {
@@ -72,22 +77,19 @@ type SubmitRedPacketReq struct {
 	TxID          string `json:"tx_id"`
 	Address       string `json:"address"`
 	AddressName   string `json:"address_name,omitempty"`
-	Amount        uint64 `json:"amount"`
+	Amount        string `json:"amount"`
 	RedPacketType int    `json:"red_packet_type"`
 	Note          string `json:"note"`
 }
 
 func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error {
-	if req.TxID == "" {
-		return errors.New("txid is empty, submit redpacket must include txid")
-	}
 
 	if req.Address == "" {
 		return errors.New("sender address is empty, please input correct address")
 	}
 
-	if req.Amount == uint64(0) {
-		return errors.New("sender amount is 0, please input correct amount")
+	if req.Amount == "" {
+		return errors.New("sender amount is empty, please input correct amount")
 	}
 
 	sender := &orm.Sender{RedPacketID: req.RedPacketID}
@@ -99,9 +101,15 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.New("the redpacket transaction have submitted, please don't repeat it")
 	}
 
+	assetID, err := s.getAssetID(req.TxID, sender.ContractProgram)
+	if err != nil {
+		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
+	}
+
 	// update sender information
 	sender.Address = req.Address
 	sender.AddressName = req.AddressName
+	sender.AssetID = assetID
 	sender.Amount = req.Amount
 	sender.TxID = &req.TxID
 	sender.RedPacketType = req.RedPacketType
@@ -115,4 +123,24 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 		return errors.New("inconsistent db status, maybe exist the same txid")
 	}
 	return nil
+}
+
+// getAsset get asset id by tx id from blockcenter
+func (s *Server) getAssetID(txID, controlProgram string) (string, error) {
+	if txID == "" {
+		return "", errors.New("txid is empty, submit redpacket must include txid")
+	}
+
+	tx, err := s.service.GetTransaction(&service.GetTransactionReq{TxID: txID})
+	if err != nil {
+		return "", errors.Wrapf(err, "get transaction from blockcenter, tx id: %s", txID)
+	}
+
+	for _, output := range tx.Outputs {
+		if output.Script == controlProgram {
+			return output.Asset.AssetID, nil
+		}
+	}
+
+	return "", errFindScriptFail
 }

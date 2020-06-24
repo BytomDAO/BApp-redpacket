@@ -31,8 +31,6 @@
     "block_center": {
       "net_type": "vapor",
       "network": "testnet",
-      "asset_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-      "asset_decimal": 8,
       "common_address": "your_address",
       "sync_seconds": 60,
       "url": "http://127.0.0.1:3000",

@@ -2,8 +2,6 @@ package api
 
 import (
 	"encoding/hex"
-	"math"
-	"strconv"
 
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
@@ -120,7 +118,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	openReceiver.IsSpend = true
 	if err := s.db.Master().Model(&orm.Receiver{}).Where(&orm.Receiver{UtxoID: openReceiver.UtxoID}).Updates(openReceiver).Error; err != nil {
 		s.cache.Del(openReceiver.UtxoID)
-		return nil, errors.Wrap(err, "update receicer utxo to spent")
+		return nil, errors.Wrap(err, "update receiver utxo to spend")
 	}
 
 	return &RedPacketStatus{
@@ -129,8 +127,8 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	}, nil
 }
 
-func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string, sender *orm.Sender) (string, error) {
-	rawTx, err := s.BuildRedPacketTransaction(amount, utxoID, address)
+func (s *Server) OpenRedPacketTransaction(amount string, utxoID, address string, sender *orm.Sender) (string, error) {
+	rawTx, err := s.BuildRedPacketTransaction(sender.AssetID, amount, utxoID, address)
 	if err != nil {
 		return "", errors.Wrap(err, "build red packet transaction")
 	}
@@ -143,18 +141,16 @@ func (s *Server) OpenRedPacketTransaction(amount uint64, utxoID, address string,
 	return *txID, nil
 }
 
-func (s *Server) BuildRedPacketTransaction(amount uint64, utxoID, address string) (string, error) {
-	amountFloat := float64(amount) / math.Pow10(s.cfg.Updater.BlockCenter.AssetDecimal)
-	amountStr := strconv.FormatFloat(amountFloat, 'f', s.cfg.Updater.BlockCenter.AssetDecimal, 64)
+func (s *Server) BuildRedPacketTransaction(assetID string, amount string, utxoID, address string) (string, error) {
 	buildReq := &service.BuildTransactionReq{
 		BuildTxRequestGeneralV3: &types.BuildTxRequestGeneralV3{
-			Fee:           strconv.FormatUint(util.TransactionFee, 10),
+			Fee:           util.TransactionFee,
 			Confirmations: uint64(1),
 			Inputs: []map[string]interface{}{
 				{"type": "spend_utxo", "output_id": utxoID},
 			},
 			Outputs: []map[string]interface{}{
-				{"type": "control_address", "asset": s.cfg.Updater.BlockCenter.AssetID, "address": address, "amount": amountStr},
+				{"type": "control_address", "asset": assetID, "address": address, "amount": amount},
 			},
 		},
 		Address: s.GetCommonAddress(),
