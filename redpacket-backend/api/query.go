@@ -116,7 +116,12 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	}
 
 	var senders []*orm.Sender
-	query := s.db.Master().Preload("Receivers").Where(&orm.Sender{Address: req.Address})
+	sender := &orm.Sender{Address: req.Address}
+	if req.AssetID != "" {
+		sender.AssetID = req.AssetID
+	}
+
+	query := s.db.Master().Preload("Receivers").Where(sender)
 	if err := query.Find(&senders).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
 	}
@@ -124,11 +129,6 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	totalAmount := new(big.Float).SetUint64(0)
 	senderDetails := []*senderDetail{}
 	for _, sender := range senders {
-		// filter asset id: if asset id is not empty or asset id is not specific asset, should skip
-		if req.AssetID != "" && req.AssetID != sender.AssetID {
-			continue
-		}
-
 		openedReceivers := []*orm.Receiver{}
 		for _, receiver := range sender.Receivers {
 			if receiver.IsSpend {
@@ -176,7 +176,12 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	var receivers []*orm.Receiver
-	query := s.db.Master().Preload("Sender").Where(&orm.Receiver{Address: req.Address})
+	sender := &orm.Sender{}
+	if req.AssetID != "" {
+		sender.AssetID = req.AssetID
+	}
+
+	query := s.db.Master().Preload("Sender").Where(&orm.Receiver{Address: req.Address}).Where(sender)
 	if err := query.Find(&receivers).Error; err != nil {
 		return nil, errors.Wrap(err, "query receiver")
 	}
@@ -185,11 +190,6 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	totalAmount := new(big.Float).SetUint64(0)
 	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
-		// filter asset id: if asset id is not empty or asset id is not specific asset, should skip
-		if req.AssetID != "" && req.AssetID != receiver.Sender.AssetID {
-			continue
-		}
-
 		receiverAmount, ok := new(big.Float).SetString(receiver.Amount)
 		if !ok {
 			return nil, errors.Wrapf(errParseAmount, "receiver amount: %s", receiver.Amount)
