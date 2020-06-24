@@ -32,6 +32,7 @@ CREATE TABLE `senders` (
   `witness_program` varchar(128) NOT NULL,
   `address` varchar(128) DEFAULT NULL,
   `address_name` varchar(128) DEFAULT NULL,
+  `asset_id` varchar(64) DEFAULT NULL,
   `amount` bigint(20) unsigned DEFAULT '0',
   `tx_id` char(64) DEFAULT NULL,
   `is_confirmed` tinyint(1) DEFAULT '0',
