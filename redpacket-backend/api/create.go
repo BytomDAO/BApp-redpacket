@@ -144,7 +144,7 @@ func (s *Server) getAssetID(txID string) (string, error) {
 
 	for _, output := range tx.Outputs {
 		if output.Script != script {
-			return output.Script, nil
+			return output.Asset.AssetID, nil
 		}
 	}
 
