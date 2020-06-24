@@ -3,6 +3,8 @@ package service
 import (
 	"fmt"
 
+	"github.com/bytom/blockcenter/api/common"
+	"github.com/bytom/blockcenter/api/service"
 	"github.com/bytom/bytom/errors"
 
 	"github.com/redpacket/redpacket-backend/util/types"
@@ -50,4 +52,22 @@ func (s *Service) GetTransaction(req *GetTransactionReq) (*types.Tx, error) {
 	urlPath := fmt.Sprintf("/%s/v3/merchant/transaction?tx_hash=%s", s.netType, req.TxID)
 	resp := new(types.Tx)
 	return resp, errors.Wrap(s.request(urlPath, nil, resp), "get transaction")
+}
+
+// ListPendingTxProposals get the bytom pending tx proposals by the blockcenter RPC call
+func (b *bycoinClient) ListTxProposals(guid string) ([]*service.RespTxProposalV3, error) {
+	url := b.baseURL + "/merchant/list-txproposals"
+	req := &service.ListTxProposalsReq{
+		GUIDReq: common.GUIDReq{
+			GUID: guid,
+		},
+		Display: common.Display{
+			Filter: map[string]interface{}{
+				"status": common.TxProposalPendingStatus,
+			},
+		},
+	}
+
+	resp := []*service.RespTxProposalV3{}
+	return resp, errors.Wrap(b.request(url, req, &resp), "ListTxProposals v3")
 }

@@ -101,6 +101,7 @@ func (s *Server) GetRedPacketDetails(c *gin.Context, req *GetRedPacketReq) (*Red
 
 type ListRedPacketsReq struct {
 	Address string `json:"address"`
+	AssetID string `json:"asset_id,omitempty"`
 }
 
 type ListSenderRedPacketsResp struct {
@@ -123,6 +124,11 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	totalAmount := new(big.Float).SetUint64(0)
 	senderDetails := []*senderDetail{}
 	for _, sender := range senders {
+		// filter asset id: if asset id is not empty or asset id is not specific asset, should skip
+		if req.AssetID != "" && req.AssetID != sender.AssetID {
+			continue
+		}
+
 		openedReceivers := []*orm.Receiver{}
 		for _, receiver := range sender.Receivers {
 			if receiver.IsSpend {
@@ -179,6 +185,11 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	totalAmount := new(big.Float).SetUint64(0)
 	receiverDetails := []*receiverDetail{}
 	for i, receiver := range receivers {
+		// filter asset id: if asset id is not empty or asset id is not specific asset, should skip
+		if req.AssetID != "" && req.AssetID != receiver.Sender.AssetID {
+			continue
+		}
+
 		receiverAmount, ok := new(big.Float).SetString(receiver.Amount)
 		if !ok {
 			return nil, errors.Wrapf(errParseAmount, "receiver amount: %s", receiver.Amount)
