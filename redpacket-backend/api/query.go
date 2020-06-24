@@ -116,12 +116,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	}
 
 	var senders []*orm.Sender
-	sender := &orm.Sender{Address: req.Address}
-	if req.AssetID != "" {
-		sender.AssetID = req.AssetID
-	}
-
-	query := s.db.Master().Preload("Receivers").Where(sender)
+	query := s.db.Master().Preload("Receivers").Where(&orm.Sender{Address: req.Address, AssetID: req.AssetID})
 	if err := query.Find(&senders).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
 	}
@@ -176,12 +171,7 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	var receivers []*orm.Receiver
-	sender := &orm.Sender{}
-	if req.AssetID != "" {
-		sender.AssetID = req.AssetID
-	}
-
-	query := s.db.Master().Preload("Sender").Where(&orm.Receiver{Address: req.Address}).Where(sender)
+	query := s.db.Master().Preload("Sender").Where(&orm.Receiver{Address: req.Address}).Where(&orm.Sender{AssetID: req.AssetID})
 	if err := query.Find(&receivers).Error; err != nil {
 		return nil, errors.Wrap(err, "query receiver")
 	}
