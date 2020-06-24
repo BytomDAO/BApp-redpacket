@@ -47,7 +47,8 @@ export function listSenderRedPackets(params)
 export function listTransaction(txHash)
 {
   const host = window.bytom.currentProvider || 'https://bcapi.movapi.com'
-  let link = `${host}/vapor/v3/merchant/transaction?tx_hash=${txHash}`
+  let _baseUrl = host.replace(/\/+$/, "")
+  let link = `${_baseUrl}/vapor/v3/merchant/transaction?tx_hash=${txHash}`
   return post(link, '', 'get')
 }
 
