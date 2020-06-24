@@ -2,51 +2,59 @@ import axios from "axios/index";
 import { url} from './environment';
 
 //Api call from Buffer server
-export function createRedPacket(params, currency)
+export function createRedPacket(params)
 {
-  let link = `${url(currency)}/create-redpacket`
+  let link = `${url()}/create-redpacket`
   return post(link, params).then(resp => resp.data)
 }
 
-export function submitRedPacket(params, currency)
+export function submitRedPacket(params)
 {
-  let link = `${url(currency)}/submit-redpacket`
+  let link = `${url()}/submit-redpacket`
   return post(link, params)
 }
 
-export function getRedPacketPassword(params, currency)
+export function getRedPacketPassword(params)
 {
-  let link = `${url(currency)}/get-redpacket-password`
+  let link = `${url()}/get-redpacket-password`
   return post(link, params)
 }
 
-export function openRedPacket(params, currency)
+export function openRedPacket(params)
 {
-  let link = `${url(currency)}/open-redpacket`
+  let link = `${url()}/open-redpacket`
   return post(link, params)
 }
 
-export function getRedPacketDetials(params, currency)
+export function getRedPacketDetials(params)
 {
-  let link = `${url(currency)}/get-redpacket-details`
+  let link = `${url()}/get-redpacket-details`
   return post(link, params)
 }
 
-export function listReceiverRedPackets(params, currency)
+export function listReceiverRedPackets(params)
 {
-  let link = `${url(currency)}/list-receiver-redpackets`
+  let link = `${url()}/list-receiver-redpackets`
   return post(link, params)
 }
 
-export function listSenderRedPackets(params, currency)
+export function listSenderRedPackets(params)
 {
-  let link = `${url(currency)}/list-sender-redpackets`
+  let link = `${url()}/list-sender-redpackets`
   return post(link, params)
 }
 
-function post(link, params){
+export function listTransaction(txHash)
+{
+  const host = window.bytom.currentProvider || 'https://bcapi.movapi.com'
+  let link = `${host}/vapor/v3/merchant/transaction?tx_hash=${txHash}`
+  return post(link, '', 'get')
+}
+
+
+function post(link, params, method){
   return axios({
-    method: 'post',
+    method: method || 'post',
     url:link,
     data: params
   }).then(response => {

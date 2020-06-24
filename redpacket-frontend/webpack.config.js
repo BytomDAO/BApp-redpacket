@@ -12,7 +12,7 @@ module.exports = {
   entry: ["babel-polyfill", "./src/index.js"],
   output: {
     path: path.join(__dirname, "/dist"),
-    filename: "index-bundle.js",
+    filename: (process.env.NODE_ENV === 'production')? '[name].[contenthash].js': '[name].[hash].js',
     publicPath: publicPath
   },
   module: {
@@ -27,7 +27,7 @@ module.exports = {
         loaders: [{
           loader: 'file-loader',
           options: {
-            name: '[name].[ext]',
+            name: '[name].[hash:8].[ext]',
             outputPath: 'static/img',
           },
         }],

@@ -3,7 +3,7 @@ import {
 } from '../../util/api'
 import {getCurrentAddress} from "../../util/utils";
 
-export function open(value,redPackId, currency) {
+export function open(value,redPackId) {
   const address = getCurrentAddress()
   const password = value.password
 
@@ -11,5 +11,5 @@ export function open(value,redPackId, currency) {
     "red_packet_id": redPackId,
     "address": address,
     "password": password
-  }, currency)
+  })
 }

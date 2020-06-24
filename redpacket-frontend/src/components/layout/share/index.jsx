@@ -29,14 +29,14 @@ class Share extends React.Component {
 
   showPassword(e){
     e.preventDefault()
-    getPassword(this.props.match.params.id, getCurrentAddress(), this.props.currency).then((resp)=> {
+    getPassword(this.props.match.params.id, getCurrentAddress()).then((resp)=> {
       const password = resp.data.password
       toastMsg(`${this.props.t('share.code')}:${password}`)
     })
   }
 
   render() {
-    const { t , currency } = this.props;
+    const { t, currency } = this.props;
 
     const packetDetails = this.props.packetDetails
 
@@ -49,7 +49,7 @@ class Share extends React.Component {
           <div className="open__hint">{t('share.hint')}</div>
 
           <div className="shared__component">
-            <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}#${currency}`}>{t('share.qrCode')}</Link>
+            <Link className="btn-primary share__copy_button" to={`/qrCode/${this.props.match.params.id}/#${currency}`}>{t('share.qrCode')}</Link>
 
             <div>
                 <button className="btn btn-link link__btn" onClick={this.copyClick.bind(this)}>

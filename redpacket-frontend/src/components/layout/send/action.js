@@ -2,11 +2,14 @@ import {
   spendWalletAction, controlAddressAction
 } from '../../util/bytomAction'
 import {
-  createRedPacket, submitRedPacket
+  createRedPacket, submitRedPacket, listTransaction
 } from '../../util/api'
 import { IdMapTest, IdMap } from '../../util/constants'
 import BigNumber from 'bignumber.js'
 import {decimals} from "@/components/util/constants";
+
+Promise.wait = (time) => new Promise(resolve => setTimeout(resolve, time || 0));
+Promise.retry = (cont, fn, delay) => fn().catch(err => cont > 0 ? Promise.wait(delay).then(() => Promise.retry(cont - 1, fn, delay)) : Promise.reject(err));
 
 export function sendRedPack(value,isNormalType) {
   const password = value.password
@@ -23,7 +26,7 @@ export function sendRedPack(value,isNormalType) {
   return new Promise((resolve, reject) => {
     return createRedPacket({
       "password": password,
-    }, currency).then(resp=>{
+    }).then(resp=>{
       const contractAddress = resp.address
       const redPackId = resp.red_packet_id
 
@@ -62,7 +65,7 @@ export function sendRedPack(value,isNormalType) {
         const requestObject = {
           red_packet_id: redPackId,
           address: window.bytom.defaultAccount.address,
-          amount: unitAmount.times(totalAmount).toNumber(),
+          amount: (totalAmount).toString(),
           password: password,
           red_packet_type:isNormalType? 0:1,
         }
@@ -76,12 +79,19 @@ export function sendRedPack(value,isNormalType) {
           output,
           gas:0
         }).then((res)=>{
-          requestObject.tx_id = res.transactionHash
-          return submitRedPacket(requestObject, currency).then(() =>{
-            resolve(redPackId)
-          }).catch(err => {
-            throw err
+          const txHash = res.transactionHash
+          requestObject.tx_id = txHash
+
+          let delay = 300;
+          let tries = 10;
+          return Promise.retry(tries, ()=>{return listTransaction(txHash)}, delay).then(() => {
+            return submitRedPacket(requestObject).then(() => {
+              resolve(redPackId)
+            }).catch(err => {
+              throw err
+            })
           })
+
         }).catch(err => {
           throw err.message
         })
@@ -112,7 +122,7 @@ export function sendRedPack(value,isNormalType) {
         const requestObject = {
           red_packet_id: redPackId,
           address: window.bytom.default_account.address,
-          amount: unitAmount.times(totalAmount).toNumber(),
+          amount: totalAmount.toString(),
           password: password,
           red_packet_type:isNormalType? 0:1,
         }
@@ -125,13 +135,20 @@ export function sendRedPack(value,isNormalType) {
           output,
           gas:0
         }).then((res)=>{
-          requestObject.tx_id = res.transaction_hash || res.transactionHash
 
-          return submitRedPacket(requestObject, currency).then(() =>{
-            resolve(redPackId)
-          }).catch(err => {
-            throw err
+          const txHash = res.transaction_hash || res.transactionHash
+          requestObject.tx_id = txHash
+
+          let delay = 300;
+          let tries = 10;
+          return Promise.retry(tries, ()=>{return listTransaction(txHash)}, delay).then(() => {
+            return submitRedPacket(requestObject).then(() => {
+              resolve(redPackId)
+            }).catch(err => {
+              throw err
+            })
           })
+
         }).catch(err => {
           throw err.message
         })

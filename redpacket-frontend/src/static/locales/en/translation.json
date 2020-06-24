@@ -81,6 +81,7 @@
     "enterCode":"Enter Code",
     "codeError":"The code entered is wrong",
     "viewDetails":"View Receive Details",
+    "confirming":"Red Packet is confirming, please wait...",
     "empty":"Red packet is empty",
     "open":"開",
     "require":"Password required",

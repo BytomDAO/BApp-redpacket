@@ -110,7 +110,7 @@ class Send extends React.Component {
               sendRedPack(values,(this.state.type === 'normal'))
                 .then((redPackId)=> {
                   setSubmitting(false)
-                  this.props.history.push(`/share/${redPackId}#${currency}`)
+                  this.props.history.push(`/share/${redPackId}/#${currency}`)
                   this.setState({
                     error:'',
                   })
