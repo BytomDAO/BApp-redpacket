@@ -25,6 +25,7 @@ type winner struct {
 type senderDetail struct {
 	SenderAddress     string          `json:"sender_address"`
 	SenderAddressName string          `json:"sender_address_name"`
+	AssetID           string          `json:"asset_id"`
 	RedPacketID       string          `json:"red_packet_id"`
 	RedPacketType     int             `json:"red_packet_type"`
 	TotalAmount       string          `json:"total_amount"`
@@ -38,6 +39,7 @@ type senderDetail struct {
 type receiverDetail struct {
 	SenderAddress     string `json:"sender_address"`
 	SenderAddressName string `json:"sender_address_name"`
+	AssetID           string `json:"asset_id"`
 	RedPacketType     int    `json:"red_packet_type"`
 	Note              string `json:"note"`
 	winner
@@ -83,6 +85,7 @@ func (s *Server) GetRedPacketDetails(c *gin.Context, req *GetRedPacketReq) (*Red
 		senderDetail: senderDetail{
 			SenderAddress:     sender.Address,
 			SenderAddressName: sender.AddressName,
+			AssetID:           sender.AssetID,
 			RedPacketID:       sender.RedPacketID,
 			RedPacketType:     sender.RedPacketType,
 			TotalAmount:       sender.Amount,
@@ -136,6 +139,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 		senderDetails = append(senderDetails, &senderDetail{
 			SenderAddress:     sender.Address,
 			SenderAddressName: sender.AddressName,
+			AssetID:           sender.AssetID,
 			RedPacketID:       sender.RedPacketID,
 			RedPacketType:     sender.RedPacketType,
 			Note:              sender.Note,
@@ -184,6 +188,7 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 		receiverDetails = append(receiverDetails, &receiverDetail{
 			SenderAddress:     receiver.Sender.Address,
 			SenderAddressName: receiver.Sender.AddressName,
+			AssetID:           receiver.Sender.AssetID,
 			RedPacketType:     receiver.Sender.RedPacketType,
 			Note:              receiver.Sender.Note,
 			winner:            *winners[i],
