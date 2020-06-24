@@ -100,11 +100,14 @@ class Open extends React.Component {
                   switch (resp.data.status){
                     case 0:
                     case 2:
-                      this.props.history.push(`/details/${redPackId}#${currency}`);
+                      this.props.history.push(`/details/${redPackId}`);
                       break;
 
                     case 3:
                       throw t('open.codeError');
+                      break;
+                    case 4:
+                      throw t('open.confirming');
                       break;
                   }
 

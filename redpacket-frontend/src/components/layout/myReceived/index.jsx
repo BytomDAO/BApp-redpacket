@@ -8,8 +8,7 @@ import {withTranslation} from "react-i18next";
 import moment from 'moment';
 import LogoContainer from '../logoContainer'
 import Unit from "@/components/widget/unitDropdown";
-import {decimals} from "@/components/util/constants";
-import {formateNumber} from "@/components/util/utils";
+import {IdMap, IdMapTest} from "@/components/util/constants";
 
 class MyRecieved extends Component {
   constructor(props) {
@@ -17,19 +16,30 @@ class MyRecieved extends Component {
   }
 
   componentDidMount() {
+    const {currency, bytom} = this.props
+    let assetId  = IdMap[currency]
+    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
+      assetId  = IdMapTest[currency]
+    }
+
     if ( window.bytom ) {
-      this.props.getMyReceived(this.props.currency)
+      this.props.getMyReceived(assetId)
     }
   }
   componentWillUpdate(nextProps) {
+    const {currency, bytom} = nextProps
+    let assetId  = IdMap[currency]
+    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
+      assetId  = IdMapTest[currency]
+    }
+
     if(this.props.currency !== nextProps.currency) {
-      this.props.getMyReceived(nextProps.currency)
+      this.props.getMyReceived(assetId)
     }
   }
 
   render () {
     const { t, currency } = this.props;
-    const currencyDecimals = decimals[currency]
 
     let totalAmount = 0
     let totalNumber = 0
@@ -93,7 +103,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getMyReceived: (currency) => dispatch(action.getMyReceived(currency)),
+  getMyReceived: (assetId) => dispatch(action.getMyReceived(assetId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(MyRecieved))

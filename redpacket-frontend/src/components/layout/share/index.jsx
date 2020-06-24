@@ -23,7 +23,7 @@ class Share extends React.Component {
   }
 
   copyClick(){
-    copyToClipboard(`${window.location.origin}${basename}/open/${this.props.match.params.id}`)
+    copyToClipboard(`${window.location.origin}${basename}/open/${this.props.match.params.id}#${this.props.currency}`)
     toastMsg(this.props.t('share.copied'))
   }
 
@@ -36,7 +36,7 @@ class Share extends React.Component {
   }
 
   render() {
-    const { t  } = this.props;
+    const { t } = this.props;
 
     const packetDetails = this.props.packetDetails
 
@@ -69,6 +69,7 @@ class Share extends React.Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
+  currency: state.currency
 })
 
 const mapDispatchToProps = dispatch => ({

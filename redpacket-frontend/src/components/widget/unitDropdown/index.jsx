@@ -43,7 +43,7 @@ class Unit extends React.Component {
           className="dropdown-menu"
         >
           <Dropdown.Item eventKey="BTM">BTM</Dropdown.Item>
-          {/*<Dropdown.Item eventKey="DAI">DAI</Dropdown.Item>*/}
+          <Dropdown.Item eventKey="DAI">DAI</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     );

@@ -81,6 +81,7 @@
     "enterCode":"输口令 领红包",
     "codeError":"口令输入错误",
     "viewDetails":"查看领取详情",
+    "confirming":"红包确认中，请稍后",
     "empty":"手慢了，红包派完了",
     "open":"開",
     "require":"需要口令才能开红包",
