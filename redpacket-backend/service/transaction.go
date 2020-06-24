@@ -24,7 +24,7 @@ type BuildTransactionResp struct {
 func (s *Service) BuildTransaction(req *BuildTransactionReq) ([]*BuildTransactionResp, error) {
 	urlPath := fmt.Sprintf("/%s/v3/merchant/build-advanced-tx?address=%s", s.netType, req.Address)
 	resp := []*BuildTransactionResp{}
-	return resp, errors.Wrap(s.request(urlPath, req.BuildTxRequestGeneralV3, &resp), "build transaction")
+	return resp, errors.Wrapf(s.request(urlPath, req.BuildTxRequestGeneralV3, &resp), "build transaction, url path: %s", urlPath)
 }
 
 type SubmitTransactionReq struct {
@@ -39,7 +39,7 @@ type SubmitTransactionResp struct {
 func (s *Service) SubmitTransaction(req *SubmitTransactionReq) (*SubmitTransactionResp, error) {
 	urlPath := fmt.Sprintf("/%s/v3/merchant/submit-payment?address=%s", s.netType, req.Address)
 	resp := new(SubmitTransactionResp)
-	return resp, errors.Wrap(s.request(urlPath, req.SubmitPaymentReqV3, resp), "submit transaction")
+	return resp, errors.Wrapf(s.request(urlPath, req.SubmitPaymentReqV3, resp), "submit transaction, url path: %s", urlPath)
 }
 
 type GetTransactionReq struct {
@@ -49,5 +49,5 @@ type GetTransactionReq struct {
 func (s *Service) GetTransaction(req *GetTransactionReq) (*types.Tx, error) {
 	urlPath := fmt.Sprintf("/%s/v3/merchant/transaction?tx_hash=%s", s.netType, req.TxID)
 	resp := new(types.Tx)
-	return resp, errors.Wrap(s.request(urlPath, nil, resp), "get transaction")
+	return resp, errors.Wrapf(s.request(urlPath, nil, resp), "get transaction, url path: %s", urlPath)
 }
