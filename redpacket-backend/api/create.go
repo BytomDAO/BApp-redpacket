@@ -83,10 +83,6 @@ type SubmitRedPacketReq struct {
 }
 
 func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error {
-	assetID, err := s.getAssetID(req.TxID)
-	if err != nil {
-		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
-	}
 
 	if req.Address == "" {
 		return errors.New("sender address is empty, please input correct address")
@@ -103,6 +99,11 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 
 	if sender.TxID != nil {
 		return errors.New("the redpacket transaction have submitted, please don't repeat it")
+	}
+
+	assetID, err := s.getAssetID(req.TxID, sender.ContractProgram)
+	if err != nil {
+		return errors.Wrapf(err, "get asset id, tx id: %s", req.TxID)
 	}
 
 	// update sender information
@@ -125,7 +126,7 @@ func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error 
 }
 
 // getAsset get asset id by tx id from blockcenter
-func (s *Server) getAssetID(txID string) (string, error) {
+func (s *Server) getAssetID(txID, controlProgram string) (string, error) {
 	if txID == "" {
 		return "", errors.New("txid is empty, submit redpacket must include txid")
 	}
@@ -135,15 +136,8 @@ func (s *Server) getAssetID(txID string) (string, error) {
 		return "", errors.Wrapf(err, "get transaction from blockcenter, tx id: %s", txID)
 	}
 
-	var script string
-	for _, input := range tx.Inputs {
-		if len(input.Script) != 0 {
-			script = input.Script
-		}
-	}
-
 	for _, output := range tx.Outputs {
-		if output.Script != script {
+		if output.Script == controlProgram {
 			return output.Asset.AssetID, nil
 		}
 	}
