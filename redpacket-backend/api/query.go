@@ -171,9 +171,8 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	var receivers []*orm.Receiver
-	receiversQuery := s.db.Master().Joins("join senders on receivers.id = senders.id")
-	receiversQuery = receiversQuery.Preload("Sender").Where(&orm.Receiver{Address: req.Address}).Where(&orm.Sender{AssetID: req.AssetID})
-	if err := receiversQuery.Find(&receivers).Error; err != nil {
+	receiversQuery := s.db.Master().Joins("join senders on receivers.id = senders.id").Where(&orm.Sender{AssetID: req.AssetID})
+	if err := receiversQuery.Preload("Sender").Where(&orm.Receiver{Address: req.Address}).Find(&receivers).Error; err != nil {
 		return nil, errors.Wrap(err, "query receiver")
 	}
 
