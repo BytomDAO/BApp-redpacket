@@ -7,10 +7,10 @@ RUN rpm --rebuilddb && yum install -y epel-release && yum -y update && yum insta
 COPY redpacket-backend/target/api /root/api
 COPY redpacket-backend/target/updater /root/updater
 
-COPY scripts/config_vapor_dai_pro.json /root/config.json
+COPY scripts/config_vapor.json /root/config.json
 
 COPY scripts/supervisord.conf /root/supervisord.conf
 
-EXPOSE 3101
+EXPOSE 3100
 
 CMD ["/usr/bin/supervisord","-c","/root/supervisord.conf"]
