@@ -4,6 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import Footer from '../addressFooter'
+import _ from 'lodash'
 
 import { Alert } from 'react-bootstrap';
 import {connect} from "react-redux";
@@ -34,7 +35,7 @@ class Send extends React.Component {
 
   render() {
 
-    const { t, i18n, currency} = this.props;
+    const { t, i18n, currency, assetsList} = this.props;
 
     const lng = i18n.language
 
@@ -103,6 +104,7 @@ class Send extends React.Component {
             onSubmit={(values, {setSubmitting}) => {
 
               values.currency = currency
+              values.assetId = _.filter(assetsList, function(o) { return o.symbol === currency; })[0].assetId;
               this.setState({
                 error:'',
               })
@@ -199,6 +201,7 @@ class Send extends React.Component {
 
 const mapStateToProps = state => ({
   currency: state.currency,
+  assetsList: state.assetsList
 })
 
 

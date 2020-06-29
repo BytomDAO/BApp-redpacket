@@ -9,6 +9,7 @@ import moment from 'moment';
 import LogoContainer from '../logoContainer'
 import Unit from "@/components/widget/unitDropdown";
 import {IdMap, IdMapTest} from "@/components/util/constants";
+import _ from 'lodash'
 
 require('./style.scss')
 
@@ -18,23 +19,15 @@ class MySent extends Component {
   }
 
   componentDidMount() {
-    const {currency, bytom} = this.props
-    let assetId  = IdMap[currency]
-    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-      assetId  = IdMapTest[currency]
-    }
+    const { bytom, assetId} = this.props
 
-    if ( window.bytom ) {
+    if ( bytom ) {
       this.props.getMySent(assetId)
     }
   }
 
   componentWillUpdate(nextProps) {
-    const {currency, bytom} = nextProps
-    let assetId  = IdMap[currency]
-    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-      assetId  = IdMapTest[currency]
-    }
+    const {assetId} = nextProps
 
     if(this.props.currency !== nextProps.currency) {
       this.props.getMySent(assetId)
@@ -94,13 +87,20 @@ class MySent extends Component {
 const mapStateToProps = state => {
   const mySent = state.mySentDetails;
   const currency = state.currency && state.currency.toUpperCase()
+  const assetsList = state.assetsList
 
   if(mySent && mySent.sender_details){
     mySent.sender_details = mySent.sender_details.reverse()
   }
+  let assetId = ''
+  if(assetsList.length>0){
+    assetId =  _.filter(assetsList, function(o) { return o.symbol === currency; })[0].assetId;
+  }
+
   return ({
     currency: currency,
-    mySentDetails: mySent
+    mySentDetails: mySent,
+    assetId
   })
 }
 

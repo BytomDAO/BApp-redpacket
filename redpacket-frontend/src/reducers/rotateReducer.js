@@ -30,6 +30,11 @@ export default (state, action) => {
         ...state,
         currency: action.currency
       };
+    case "UPDATE_ASSET_LIST":
+      return {
+        ...state,
+        assetsList: action.assetsList
+      };
     default:
       return state
   }

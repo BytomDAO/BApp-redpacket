@@ -71,14 +71,25 @@ export default function(WrappedComponent) {
       </div>
 
       const bytom = this.props.bytom
-      if (
-        bytom
-        && bytom.default_account
-        && isVapor(bytom.default_account.address)
-      ) {
+
+      if(!bytom || !window.bytom){
+        return <div className="d-flex vh-100 justify-content-center align-items-center">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+
+      }else if ((
+          bytom
+          && bytom.default_account
+          && isVapor(bytom.default_account.address)
+        ) || (
+          bytom
+          && bytom.defaultAccount
+          && isVapor(bytom.defaultAccount.address)
+        ) ){
         return Wrap(<WrappedComponent {...this.props} />)
-      }
-      else if (( bytom && !this.props.bytomConnection)) {
+      }else if (( bytom && !this.props.bytomConnection)) {
         return WrapWithBycoin(
           <div className="columns">
             <p className="text-white">
@@ -86,7 +97,7 @@ export default function(WrappedComponent) {
             </p>
           </div>
         )
-      } else if (( bytom && !isVapor(bytom.default_account.address) )) {
+      } else if (( bytom && !isVapor(bytom.defaultAccount.address) )||( bytom && !isVapor(bytom.default_account.address) )) {
         return WrapWithBycoin(
           <div className="columns">
               <p className="text-white download_hint">
