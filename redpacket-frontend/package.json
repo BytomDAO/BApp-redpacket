@@ -34,7 +34,7 @@
     "axios": "^0.18.0",
     "bignumber.js": "^8.0.2",
     "bootstrap": "^4.2.1",
-    "bytom.js": "npm:bytom.js@^2.0.0-Beta",
+    "bytom.js": "npm:bytom.js@^2.0.0-Beta2",
     "bytom.jsV1": "npm:bytom.js@^1.4.0-beta5",
     "formik": "^1.5.4",
     "i18next": "^17.0.15",
