@@ -63,7 +63,7 @@ class RedPackDetails extends Component {
         const date2 = new Date(packetDetails.send_time *1000)
         const timeDiff = timeDifference(date1, date2)
         label = t('detail.finished', {total:packetDetails.total_number, amount:packetDetails.total_amount, time:timeDiff, unit:currency})
-        maxAmount = (_.maxBy(winners, 'amount')).amount
+        maxAmount = (_.maxBy(winners, function(o) { return Number(o.amount); })).amount
       }else{
         label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${ _.sumBy(winners, 'amount')  }/ ${ packetDetails.total_amount  } ${currency}`})
       }
