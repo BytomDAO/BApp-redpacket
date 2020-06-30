@@ -17,11 +17,7 @@ export function sendRedPack(value,isNormalType) {
   const number = Number(value.number)
   const alias = value.alias.trim()
   const bytom = window.bytom
-
-  const currency = value.currency
-  const currencyDecimals = decimals[currency]
-
-  const unitAmount = new BigNumber(1).shiftedBy(currencyDecimals)
+  const assetId  = value.assetId
 
   return new Promise((resolve, reject) => {
     return createRedPacket({
@@ -33,11 +29,6 @@ export function sendRedPack(value,isNormalType) {
       const input = []
       const output = []
       let totalAmount
-
-      let assetId  = IdMap[currency]
-      if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-        assetId  = IdMapTest[currency]
-      }
 
       if(bytom && bytom.version ){
 
@@ -98,6 +89,11 @@ export function sendRedPack(value,isNormalType) {
 
       }
       else{
+        const currency = value.currency
+        const currencyDecimals = decimals[currency]
+
+        const unitAmount = new BigNumber(1).shiftedBy(currencyDecimals || 0)
+
         if(isNormalType){
           totalAmount = BigNumber(amount).times(number)
 

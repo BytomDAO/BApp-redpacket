@@ -8,7 +8,6 @@ import {withTranslation} from "react-i18next";
 import moment from 'moment';
 import LogoContainer from '../logoContainer'
 import Unit from "@/components/widget/unitDropdown";
-import {IdMap, IdMapTest} from "@/components/util/constants";
 
 class MyRecieved extends Component {
   constructor(props) {
@@ -16,23 +15,14 @@ class MyRecieved extends Component {
   }
 
   componentDidMount() {
-    const {currency, bytom} = this.props
-    let assetId  = IdMap[currency]
-    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-      assetId  = IdMapTest[currency]
-    }
+    const { bytom, assetId} = this.props
 
-    if ( window.bytom ) {
+    if ( bytom ) {
       this.props.getMyReceived(assetId)
     }
   }
   componentWillUpdate(nextProps) {
-    const {currency, bytom} = nextProps
-    let assetId  = IdMap[currency]
-    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-      assetId  = IdMapTest[currency]
-    }
-
+    const {assetId} = nextProps
     if(this.props.currency !== nextProps.currency) {
       this.props.getMyReceived(assetId)
     }
@@ -92,13 +82,23 @@ class MyRecieved extends Component {
 const mapStateToProps = state => {
   const myReceive = state.myReceivedDetails;
   const currency = state.currency && state.currency.toUpperCase()
+  const assetsList = state.assetsList
+
 
   if(myReceive && myReceive.receiver_details){
     myReceive.receiver_details = myReceive.receiver_details.reverse()
   }
+
+  let assetId = ''
+  if(assetsList.length>0){
+    const Object = _.filter(assetsList, function(o) { return o.symbol === currency; })
+    assetId =  Object.length>0? Object[0].assetId : '';
+  }
+
   return ({
     currency: currency,
-    myReceivedDetails: myReceive
+    myReceivedDetails: myReceive,
+    assetId
   })
 }
 

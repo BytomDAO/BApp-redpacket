@@ -30,6 +30,16 @@ export default (state, action) => {
         ...state,
         currency: action.currency
       };
+    case "UPDATE_ASSET_LIST":
+      return {
+        ...state,
+        assetsList: action.assetsList
+      };
+    case "FINISHED_PAGE_LOAD":
+      return {
+        ...state,
+        loading: false
+      };
     default:
       return state
   }

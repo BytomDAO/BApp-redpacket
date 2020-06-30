@@ -11,7 +11,6 @@ import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import moment from "moment/moment";
 import { getCurrentAddress } from "../../util/utils";
-import {AliasMap, AliasMapTest, IdMap, IdMapTest} from "@/components/util/constants";
 
 require('./style.scss')
 
@@ -31,7 +30,7 @@ class RedPackDetails extends Component {
   }
 
   render () {
-    const { t, bytom} = this.props;
+    const { t, assetsList} = this.props;
 
     if(!this.props.packetDetails){
       return <div></div>
@@ -43,10 +42,8 @@ class RedPackDetails extends Component {
     const myAddress = getCurrentAddress()
 
     const assetId = packetDetails.asset_id
-    let currency  = AliasMap[assetId]
-    if(bytom.net === 'testnet' ||bytom.net === 'solonet'){
-      currency  = AliasMapTest[assetId]
-    }
+    const currencyObject  =  _.filter(assetsList, function(o) { return o.assetId === assetId; });
+    const currency = currencyObject.length>0 ? currencyObject[0].symbol: ''
 
 
     const isNormalType = packetDetails.red_packet_type===0
@@ -63,7 +60,7 @@ class RedPackDetails extends Component {
         const date2 = new Date(packetDetails.send_time *1000)
         const timeDiff = timeDifference(date1, date2)
         label = t('detail.finished', {total:packetDetails.total_number, amount:packetDetails.total_amount, time:timeDiff, unit:currency})
-        maxAmount = (_.maxBy(winners, 'amount')).amount
+        maxAmount = (_.maxBy(winners, function(o) { return Number(o.amount); })).amount
       }else{
         label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${ _.sumBy(winners, 'amount')  }/ ${ packetDetails.total_amount  } ${currency}`})
       }
@@ -120,7 +117,7 @@ class RedPackDetails extends Component {
 
 const mapStateToProps = state => ({
   packetDetails: state.packetDetails,
-  bytom: state.bytom
+  assetsList:state.assetsList
 })
 
 const mapDispatchToProps = dispatch => ({

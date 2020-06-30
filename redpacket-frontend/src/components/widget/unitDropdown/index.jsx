@@ -24,9 +24,20 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 
 
 class Unit extends React.Component {
+  componentDidMount(){
+    const {  bytom, assetsList } = this.props
+    if(bytom && assetsList.length ===0) {
+
+      bytomJs.Bc.queryAll().then((assets) => {
+        const result = assets.reverse()
+        this.props.updateAssetList(result)
+      })
+    }
+  }
+
   render() {
 
-    const { currency, updateCurrency} = this.props;
+    const { currency, updateCurrency, assetsList} = this.props;
     return (
       <Dropdown
         id='dropdown-custom-1'
@@ -42,8 +53,7 @@ class Unit extends React.Component {
         <Dropdown.Menu
           className="dropdown-menu"
         >
-          <Dropdown.Item eventKey="BTM">BTM</Dropdown.Item>
-          <Dropdown.Item eventKey="DAI">DAI</Dropdown.Item>
+          {(assetsList||[]).map(asset => <Dropdown.Item eventKey={`${asset.symbol}`}>{asset.symbol}</Dropdown.Item>)}
         </Dropdown.Menu>
       </Dropdown>
     );
@@ -51,13 +61,19 @@ class Unit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  bytom: state.bytom,
   currency: state.currency,
+  assetsList: state.assetsList
 })
 
 const mapDispatchToProps = dispatch => ({
   updateCurrency: (currency) => dispatch({
     type: "UPDATE_CURRENCY",
     currency: currency
+  }),
+  updateAssetList: (assets) => dispatch({
+    type: "UPDATE_ASSET_LIST",
+    assetsList: assets
   }),
 })
 

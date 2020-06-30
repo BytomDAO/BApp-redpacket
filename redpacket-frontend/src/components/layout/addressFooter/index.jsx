@@ -50,6 +50,7 @@ class Footer extends Component {
 
   componentWillUpdate(nextProps) {
     if(this.props.currency !== nextProps.currency) {
+      clearTimeout(this.timer)
       this.updateBalance(nextProps)
     }
   }
