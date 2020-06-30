@@ -19,7 +19,7 @@ type BindInviteRelationResp struct {
 }
 
 func (s *Service) BindInviteRelation(req *BindInviteRelationReq) (*BindInviteRelationResp, error) {
-	urlPath := "/partner/v3"
+	urlPath := "/partner/v3/bind-invite-relation"
 	resp := &BindInviteRelationResp{}
 	return resp, errors.Wrapf(s.request(urlPath, req, resp), "bind invite relation, url path: %s", urlPath)
 }
