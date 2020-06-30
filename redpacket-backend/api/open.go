@@ -185,3 +185,11 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 	}
 	return &submitResp.TxHash, nil
 }
+
+func (s *Server) joinCopartner() {
+	// it works in vapor only
+	if s.cfg.Updater.BlockCenter.NetType == "btm" {
+		return
+	}
+
+}

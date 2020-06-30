@@ -19,6 +19,7 @@ type Server struct {
 	cfg     *config.Config
 	engine  *gin.Engine
 	service *service.Service
+	//copartner *
 }
 
 func NewServer(cfg *config.Config) *Server {
