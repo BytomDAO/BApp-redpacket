@@ -22,7 +22,7 @@ export default function(WrappedComponent) {
     }
 
     render () {
-      const { t } = this.props;
+      const { t, loading } = this.props;
 
       let contents = <div />
 
@@ -73,7 +73,7 @@ export default function(WrappedComponent) {
 
       const bytom = this.props.bytom
 
-      if(!bytom || !window.bytom){
+      if(loading){
         return <div className="d-flex vh-100 justify-content-center align-items-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
@@ -123,7 +123,8 @@ export default function(WrappedComponent) {
   }
   const mapStateToProps = state => ({
     bytom: state.bytom,
-    bytomConnection: state.bytomConnection
+    bytomConnection: state.bytomConnection,
+    loading:state.loading
   })
 
   const mapDispatchToProps = dispatch => ({

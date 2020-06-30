@@ -35,6 +35,11 @@ export default (state, action) => {
         ...state,
         assetsList: action.assetsList
       };
+    case "FINISHED_PAGE_LOAD":
+      return {
+        ...state,
+        loading: false
+      };
     default:
       return state
   }

@@ -16,9 +16,18 @@ const updateConnection = (bytomConnection) => {
   }
 }
 
+const finishedPageLoad = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "FINISHED_PAGE_LOAD"
+    })
+  }
+}
+
 let actions = {
   setBytom,
-  updateConnection
+  updateConnection,
+  finishedPageLoad
 }
 
 export default actions

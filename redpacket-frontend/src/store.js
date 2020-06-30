@@ -10,7 +10,8 @@ function configureStore(state =
                             bytom:'',
                             bytomConnection:false,
                             currency:'BTM',
-                            assetsList:[]
+                            assetsList:[],
+                            loading:true
                           }) {
   return createStore(
     rotateReducer,

@@ -32,6 +32,17 @@ class App extends Component {
     global.bytomAPI = new Bytom(networks, '')
   }
 
+  componentDidMount(){
+    let that = this
+    let intervalID = null;
+    intervalID = setInterval(function() {
+      if (document.readyState === "complete") {
+        that.props.finishedPageLoad()
+        clearInterval(intervalID);
+      }
+    }, 10);
+  }
+
 
   componentWillMount(){
     const { bytom, setBytom , assetsList} = this.props;
@@ -48,9 +59,12 @@ class App extends Component {
         }
         this.bytomLoaded(bytom);
         setBytom(bytom);
+        this.props.finishedPageLoad()
+
       });
     }else {
       this.bytomLoaded(bytom);
+      this.props.finishedPageLoad()
     }
   }
 
@@ -113,6 +127,7 @@ const mapDispatchToProps = dispatch => ({
     type: "UPDATE_ASSET_LIST",
     assetsList: assets
   }),
+  finishedPageLoad:() => dispatch(action.finishedPageLoad())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
