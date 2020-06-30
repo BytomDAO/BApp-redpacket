@@ -60,8 +60,16 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 		return nil, errors.Wrap(err, "query sender")
 	}
 
-	// join copartner
-	joinCopartner(s.cfg.Updater, sender.Address, req.Address)
+	// join copartner, it works in vapor only
+	if s.cfg.Updater.BlockCenter.NetType != "btm" {
+		if err := joinCopartner(s.cfg.Updater.Copartner, sender.Address, req.Address); err != nil {
+			log.WithFields(log.Fields{
+				"err":             err,
+				"inviter_address": sender.Address,
+				"invitee_address": req.Address,
+			}).Warning("Cannot bind invite relation")
+		}
+	}
 
 	// check whether the redpacket is empty or not
 	if len(sender.Receivers) == 0 {
@@ -192,32 +200,16 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 	return &submitResp.TxHash, nil
 }
 
-func joinCopartner(updater config.Updater, inviterAddress, inviteeAddress string) {
-	// it works in vapor only
-	if updater.BlockCenter.NetType == "btm" {
-		return
-	}
-
-	copartnerService := copartner.NewService(updater.Copartner.URL)
+func joinCopartner(cp config.Copartner, inviterAddress, inviteeAddress string) error {
+	copartnerService := copartner.NewService(cp.URL)
 	bindInviteRelationReq := &copartner.BindInviteRelationReq{
-		Token:          updater.Copartner.Token,
+		Token:          cp.Token,
 		InviterAddress: inviterAddress,
 		InviteeAddress: inviteeAddress,
 	}
-	BindInviteRelationResp, err := copartnerService.BindInviteRelation(bindInviteRelationReq)
-	if err != nil {
-		log.WithFields(log.Fields{
-			"err":             err,
-			"token":           updater.Copartner.Token,
-			"inviter_address": inviterAddress,
-			"invitee_address": inviteeAddress,
-		}).Warning("Cannot bind invite relation")
+	if _, err := copartnerService.BindInviteRelation(bindInviteRelationReq); err != nil {
+		return errors.Wrap(err, "bind invite relation")
 	}
 
-	log.WithFields(log.Fields{
-		"token":           updater.Copartner.Token,
-		"inviter_address": BindInviteRelationResp.InviterAddress,
-		"invitee_address": BindInviteRelationResp.InviteeAddress,
-		"invite_code":     BindInviteRelationResp.InviteCode,
-	}).Info("Bind invite relation successfully")
+	return nil
 }
