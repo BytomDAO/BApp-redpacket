@@ -32,13 +32,20 @@ class App extends Component {
     global.bytomAPI = new Bytom(networks, '')
   }
 
+
   componentWillMount(){
-    const { bytom, setBytom } = this.props;
+    const { bytom, setBytom , assetsList} = this.props;
     if(!bytom){
       document.addEventListener('chromeBytomLoaded', bytomExtension => {
         const bytom = window.bytom;
         window.bytomJs = new bytomJs(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
         window.bytomJsV1 = new bytomJsV1(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
+        if(assetsList.length ===0) {
+          window.bytomJs.Bc.queryAll().then((assets) => {
+            const result = assets.reverse()
+            this.props.updateAssetList(result)
+          })
+        }
         this.bytomLoaded(bytom);
         setBytom(bytom);
       });
@@ -96,11 +103,16 @@ const Main = () => (
 
 const mapStateToProps = state => ({
   bytom: state.bytom,
+  assetsList: state.assetsList
 })
 
 const mapDispatchToProps = dispatch => ({
   setBytom: (bytom) => dispatch(action.setBytom(bytom)),
   updateConnection: (bytomConnection) => dispatch(action.updateConnection(bytomConnection)),
+  updateAssetList: (assets) => dispatch({
+    type: "UPDATE_ASSET_LIST",
+    assetsList: assets
+  }),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

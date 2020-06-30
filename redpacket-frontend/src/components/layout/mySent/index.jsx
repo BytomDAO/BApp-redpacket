@@ -94,7 +94,8 @@ const mapStateToProps = state => {
   }
   let assetId = ''
   if(assetsList.length>0){
-    assetId =  _.filter(assetsList, function(o) { return o.symbol === currency; })[0].assetId;
+    const Object = _.filter(assetsList, function(o) { return o.symbol === currency; })
+    assetId =  Object.length>0? Object[0].assetId : '';
   }
 
   return ({

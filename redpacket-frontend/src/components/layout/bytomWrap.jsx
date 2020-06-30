@@ -16,6 +16,7 @@ export default function(WrappedComponent) {
       let currency
       if(hash){
         currency = hash.replace('#','');
+        currency = currency ==='undefined'?'BTM':currency
         this.props.updateCurrency(currency)
       }
     }

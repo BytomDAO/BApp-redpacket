@@ -40,7 +40,7 @@ class QrCode extends React.Component {
       });
     }
 
-    QRCode.toDataURL(`${window.location.origin}${basename}/open/${this.props.match.params.id}#${this.props.currency}`, opts)
+    QRCode.toDataURL(`${window.location.origin}${basename}/open/${this.props.match.params.id}#${currency}`, opts)
       .then(url => {
         return setStateAsync({url:url})
       })
