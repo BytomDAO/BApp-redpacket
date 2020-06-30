@@ -38,6 +38,10 @@
         "max_open_conns": 5,
         "max_idle_conns": 5
       }
+    },
+    "copartner": {
+      "url": "",
+      "token": "123456"
     }
   }
 }

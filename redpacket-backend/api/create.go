@@ -83,7 +83,6 @@ type SubmitRedPacketReq struct {
 }
 
 func (s *Server) SubmitRedPacket(c *gin.Context, req *SubmitRedPacketReq) error {
-
 	if req.Address == "" {
 		return errors.New("sender address is empty, please input correct address")
 	}

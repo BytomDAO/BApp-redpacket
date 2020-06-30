@@ -6,7 +6,10 @@ import (
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/copartner"
 	"github.com/redpacket/redpacket-backend/database/orm"
 	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
@@ -56,6 +59,9 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	if err := query.First(sender).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
 	}
+
+	// join coparter
+	joinCopartner(s.cfg.Updater, sender.Address, req.Address)
 
 	// check whether the redpacket is empty or not
 	if len(sender.Receivers) == 0 {
@@ -186,10 +192,32 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 	return &submitResp.TxHash, nil
 }
 
-func (s *Server) joinCopartner() {
+func joinCopartner(updater config.Updater, inviterAddress, inviteeAddress string) {
 	// it works in vapor only
-	if s.cfg.Updater.BlockCenter.NetType == "btm" {
+	if updater.BlockCenter.NetType == "btm" {
 		return
 	}
 
+	copartnerService := copartner.NewService(updater.Copartner.URL)
+	bindInviteRelationReq := &copartner.BindInviteRelationReq{
+		Token:          updater.Copartner.Token,
+		InviterAddress: inviterAddress,
+		InviteeAddress: inviteeAddress,
+	}
+	BindInviteRelationResp, err := copartnerService.BindInviteRelation(bindInviteRelationReq)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"err":             err,
+			"token":           updater.Copartner.Token,
+			"inviter_address": inviterAddress,
+			"invitee_address": inviteeAddress,
+		}).Warning("Cannot bind invite relation")
+	}
+
+	log.WithFields(log.Fields{
+		"token":           updater.Copartner.Token,
+		"inviter_address": BindInviteRelationResp.InviterAddress,
+		"invitee_address": BindInviteRelationResp.InviteeAddress,
+		"invite_code":     BindInviteRelationResp.InviteCode,
+	}).Info("Bind invite relation successfully")
 }
