@@ -181,6 +181,7 @@ class Send extends React.Component {
 
 
                   <button className="btn-primary w-100 mt-4" type="submit" disabled={props.isSubmitting}>
+                    { props.isSubmitting&& <span className="spinner-border spinner-border-sm"></span>}
                     {t('send.send')}
                   </button>
                 </Form>
