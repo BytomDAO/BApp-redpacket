@@ -40,7 +40,7 @@ class App extends Component {
         that.props.finishedPageLoad()
         clearInterval(intervalID);
       }
-    }, 10);
+    }, 2000);
   }
 
 
