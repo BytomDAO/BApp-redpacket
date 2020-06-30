@@ -60,7 +60,7 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 		return nil, errors.Wrap(err, "query sender")
 	}
 
-	// join coparter
+	// join copartner
 	joinCopartner(s.cfg.Updater, sender.Address, req.Address)
 
 	// check whether the redpacket is empty or not
