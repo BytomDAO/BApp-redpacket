@@ -40,7 +40,7 @@
       }
     },
     "copartner": {
-      "url": "",
+      "url": "http://copartner.bystack.com",
       "token": "123456"
     }
   }
