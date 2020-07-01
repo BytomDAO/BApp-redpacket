@@ -83,6 +83,12 @@ type BlockCenter struct {
 	MySQLConnCfg  MySQLConnCfg `json:"mysql_conns"`
 }
 
+type Copartner struct {
+	URL   string `json:"url"`
+	Token string `json:"token"`
+}
+
 type Updater struct {
 	BlockCenter BlockCenter `json:"block_center"`
+	Copartner   Copartner   `json:"copartner"`
 }

@@ -6,7 +6,10 @@ import (
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 
+	"github.com/redpacket/redpacket-backend/config"
+	"github.com/redpacket/redpacket-backend/copartner"
 	"github.com/redpacket/redpacket-backend/database/orm"
 	"github.com/redpacket/redpacket-backend/service"
 	"github.com/redpacket/redpacket-backend/util"
@@ -55,6 +58,17 @@ func (s *Server) OpenRedPacket(c *gin.Context, req *OpenRedPacketReq) (*RedPacke
 	query := s.db.Master().Preload("Receivers").Where(&orm.Sender{RedPacketID: req.RedPacketID})
 	if err := query.First(sender).Error; err != nil {
 		return nil, errors.Wrap(err, "query sender")
+	}
+
+	// join copartner, it works in vapor only
+	if s.cfg.Updater.BlockCenter.NetType != "btm" {
+		if err := joinCopartner(s.cfg.Updater.Copartner, sender.Address, req.Address); err != nil {
+			log.WithFields(log.Fields{
+				"err":             err,
+				"inviter_address": sender.Address,
+				"invitee_address": req.Address,
+			}).Warning("Cannot bind invite relation")
+		}
 	}
 
 	// check whether the redpacket is empty or not
@@ -184,4 +198,18 @@ func (s *Server) SubmitRedPacketTransaction(rawTx string, sender *orm.Sender) (*
 		return nil, errors.Wrap(err, "submit transaction")
 	}
 	return &submitResp.TxHash, nil
+}
+
+func joinCopartner(cp config.Copartner, inviterAddress, inviteeAddress string) error {
+	copartnerService := copartner.NewService(cp.URL)
+	bindInviteRelationReq := &copartner.BindInviteRelationReq{
+		Token:          cp.Token,
+		InviterAddress: inviterAddress,
+		InviteeAddress: inviteeAddress,
+	}
+	if _, err := copartnerService.BindInviteRelation(bindInviteRelationReq); err != nil {
+		return errors.Wrap(err, "bind invite relation")
+	}
+
+	return nil
 }
