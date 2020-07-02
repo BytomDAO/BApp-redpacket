@@ -60,7 +60,8 @@
     "passwordZhHint":"Please Enter the Chinese Characters password within length 6.",
     "aliasEnHint":"Please Enter the Chinese Characters and English Characters alias within length 20",
     "aliasZhHint":"Please Enter the Chinese Characters alias within length 6.",
-    "aliasTypeHint":"Please Enter the alias within correct format"
+    "aliasTypeHint":"Please Enter the alias within correct format",
+    "partnerHint":"If the user receives the red envelope for the first time,he will automatically become your partner and share transaction fees for you."
   },
   "share":{
     "hint":"Your Red Packet is prepared!",

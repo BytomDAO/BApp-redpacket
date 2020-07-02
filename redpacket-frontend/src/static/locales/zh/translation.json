@@ -60,7 +60,8 @@
     "passwordZhHint":"请输入中文长度为6以内的口令。",
     "aliasEnHint":"请输入英文和中文长度为20以内的昵称。",
     "aliasZhHint":"请输入中文长度为6以内的昵称。",
-    "aliasTypeHint":"填写正确的昵称格式"
+    "aliasTypeHint":"填写正确的昵称格式",
+    "partnerHint":"若新用户分享了您的红包，将自动成为您的合伙人，您将享有其后续的交易手续费分成。"
   },
   "share":{
     "hint":"你的红包准备好了",

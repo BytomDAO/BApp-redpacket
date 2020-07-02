@@ -83,17 +83,24 @@ class Footer extends Component {
 
     return (
       <div className="footer">
-          <div className="text-left amount__container footer__content">
-            <div className="footer__content_item">
-              <div >{t('common.balances')}: </div>
-              <div className="text-secondary">{ balance } {currency}</div>
+          <div className="text-left footer__content">
+            <div className="deco_line"/>
+            <div className="footer__inner_box pt-2 pb-2">
+              <div className="footer__content_item">
+                <div >{t('common.balances')}: </div>
+                <div className="text-secondary">{ balance } {currency}</div>
+              </div>
+              <div className="footer__content_item">
+                <div>{t('common.address')}: </div>
+                { account && <div className="text-secondary">{account.address} <a onClick={(e)=>this.copyAddress(e, account)}>
+                  <img className="icon" src={require('../../img/icon/copy.png')} alt=""/></a>
+                </div>}
+              </div>
+              <div className="footer__hint mt-2 mb-1">
+                {t('send.partnerHint')}
+              </div>
             </div>
-            <div className="footer__content_item">
-              <div>{t('common.address')}: </div>
-              { account && <div className="text-secondary">{account.address} <a onClick={(e)=>this.copyAddress(e, account)}>
-                <img className="icon" src={require('../../img/icon/copy.png')} alt=""/></a>
-              </div>}
-            </div>
+            <div className="deco_line flipV"/>
 
           </div>
       </div>
