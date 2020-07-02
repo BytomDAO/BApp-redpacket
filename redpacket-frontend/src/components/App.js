@@ -19,6 +19,8 @@ import action from './action'
 import {connect} from "react-redux";
 import bytomJs from 'bytom.js'
 import bytomJsV1 from 'bytom.jsV1'
+import {currencySort} from "@/components/util/constants";
+import _ from 'lodash'
 
 const networks = {
   solonet: 'http://app.bycoin.io:3000/',
@@ -53,7 +55,10 @@ class App extends Component {
         window.bytomJsV1 = new bytomJsV1(window.bytom.currentProvider ||'https://bcapi.bystack.com/')
         if(assetsList.length ===0) {
           window.bytomJs.Bc.queryAll().then((assets) => {
-            const result = assets.reverse()
+            const result = _.sortBy(assets, function(item){
+              return currencySort.indexOf(item.symbol)
+            }).reverse();
+
             this.props.updateAssetList(result)
           })
         }
