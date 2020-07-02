@@ -153,7 +153,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	}
 
 	return &ListSenderRedPacketsResp{
-		TotalAmount:   totalAmount.String(),
+		TotalAmount:   totalAmount.Text('f', -1),
 		TotalNumber:   int64(len(senders)),
 		SenderDetails: senderDetails,
 	}, nil
@@ -197,7 +197,7 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	return &ListReceiverRedPacketsResp{
-		TotalAmount:     totalAmount.String(),
+		TotalAmount:     totalAmount.Text('f', -1),
 		TotalNumber:     int64(len(receivers)),
 		ReceiverDetails: receiverDetails,
 	}, nil
