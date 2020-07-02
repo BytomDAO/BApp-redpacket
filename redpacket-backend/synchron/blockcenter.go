@@ -2,6 +2,7 @@ package synchron
 
 import (
 	"math/big"
+	"strings"
 	"time"
 
 	"github.com/bytom/bytom/errors"
@@ -121,7 +122,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		// save utxo into receiver
 		if err := batchDB.Create(&orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   amount.Sub(amount, fee).Text('f', -1),
+			Amount:   strings.TrimRight(amount.Sub(amount, fee).Text('f', 10), "0"),
 			SenderID: sender.ID,
 		}).Error; err != nil {
 			batchDB.Rollback()
