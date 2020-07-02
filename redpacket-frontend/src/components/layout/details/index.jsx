@@ -11,6 +11,7 @@ import {withTranslation} from "react-i18next";
 import LogoContainer from '../logoContainer'
 import moment from "moment/moment";
 import { getCurrentAddress } from "../../util/utils";
+import BigNumber from 'bignumber.js'
 
 require('./style.scss')
 
@@ -55,14 +56,15 @@ class RedPackDetails extends Component {
 
       let maxAmount
 
+      const amountArray = winners.map(w => w.amount)
       if(winners.length === packetDetails.total_number && winners.length > 0){
         const date1 = new Date(_.maxBy(winners, 'confirmed_time').confirmed_time * 1000)
         const date2 = new Date(packetDetails.send_time *1000)
         const timeDiff = timeDifference(date1, date2)
         label = t('detail.finished', {total:packetDetails.total_number, amount:packetDetails.total_amount, time:timeDiff, unit:currency})
-        maxAmount = (_.maxBy(winners, function(o) { return Number(o.amount); })).amount
+        maxAmount = BigNumber.max.apply(null, amountArray).toString()
       }else{
-        label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${ _.sumBy(winners, 'amount')  }/ ${ packetDetails.total_amount  } ${currency}`})
+        label = t('detail.opened',{number: `${winners.length}/${packetDetails.total_number}`, total:` ${ BigNumber.sum.apply(null, amountArray)  }/ ${ packetDetails.total_amount  } ${currency}`})
       }
 
 

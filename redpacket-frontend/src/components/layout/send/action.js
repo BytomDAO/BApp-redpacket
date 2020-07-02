@@ -4,7 +4,7 @@ import {
 import {
   createRedPacket, submitRedPacket, listTransaction
 } from '../../util/api'
-import { IdMapTest, IdMap } from '../../util/constants'
+import { BTM } from '../../util/constants'
 import BigNumber from 'bignumber.js'
 import {decimals} from "@/components/util/constants";
 
@@ -13,7 +13,7 @@ Promise.retry = (cont, fn, delay) => fn().catch(err => cont > 0 ? Promise.wait(d
 
 export function sendRedPack(value,isNormalType) {
   const password = value.password
-  const amount = Number(value.amount)
+  const amount = BigNumber(value.amount)
   const number = Number(value.number)
   const alias = value.alias.trim()
   const bytom = window.bytom
@@ -33,23 +33,23 @@ export function sendRedPack(value,isNormalType) {
       if(bytom && bytom.version ){
 
         if(isNormalType){
-          totalAmount = BigNumber(amount).times(number)
+          totalAmount = amount.times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction((BigNumber(amount)).toString(), assetId, contractAddress))
+            output.push(controlAddressAction((amount).toString(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
 
-          const numberArray = generateRandom(number, totalAmount)
+          const numberArray = generateRandom(number, totalAmount, assetId === BTM? 0.01: 0.00001)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(BigNumber(randomAmount).toString(), assetId, contractAddress))
+            output.push(controlAddressAction(randomAmount, assetId, contractAddress))
           })
 
         }
 
-        const inputAmount = BigNumber(totalAmount)
+        const inputAmount = totalAmount
 
         input.push(spendWalletAction(inputAmount.toString() ,assetId))
 
@@ -103,7 +103,7 @@ export function sendRedPack(value,isNormalType) {
         }else{
           totalAmount = amount
 
-          const numberArray = generateRandom(number, totalAmount)
+          const numberArray = generateRandom(number, totalAmount, assetId === BTM? 0.01: 0.00001)
 
           numberArray.forEach((randomAmount)=>{
             output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), assetId, contractAddress))
@@ -157,15 +157,16 @@ export function sendRedPack(value,isNormalType) {
   })
 }
 
-function generateRandom(count, sum){
+function generateRandom(c, sum, min = 0.01){
   let result = []
-  let remainTotal = sum - count*0.01
+  const count = BigNumber(c)
+  let remainTotal = sum.minus(count.times(min))
   for (let i=0;i<count - 1;i++) {
-    const value = parseFloat((Math.random() * (remainTotal/(count-result.length)*2)).toFixed(2) )
-    result.push(parseFloat((value+0.01).toFixed(2)))
-    remainTotal = remainTotal - value
+    const value = ((remainTotal.div(count-result.length).times(2)).times(Math.random())).toFixed(2)
+    result.push(BigNumber(value).plus(min))
+    remainTotal = remainTotal.minus(value)
   }
-  result.push(parseFloat((remainTotal+0.01).toFixed(2)))
+  result.push(remainTotal.plus(min))
 
   return result
 }

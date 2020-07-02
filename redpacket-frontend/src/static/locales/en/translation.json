@@ -52,15 +52,16 @@
     "fee":"Network fee",
     "send":"Send Red Packet",
     "amountHint":"Invalid {{unit}} amount format",
-    "amountMinHint":"The min value is 0.01",
-    "amountMultipleMinHint":"The min value of each redpacket is 0.01",
+    "amountMinHint":"The min value is {{amount}}",
+    "amountMultipleMinHint":"The min value of each redpacket is {{amount}}",
     "numberHint":"Please use the correct redpacket number",
     "gasHint":"The minimum fee is 0.002",
     "passwordEnHint":"Please Enter the Chinese Characters and English Characters password within length 20",
     "passwordZhHint":"Please Enter the Chinese Characters password within length 6.",
     "aliasEnHint":"Please Enter the Chinese Characters and English Characters alias within length 20",
     "aliasZhHint":"Please Enter the Chinese Characters alias within length 6.",
-    "aliasTypeHint":"Please Enter the alias within correct format"
+    "aliasTypeHint":"Please Enter the alias within correct format",
+    "partnerHint":"If the user receives the red envelope for the first time,he will automatically become your partner and share transaction fees for you."
   },
   "share":{
     "hint":"Your Red Packet is prepared!",

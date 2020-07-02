@@ -2,6 +2,8 @@ import React from 'react'
 import {withTranslation} from "react-i18next";
 import {Dropdown } from 'react-bootstrap';
 import {connect} from "react-redux";
+import {currencySort} from "@/components/util/constants";
+import _ from 'lodash'
 
 require('./style.scss')
 
@@ -29,7 +31,10 @@ class Unit extends React.Component {
     if(bytom && assetsList.length ===0) {
 
       bytomJs.Bc.queryAll().then((assets) => {
-        const result = assets.reverse()
+        const result = _.sortBy(assets, function(item){
+          return currencySort.indexOf(item.symbol)
+        }).reverse();
+
         this.props.updateAssetList(result)
       })
     }
