@@ -2,6 +2,7 @@ package synchron
 
 import (
 	"math/big"
+	"strings"
 	"time"
 
 	"github.com/bytom/bytom/errors"
