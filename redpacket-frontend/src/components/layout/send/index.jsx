@@ -57,10 +57,14 @@ class Send extends React.Component {
               let errors = {};
               if (!values.amount) {
                 errors.amount = t('common.require');
-              } else if (values.amount < 0.01) {
-                errors.amount = t('send.amountMinHint', {unit:currency});
-              } else if (this.state.type ==='advanced' && values.amount < 0.01 * values.number) {
-                errors.amount = t('send.amountMultipleMinHint' , {unit:currency});
+              } else if (currency === 'BTM' && values.amount < 0.01) {
+                errors.amount = t('send.amountMinHint', {unit:currency,  amount: 0.01});
+              } else if (currency !== 'BTM' && values.amount < 0.00001) {
+                errors.amount = t('send.amountMinHint', {unit:currency,  amount: 0.00001});
+              } else if (this.state.type ==='advanced' && currency === 'BTM' && values.amount < 0.01 * values.number) {
+                errors.amount = t('send.amountMultipleMinHint' , {unit:currency, amount:0.01});
+              } else if (this.state.type ==='advanced' && currency !== 'BTM' && values.amount < 0.00001 * values.number) {
+                errors.amount = t('send.amountMultipleMinHint' , {unit:currency, amount:0.00001});
               } else if (
                 !/^(\d*\.)?\d+$/i.test(values.amount)
               ) {

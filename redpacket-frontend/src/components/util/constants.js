@@ -24,3 +24,5 @@ export const AliasMap ={
   'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff': 'BTM',
   '25f2069140fa3ff4d6e0dc1d0fcaa11ace01eb721f115f0f1a5a3782db597fb1': 'DAI'
 }
+
+export const currencySort =["USDC", "DAI", "USDT", "ETH",  "BTC", "BTM"]

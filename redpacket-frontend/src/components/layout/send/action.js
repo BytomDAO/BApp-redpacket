@@ -4,7 +4,7 @@ import {
 import {
   createRedPacket, submitRedPacket, listTransaction
 } from '../../util/api'
-import { IdMapTest, IdMap } from '../../util/constants'
+import { BTM } from '../../util/constants'
 import BigNumber from 'bignumber.js'
 import {decimals} from "@/components/util/constants";
 
@@ -41,7 +41,7 @@ export function sendRedPack(value,isNormalType) {
         }else{
           totalAmount = amount
 
-          const numberArray = generateRandom(number, totalAmount)
+          const numberArray = generateRandom(number, totalAmount, assetId === BTM? 0.01: 0.00001)
 
           numberArray.forEach((randomAmount)=>{
             output.push(controlAddressAction(randomAmount, assetId, contractAddress))
@@ -103,7 +103,7 @@ export function sendRedPack(value,isNormalType) {
         }else{
           totalAmount = amount
 
-          const numberArray = generateRandom(number, totalAmount)
+          const numberArray = generateRandom(number, totalAmount, assetId === BTM? 0.01: 0.00001)
 
           numberArray.forEach((randomAmount)=>{
             output.push(controlAddressAction(unitAmount.times(BigNumber(randomAmount)).toNumber(), assetId, contractAddress))
@@ -157,16 +157,16 @@ export function sendRedPack(value,isNormalType) {
   })
 }
 
-function generateRandom(c, sum){
+function generateRandom(c, sum, min = 0.01){
   let result = []
   const count = BigNumber(c)
-  let remainTotal = sum.minus(count.times(0.01))
+  let remainTotal = sum.minus(count.times(min))
   for (let i=0;i<count - 1;i++) {
     const value = ((remainTotal.div(count-result.length).times(2)).times(Math.random())).toFixed(2)
-    result.push((BigNumber(value).plus(0.01)).toFixed(2))
+    result.push(BigNumber(value).plus(min))
     remainTotal = remainTotal.minus(value)
   }
-  result.push((remainTotal.plus(0.01)).toFixed(2))
+  result.push(remainTotal.plus(min))
 
   return result
 }
