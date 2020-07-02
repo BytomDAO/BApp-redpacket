@@ -13,7 +13,7 @@ Promise.retry = (cont, fn, delay) => fn().catch(err => cont > 0 ? Promise.wait(d
 
 export function sendRedPack(value,isNormalType) {
   const password = value.password
-  const amount = Number(value.amount)
+  const amount = BigNumber(value.amount)
   const number = Number(value.number)
   const alias = value.alias.trim()
   const bytom = window.bytom
@@ -33,10 +33,10 @@ export function sendRedPack(value,isNormalType) {
       if(bytom && bytom.version ){
 
         if(isNormalType){
-          totalAmount = BigNumber(amount).times(number)
+          totalAmount = amount.times(number)
 
           for(let i = 0; i <number; i++){
-            output.push(controlAddressAction((BigNumber(amount)).toString(), assetId, contractAddress))
+            output.push(controlAddressAction((amount).toString(), assetId, contractAddress))
           }
         }else{
           totalAmount = amount
@@ -44,12 +44,12 @@ export function sendRedPack(value,isNormalType) {
           const numberArray = generateRandom(number, totalAmount)
 
           numberArray.forEach((randomAmount)=>{
-            output.push(controlAddressAction(BigNumber(randomAmount).toString(), assetId, contractAddress))
+            output.push(controlAddressAction(randomAmount, assetId, contractAddress))
           })
 
         }
 
-        const inputAmount = BigNumber(totalAmount)
+        const inputAmount = totalAmount
 
         input.push(spendWalletAction(inputAmount.toString() ,assetId))
 
@@ -157,15 +157,16 @@ export function sendRedPack(value,isNormalType) {
   })
 }
 
-function generateRandom(count, sum){
+function generateRandom(c, sum){
   let result = []
-  let remainTotal = sum - count*0.01
+  const count = BigNumber(c)
+  let remainTotal = sum.minus(count.times(0.01))
   for (let i=0;i<count - 1;i++) {
-    const value = parseFloat((Math.random() * (remainTotal/(count-result.length)*2)).toFixed(2) )
-    result.push(parseFloat((value+0.01).toFixed(2)))
-    remainTotal = remainTotal - value
+    const value = ((remainTotal.div(count-result.length).times(2)).times(Math.random())).toFixed(2)
+    result.push((BigNumber(value).plus(0.01)).toFixed(2))
+    remainTotal = remainTotal.minus(value)
   }
-  result.push(parseFloat((remainTotal+0.01).toFixed(2)))
+  result.push((remainTotal.plus(0.01)).toFixed(2))
 
   return result
 }

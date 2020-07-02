@@ -104,7 +104,10 @@ class Send extends React.Component {
             onSubmit={(values, {setSubmitting}) => {
 
               values.currency = currency
-              values.assetId = _.filter(assetsList, function(o) { return o.symbol === currency; })[0].assetId;
+              if(assetsList.length>0){
+                const Object = _.filter(assetsList, function(o) { return o.symbol === currency; })
+                values.assetId =  Object.length>0? Object[0].assetId : '';
+              }
               this.setState({
                 error:'',
               })
