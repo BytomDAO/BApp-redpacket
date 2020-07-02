@@ -122,7 +122,7 @@ func (b *blockCenterKeeper) parseTxAndSaveUtxo(tx *types.Tx, sender *orm.Sender)
 		// save utxo into receiver
 		if err := batchDB.Create(&orm.Receiver{
 			UtxoID:   output.UtxoID,
-			Amount:   strings.TrimRight(amount.Sub(amount, fee).Text('f', 10), "0"),
+			Amount:   util.TrimFloatStr(amount),
 			SenderID: sender.ID,
 		}).Error; err != nil {
 			batchDB.Rollback()

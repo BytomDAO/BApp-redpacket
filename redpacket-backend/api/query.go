@@ -2,12 +2,12 @@ package api
 
 import (
 	"math/big"
-	"strings"
 
 	"github.com/bytom/bytom/errors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/redpacket/redpacket-backend/database/orm"
+	"github.com/redpacket/redpacket-backend/util"
 	"github.com/redpacket/redpacket-backend/util/types"
 )
 
@@ -154,7 +154,7 @@ func (s *Server) ListSenderRedPackets(c *gin.Context, req *ListRedPacketsReq) (*
 	}
 
 	return &ListSenderRedPacketsResp{
-		TotalAmount:   strings.TrimRight(totalAmount.Text('f', 10), "0"),
+		TotalAmount:   util.TrimFloatStr(totalAmount),
 		TotalNumber:   int64(len(senders)),
 		SenderDetails: senderDetails,
 	}, nil
@@ -198,7 +198,7 @@ func (s *Server) ListReceiverRedPackets(c *gin.Context, req *ListRedPacketsReq) 
 	}
 
 	return &ListReceiverRedPacketsResp{
-		TotalAmount:     strings.TrimRight(totalAmount.Text('f', 10), "0"),
+		TotalAmount:     util.TrimFloatStr(totalAmount),
 		TotalNumber:     int64(len(receivers)),
 		ReceiverDetails: receiverDetails,
 	}, nil
