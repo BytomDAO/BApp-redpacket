@@ -32,3 +32,8 @@ export function formateNumber(n, decimals){
 
   return x.shiftedBy(-decimals).toString()
 }
+
+Number.prototype.countDecimals = function () {
+  if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+  return this.toString().split(".")[1].length || 0;
+}
