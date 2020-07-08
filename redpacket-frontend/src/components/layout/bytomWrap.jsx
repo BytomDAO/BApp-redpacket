@@ -50,7 +50,7 @@ export default function(WrappedComponent) {
         }
       }
 
-      const WrapWithBycoin = (content) => <div className="container__wrapper">
+      const WrapWithBycoin = (content, downloadHint) => <div className="container__wrapper">
         <Header />
         <section className="portfolio" id="portfolio">
           <div className="container pt-4">
@@ -60,6 +60,7 @@ export default function(WrappedComponent) {
                   {content}
                 </div>
               </div>
+              {downloadHint}
             </div>
           </div>
         </section>
@@ -110,9 +111,21 @@ export default function(WrappedComponent) {
         return WrapWithBycoin(
           <div className="columns">
               <p className="text-white download_hint">
-                {t('wrap.downloadHint')}
               </p>
               <a className="btn-primary download_btn ml-auto mr-auto" href="https://bycoin.im" target="_blank">{t('wrap.download')}</a>
+          </div>,
+          <div className="d-flex outer__container">
+            <div className="mr-3">
+              <img className="bycoin_img" src={require('@/components/img/bycoin.png')}/>
+            </div>
+            <div>
+              <div className="hint-item text-white">
+                {t('qrCode.downloadHint')}
+              </div>
+              <div className="hint-item text-white">
+                {t('qrCode.passwordHint')}
+              </div>
+            </div>
           </div>
         )
       }

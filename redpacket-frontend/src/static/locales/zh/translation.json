@@ -52,6 +52,7 @@
     "fee":"网络服务费",
     "send":"发红包",
     "amountHint":"请填写正确的红包金额",
+    "amountDecimalsHint":"{{currency}}红包金额仅支持{{decimals}}位小数",
     "amountMinHint":"红包金额最低{{amount}}{{unit}}",
     "amountMultipleMinHint":"每个红包金额最低{{amount}}{{unit}}",
     "numberHint":"请填写正确的红包个数",

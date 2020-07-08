@@ -52,6 +52,7 @@
     "fee":"Network fee",
     "send":"Send Red Packet",
     "amountHint":"Invalid {{unit}} amount format",
+    "amountDecimalsHint":"The {{currency}} amount only support {{decimals}} decimals.",
     "amountMinHint":"The min value is {{amount}}",
     "amountMultipleMinHint":"The min value of each redpacket is {{amount}}",
     "numberHint":"Please use the correct redpacket number",

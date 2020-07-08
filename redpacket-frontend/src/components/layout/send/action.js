@@ -12,7 +12,7 @@ Promise.wait = (time) => new Promise(resolve => setTimeout(resolve, time || 0));
 Promise.retry = (cont, fn, delay) => fn().catch(err => cont > 0 ? Promise.wait(delay).then(() => Promise.retry(cont - 1, fn, delay)) : Promise.reject(err));
 
 export function sendRedPack(value,isNormalType) {
-  const password = value.password
+  const password = value.password.trim()
   const amount = BigNumber(value.amount)
   const number = Number(value.number)
   const alias = value.alias.trim()
