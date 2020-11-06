@@ -23,9 +23,7 @@ import {currencySort} from "@/components/util/constants";
 import _ from 'lodash'
 
 const networks = {
-  solonet: 'http://app.bycoin.io:3000/',
-  testnet: 'http://app.bycoin.io:3020/',
-  mainnet: 'https://api.bycoin.im:8000/'
+  mainnet: 'https://bcapi.movapi.com'
 };
 
 class App extends Component {
